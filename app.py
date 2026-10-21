@@ -28,7 +28,7 @@ def get_signal():
     return jsonify(latest_signal)
 
 def run_flask():
-    # রেন্ডারের ডায়নামিক পোর্ট নেওয়ার জন্য os.environ ব্যবহার করা হয়েছে
+    # Render এর ডায়নামিক পোর্ট অটোমেটিক রিড করার লজিক
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
