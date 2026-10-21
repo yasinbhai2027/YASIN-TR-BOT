@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 import threading
 
@@ -27,7 +28,9 @@ def get_signal():
     return jsonify(latest_signal)
 
 def run_flask():
-    app.run(host='0.0.0.0', port=8080)
+    # রেন্ডারের ডায়নামিক পোর্ট নেওয়ার জন্য os.environ ব্যবহার করা হয়েছে
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
 
 def start_server():
     server_thread = threading.Thread(target=run_flask)
