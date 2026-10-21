@@ -127,12 +127,40 @@ def bot_script():
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.92);z-index:9999998;pointer-events:none;';
             sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
-            // Cache busting added with ?t=Date.now() to ensure 100% fresh real-time backend signals
-            Promise.all([fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),new Promise(function(res){setTimeout(res,5000);})]).then(function(results){
-                var j=results[0];sc.remove();
-                var sigObj=j.latest_signal||j,st=String(sigObj.signal||j.signal||'UP').toUpperCase(),c=st.includes('CALL')||st.includes('BUY')||st.includes('UP'),p=st.includes('PUT')||st.includes('SELL')||st.includes('DOWN'),txt=c?'UP':'DOWN',col=c?'#0f6':'#ff1a1a';
-                if(c||p){d.querySelectorAll('button').forEach(bt=>{var tn=bt.innerText?bt.innerText.trim().toUpperCase():'';if((c&&(tn.includes('BUY')||tn.includes('UP')))||(p&&(tn.includes('SELL')||tn.includes('DOWN'))))bt.click();});}
-                var sb=d.createElement('div');sb.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
+            
+            // Fetch live backend signal with cache busting
+            Promise.all([
+                fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
+                new Promise(function(res){setTimeout(res,5000);})
+            ]).then(function(results){
+                var j=results[0];
+                sc.remove();
+                
+                var sigObj=j.latest_signal||j;
+                var rawSig=String(sigObj.signal||j.signal||sigObj.action||j.action||'UP').toUpperCase();
+                
+                // Accurate check for DOWN / PUT / SELL / LOWER
+                var isDown=rawSig.includes('PUT')||rawSig.includes('SELL')||rawSig.includes('DOWN')||rawSig.includes('LOWER');
+                var txt=isDown?'DOWN':'UP';
+                var col=isDown?'#ff1a1a':'#0f6';
+                
+                // Advanced Quotex Button Auto-Clicker (Matches Higher/Lower, Call/Put, Up/Down, Buy/Sell)
+                d.querySelectorAll('button').forEach(function(bt){
+                    var tn=bt.innerText?bt.innerText.trim().toUpperCase():'';
+                    var cls=bt.className?bt.className.toUpperCase():'';
+                    if(!isDown){
+                        if(tn.includes('BUY')||tn.includes('UP')||tn.includes('CALL')||tn.includes('HIGHER')||cls.includes('CALL')||cls.includes('UP')){
+                            bt.click();
+                        }
+                    }else{
+                        if(tn.includes('SELL')||tn.includes('DOWN')||tn.includes('PUT')||tn.includes('LOWER')||cls.includes('PUT')||cls.includes('DOWN')){
+                            bt.click();
+                        }
+                    }
+                });
+                
+                var sb=d.createElement('div');
+                sb.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
                 sb.innerHTML='<div style="animation:c1 2s infinite;color:'+col+';">'+txt+'</div>';
                 d.body.appendChild(sb);
                 setTimeout(()=>sb.remove(),3500);
