@@ -4,7 +4,6 @@ import threading
 
 app = Flask(__name__)
 
-# বটের সর্বশেষ লাইভ সিগন্যাল স্টোরেজ
 latest_signal = {"signal": "HOLD", "confidence": 0, "reason": "Initializing..."}
 
 @app.route('/')
@@ -28,7 +27,6 @@ def get_signal():
     return jsonify(latest_signal)
 
 def run_flask():
-    # Render এর ডায়নামিক পোর্ট অটোমেটিক রিড করার লজিক
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
