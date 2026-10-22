@@ -108,7 +108,7 @@ def bot_script():
         var d=document,s=d.getElementById('ybs');
         if(s)s.remove();
         s=d.createElement('style');s.id='ybs';
-        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
+        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff00ff}}';
         d.head.appendChild(s);
         var b=d.createElement('div');window.YB=b;
         b.style.cssText='position:fixed;bottom:80px;right:25px;width:72px;height:72px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999999;cursor:pointer;animation:mC 3s infinite linear;border:3px solid #ff0033;box-sizing:border-box;will-change:transform,box-shadow;';
@@ -132,31 +132,34 @@ def bot_script():
                 fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
                 new Promise(function(res){setTimeout(res,5000);})
             ]).then(function(results){
-                var j=results[0]||{};
+                var j = results[0] || {};
                 sc.remove();
                 
-                // Comprehensive signal extraction from backend response
+                // Deep extraction of signal from backend response
                 var sigText = '';
-                if (j.latest_signal) {
-                    if (typeof j.latest_signal === 'object') {
-                        sigText = j.latest_signal.signal || j.latest_signal.action || j.latest_signal.direction || j.latest_signal.type || '';
-                    } else {
-                        sigText = String(j.latest_signal);
-                    }
+                var targetObj = j.latest_signal || j.signal_data || j.data || j;
+                if (typeof targetObj === 'object' && targetObj !== null) {
+                    sigText = targetObj.signal || targetObj.action || targetObj.direction || targetObj.type || targetObj.trend || '';
                 }
-                if (!sigText && j.signal) sigText = j.signal;
-                if (!sigText && j.action) sigText = j.action;
-                if (!sigText && j.direction) sigText = j.direction;
-                if (!sigText && typeof j === 'string') sigText = j;
+                if (!sigText) {
+                    sigText = j.signal || j.action || j.direction || j.type || j.trend || '';
+                }
+                if (!sigText && typeof j === 'string') {
+                    sigText = j;
+                }
                 
                 var rawSig = String(sigText).toUpperCase();
                 
-                // Strict validation for SELL / DOWN / PUT / LOWER
+                // Precise check for SELL / DOWN / PUT / LOWER
                 var isSell = rawSig.includes('SELL') || rawSig.includes('PUT') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR') || rawSig === 'SELL' || rawSig === 'PUT' || rawSig === 'DOWN';
-                var txt = isSell ? 'SELL' : 'BUY';
+                var isBuy = rawSig.includes('BUY') || rawSig.includes('CALL') || rawSig.includes('UP') || rawSig.includes('HIGHER') || rawSig.includes('BULL') || rawSig === 'UP' || rawSig === 'CALL' || rawSig === 'BUY';
+                
+                // If backend gives explicit sell, mark as SELL, otherwise fallback safely or based on detected keyword
+                var finalAction = isSell ? 'SELL' : 'BUY';
+                var txt = finalAction;
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
-                // Ultra-precise Quotex Button Auto-Clicker for Buy / Sell buttons
+                // Ultra-precise Quotex Button Auto-Clicker targeting Buy / Sell buttons
                 var clicked = false;
                 var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
