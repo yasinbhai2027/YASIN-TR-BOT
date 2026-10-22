@@ -132,18 +132,31 @@ def bot_script():
                 fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
                 new Promise(function(res){setTimeout(res,5000);})
             ]).then(function(results){
-                var j=results[0];
+                var j=results[0]||{};
                 sc.remove();
                 
-                var sigObj = j.latest_signal || j.signal_data || j;
-                var sigVal = sigObj.signal || j.signal || sigObj.action || j.action || sigObj.direction || j.direction || sigObj.type || j.type || 'BUY';
-                var rawSig = String(sigVal).toUpperCase();
+                // Comprehensive signal extraction from backend response
+                var sigText = '';
+                if (j.latest_signal) {
+                    if (typeof j.latest_signal === 'object') {
+                        sigText = j.latest_signal.signal || j.latest_signal.action || j.latest_signal.direction || j.latest_signal.type || '';
+                    } else {
+                        sigText = String(j.latest_signal);
+                    }
+                }
+                if (!sigText && j.signal) sigText = j.signal;
+                if (!sigText && j.action) sigText = j.action;
+                if (!sigText && j.direction) sigText = j.direction;
+                if (!sigText && typeof j === 'string') sigText = j;
                 
-                // Robust check for SELL / DOWN / PUT / LOWER / BEAR
-                var isSell = rawSig.includes('PUT') || rawSig.includes('SELL') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR') || rawSig === 'SELL' || rawSig === 'DOWN';
+                var rawSig = String(sigText).toUpperCase();
+                
+                // Strict validation for SELL / DOWN / PUT / LOWER
+                var isSell = rawSig.includes('SELL') || rawSig.includes('PUT') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR') || rawSig === 'SELL' || rawSig === 'PUT' || rawSig === 'DOWN';
                 var txt = isSell ? 'SELL' : 'BUY';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
+                // Ultra-precise Quotex Button Auto-Clicker for Buy / Sell buttons
                 var clicked = false;
                 var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
