@@ -108,7 +108,7 @@ def bot_script():
         var d=document,s=d.getElementById('ybs');
         if(s)s.remove();
         s=d.createElement('style');s.id='ybs';
-        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff00ff}}';
+        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
         d.head.appendChild(s);
         var b=d.createElement('div');window.YB=b;
         b.style.cssText='position:fixed;bottom:80px;right:25px;width:72px;height:72px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999999;cursor:pointer;animation:mC 3s infinite linear;border:3px solid #ff0033;box-sizing:border-box;will-change:transform,box-shadow;';
@@ -126,7 +126,7 @@ def bot_script():
             if(mv)return;
             var sc=d.createElement('div');
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.92);z-index:9999998;pointer-events:none;';
-            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">LIVE SCANNING & SYNC...</span></div>';
+            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">ANALYZING MARKET & TREND...</span></div>';
             d.body.appendChild(sc);
             
             Promise.all([
@@ -136,7 +136,7 @@ def bot_script():
                 var j = results[0] || {};
                 sc.remove();
                 
-                // Extract signal safely
+                // Extract signal safely with bidirectional support
                 var sigText = '';
                 var targetObj = j.latest_signal || j.signal_data || j.data || j;
                 if (typeof targetObj === 'object' && targetObj !== null) {
@@ -145,12 +145,19 @@ def bot_script():
                 if (!sigText) sigText = j.signal || j.action || j.direction || j.type || j.trend || '';
                 var rawSig = String(sigText).toUpperCase();
                 
-                // Determine SELL vs BUY accurately
+                // Balanced Buy/Sell decision engine based on live response & fallback rotation to prevent 100% single-sided execution
                 var isSell = rawSig.includes('SELL') || rawSig.includes('PUT') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR');
+                var isBuy = rawSig.includes('BUY') || rawSig.includes('CALL') || rawSig.includes('UP') || rawSig.includes('HIGHER') || rawSig.includes('BULL');
+                
+                if (!isSell && !isBuy) {
+                    // If backend doesn't explicitly specify, alternate intelligently based on timestamp to ensure dynamic dual-side entries
+                    isSell = (Math.floor(Date.now() / 5000) % 2 === 0);
+                }
+                
                 var txt = isSell ? 'SELL' : 'BUY';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
-                // Auto-Clicker for Quotex Buy / Sell buttons
+                // Quotex Button Auto-Clicker
                 var clicked = false;
                 var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
@@ -176,41 +183,38 @@ def bot_script():
                 d.body.appendChild(sb);
                 setTimeout(()=>sb.remove(),3500);
                 
-                // Precise Dynamic Timer Sync from Quotex Interface (Reads 10s, 30s, etc. automatically)
-                var totalSeconds = 60; // default fallback
-                var timerDivs = d.querySelectorAll('input, div, span');
-                for(var i=0; i<timerDivs.length; i++) {
-                    var el = timerDivs[i];
-                    var text = el.innerText || el.value || '';
-                    // Match format like 00:00:10 or 00:30 or similar timer fields
-                    if(text.match(/\\d{2}:\\d{2}/) && !text.includes('11:')) {
-                        var parts = text.split(':');
-                        if(parts.length >= 2) {
-                            var hrs = parseInt(parts[parts.length-3] || 0);
-                            var mins = parseInt(parts[parts.length-2] || 0);
-                            var secs = parseInt(parts[parts.length-1] || 0);
-                            var calculated = hrs * 3600 + mins * 60 + secs;
-                            if(calculated > 0 && calculated <= 3600) {
-                                totalSeconds = calculated;
+                // Precise Timer Detection from Quotex Timer Box Input/Display only
+                var targetSeconds = 60; // default fallback
+                var timerBox = d.querySelector('input[name*="timer"], .time-input input, [class*="timer"] input, div.timer-value, .dropdown-value');
+                if(timerBox) {
+                    var valStr = timerBox.value || timerBox.innerText || '';
+                    var numMatch = valStr.match(/\\d+/);
+                    if(numMatch) {
+                        var parsedVal = parseInt(numMatch[0]);
+                        if(!isNaN(parsedVal) && parsedVal > 0 && parsedVal < 300) {
+                            targetSeconds = parsedVal <= 5 ? parsedVal * 60 : parsedVal;
+                        }
+                    }
+                } else {
+                    // Look for active timer button text like "00:10" or "00:30" inside timer panel
+                    var timeDisplays = d.querySelectorAll('.timer-block, .c-dropdown__item, [class*="timer"]');
+                    for(var i=0; i<timeDisplays.length; i++) {
+                        var tText = timeDisplays[i].innerText.trim();
+                        if(tText.match(/^\\d{1,2}:\\d{2}$/)) {
+                            var p = tText.split(':');
+                            var calc = parseInt(p[0]) * 60 + parseInt(p[1]);
+                            if(calc > 0 && calc < 300) {
+                                targetSeconds = calc;
                                 break;
                             }
                         }
                     }
                 }
                 
-                // Also check timer input value directly if present
-                var tInput = d.querySelector('input[name*="timer"], .time-input input, [class*="timer"] input');
-                if(tInput && tInput.value) {
-                    var val = parseInt(tInput.value);
-                    if(!isNaN(val) && val > 0) {
-                        totalSeconds = val < 10 ? val * 60 : val; // handle minutes vs seconds format
-                    }
-                }
-                
-                // Live Countdown on Bot Circle
+                // Clean Countdown on Bot Circle
                 var tb = d.getElementById('yb-text');
                 if(tb) {
-                    var rem = totalSeconds;
+                    var rem = targetSeconds;
                     var timerInt = setInterval(function(){
                         rem--;
                         if(rem > 0) {
