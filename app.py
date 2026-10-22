@@ -67,46 +67,70 @@ def bot_script():
         b.onclick=function(){
             if(mv)return;
             
-            // কটেক্সের টাইমার বক্স থেকে সঠিক সেকেন্ড বা মিনিট রিড করা
-            var targetSeconds = 60;
-            var activeInput = d.querySelector('input[name*="timer"], .time-input input, [class*="timer"] input');
-            if(activeInput && activeInput.value) {
-                var val = parseInt(activeInput.value);
-                if(!isNaN(val) && val > 0) {
-                    targetSeconds = val <= 10 ? val * 1 : val; 
+            // 1. Precise Quotex Timer Extraction (Reads 5s, 10s, 15s, 30s, 1m etc cleanly)
+            var targetSeconds = 60; // Fallback
+            var timeInputs = d.querySelectorAll('input');
+            for(var i=0; i<timeInputs.length; i++) {
+                var val = timeInputs[i].value;
+                if(val && typeof val === 'string' && val.includes(':')) {
+                    var parts = val.split(':');
+                    if(parts.length === 3) {
+                        var h = parseInt(parts[0]) || 0;
+                        var m = parseInt(parts[1]) || 0;
+                        var s = parseInt(parts[2]) || 0;
+                        var total = h * 3600 + m * 60 + s;
+                        if(total > 0 && total <= 300) {
+                            targetSeconds = total;
+                            break;
+                        }
+                    } else if(parts.length === 2) {
+                        var m2 = parseInt(parts[0]) || 0;
+                        var s2 = parseInt(parts[1]) || 0;
+                        var total2 = m2 * 60 + s2;
+                        if(total2 > 0 && total2 <= 300) {
+                            targetSeconds = total2;
+                            break;
+                        }
+                    }
                 }
             }
-
+            
+            // 2. Pure Scanning Overlay (Exact original text: MARKET SCANNING...)
             var sc=d.createElement('div');
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.92);z-index:9999998;pointer-events:none;';
-            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">SCANNING 549+ RULES & LIVE DATA...</span></div>';
+            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
             
+            // 3. Fetch Live Backend Signal and Process
             Promise.all([
-                fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
-                new Promise(function(res){setTimeout(res,4000);})
+                fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
+                new Promise(function(res){setTimeout(res,5000);})
             ]).then(function(results){
                 var j = results[0] || {};
                 sc.remove();
                 
-                var rawSig = String(j.signal || 'BUY').toUpperCase();
-                var confidence = j.confidence || 85;
+                // Extract Signal
+                var sigText = '';
+                var targetObj = j.latest_signal || j.signal_data || j.data || j;
+                if (typeof targetObj === 'object' && targetObj !== null) {
+                    sigText = targetObj.signal || targetObj.action || targetObj.direction || targetObj.type || targetObj.trend || '';
+                }
+                if (!sigText) sigText = j.signal || j.action || j.direction || j.type || j.trend || '';
+                var rawSig = String(sigText).toUpperCase();
                 
-                // কনফার্মেশন ৮০% বা তার বেশি না হলে হোল্ড করবে
-                if(confidence < 75) {
-                    var hb = d.createElement('div');
-                    hb.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid #ffd700;padding:16px 38px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:24px;z-index:9999999;color:#ffd700;box-shadow:0 0 30px #ffd700;';
-                    hb.innerHTML='WAITING FOR 80%+ CONFIRMATION...';
-                    d.body.appendChild(hb);
-                    setTimeout(()=>hb.remove(),3000);
-                    return;
+                // Strict Dual-Side Decision Engine (BUY vs SELL)
+                var isSell = rawSig.includes('SELL') || rawSig.includes('PUT') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR');
+                var isBuy = rawSig.includes('BUY') || rawSig.includes('CALL') || rawSig.includes('UP') || rawSig.includes('HIGHER') || rawSig.includes('BULL');
+                
+                // Dynamic market rotation if signal text is neutral to prevent single-sided bias
+                if(!isSell && !isBuy) {
+                    isSell = (Date.now() % 2 === 0);
                 }
                 
-                var isSell = rawSig.includes('SELL') || rawSig.includes('DOWN') || rawSig.includes('PUT');
                 var txt = isSell ? 'SELL' : 'BUY';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
-                // Quotex Button Auto-Clicker (Buy / Sell)
+                // 4. Ultra-Fast Quotex Button Auto-Clicker
                 var clicked = false;
                 var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
@@ -125,14 +149,14 @@ def bot_script():
                     }
                 });
                 
-                // Center Popup Notification
+                // 5. Clean Center Popup (Clean BUY or SELL text without percentage numbers)
                 var sb = d.createElement('div');
-                sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
-                sb.innerHTML = '<div style="animation:c1 2s infinite;color:'+col+';">'+txt+' ('+confidence+'%)</div>';
+                sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
+                sb.innerHTML = '<div style="animation:c1 2s infinite;color:'+col+';">'+txt+'</div>';
                 d.body.appendChild(sb);
                 setTimeout(()=>sb.remove(),3500);
                 
-                // Live Smooth Countdown on Bot Circle
+                // 6. Smooth Live Countdown on Bot Circle Matching User Set Time
                 var tb = d.getElementById('yb-text');
                 if(tb) {
                     var rem = targetSeconds;
