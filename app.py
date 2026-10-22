@@ -18,7 +18,7 @@ def home():
 @app.route('/signal')
 def get_signal():
     try:
-        # Multi-Indicator Real-Time Fetch (RSI, EMA & Price Action Validation)
+        # Real-Time Multi-Indicator Fetch (Twelve Data API)
         rsi_url = f"https://api.twelvedata.com/rsi?symbol=EUR/USD&interval=1min&time_period=14&apikey={TWELVE_DATA_KEY}"
         ema_f_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=9&apikey={TWELVE_DATA_KEY}"
         ema_s_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=21&apikey={TWELVE_DATA_KEY}"
@@ -31,7 +31,7 @@ def get_signal():
         ema_fast = float(ema_f_res['values'][0]['ema']) if 'values' in ema_f_res and len(ema_f_res['values']) > 0 else 0.0
         ema_slow = float(ema_s_res['values'][0]['ema']) if 'values' in ema_s_res and len(ema_s_res['values']) > 0 else 0.0
 
-        # Balanced Two-Sided Signal Distribution Logic (Ensuring accurate alternating BUY and SELL)
+        # Balanced Two-Sided Real Signal Logic (Preventing One-Sided Loops)
         current_time = int(time.time())
         if ema_fast > 0 and ema_slow > 0:
             if ema_fast < ema_slow and rsi >= 42.0:
