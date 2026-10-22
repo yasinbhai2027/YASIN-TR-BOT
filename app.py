@@ -2,7 +2,7 @@ from flask import Flask, jsonify, make_response
 import threading
 import requests
 
-app = Flask(__name__)
+app = FlaskName = Flask(__name__)
 
 # Master API Configuration (549 Rules & 6 Master APIs Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
@@ -30,13 +30,13 @@ def get_signal():
         ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data and len(ema_f_data['values']) > 0 else 0.0
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
 
-        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক
-        if rsi < 49 or (ema_fast > ema_slow and rsi < 52):
+        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক (কোনো একমুখী বায়াস নেই)
+        if rsi < 49.5 or (ema_fast > ema_slow and rsi < 51.5):
             signal = "BUY"
-            confidence = int(82 + abs(49 - rsi) * 1.4 if rsi < 49 else 85)
-        elif rsi > 51 or (ema_fast < ema_slow and rsi > 48):
+            confidence = int(82 + abs(49.5 - rsi) * 1.5 if rsi < 49.5 else 84)
+        elif rsi > 50.5 or (ema_fast < ema_slow and rsi > 48.5):
             signal = "SELL"
-            confidence = int(82 + abs(rsi - 51) * 1.4 if rsi > 51 else 85)
+            confidence = int(82 + abs(rsi - 50.5) * 1.5 if rsi > 50.5 else 84)
         else:
             signal = "BUY" if rsi <= 50 else "SELL"
             confidence = 81
