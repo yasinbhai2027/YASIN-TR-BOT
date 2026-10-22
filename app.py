@@ -17,7 +17,6 @@ def home():
 @app.route('/signal')
 def get_signal():
     try:
-        # Twelve Data Real-Time Feed (1-min RSI & EMA Confluence)
         rsi_url = f"https://api.twelvedata.com/rsi?symbol=EUR/USD&interval=1min&time_period=14&apikey={TWELVE_DATA_KEY}"
         ema_fast_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=9&apikey={TWELVE_DATA_KEY}"
         ema_slow_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=21&apikey={TWELVE_DATA_KEY}"
@@ -41,7 +40,6 @@ def get_signal():
             signal = "BUY" if ema_fast >= ema_slow else "SELL"
             confidence = 82
 
-        # ৮০% থেকে ৯৮% কনফিডেন্স ক্যাপ
         confidence = min(max(confidence, 80), 98)
 
         response = jsonify({
@@ -132,13 +130,11 @@ def bot_script():
                 }
             }
             
-            # নিখুঁত ৫ সেকেন্ডের স্ক্যানিং ইফেক্ট ও স্টাইল ফিরিয়ে আনা হলো
             var sc = d.createElement('div');
             sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.85);z-index:9999998;pointer-events:none;will-change:opacity;';
             sc.innerHTML = '<div style="position:absolute;width:100%;height:5px;animation:fS 1.3s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 10px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:14px 28px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;animation:mC 3s infinite;background:rgba(0,0,0,0.9);box-shadow:0 0 30px #ff00ff,inset 0 0 12px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING (5s)...</span></div>';
             d.body.appendChild(sc);
             
-            # ঠিক ৫ সেকেন্ড (৫০০০ মিলি সেকেন্ড) স্ক্যানিং ডিলে রেখে তারপর ফেচ ও এক্সিকিউট হবে
             setTimeout(function(){
                 fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                 .then(function(r){ return r.json(); })
@@ -217,7 +213,7 @@ def bot_script():
                         }, 1000);
                     }
                 });
-            }, 5000); // ঠিক ৫ সেকেন্ড স্ক্যানিং টাইম
+            }, 5000);
         };
     })();
     """
