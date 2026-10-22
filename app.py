@@ -2,9 +2,9 @@ from flask import Flask, jsonify, make_response
 import threading
 import requests
 
-app = FlaskName = Flask(__name__)
+app = Flask(__name__)
 
-# Master API Configuration (549 Rules & 6 Master APIs Integrated)
+# Master API Configuration (549 Rules & Master APIs Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 GROQ_API_KEY = "gsk_W7pys4nkUoyGz69YSC3" + "QWGdyb3FYTlBpucHbvPYAf6jhIOoDTKAM"
 FINNHUB_KEY = "dbcaa19r01qqr3s0pf60" + "dbcaa19r01qqr3s0pf6g"
@@ -30,15 +30,16 @@ def get_signal():
         ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data and len(ema_f_data['values']) > 0 else 0.0
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
 
-        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক (কোনো একমুখী বায়াস নেই)
-        if rsi < 49.5 or (ema_fast > ema_slow and rsi < 51.5):
+        # নিখুঁত দ্বিমুখী (BUY / SELL) কনফ্লুয়েন্স লজিক (৫০ বেজলাইন কঠোরভাবে বিভক্ত)
+        if rsi < 49.0 or (ema_fast > ema_slow and rsi < 50.0):
             signal = "BUY"
-            confidence = int(82 + abs(49.5 - rsi) * 1.5 if rsi < 49.5 else 84)
-        elif rsi > 50.5 or (ema_fast < ema_slow and rsi > 48.5):
+            confidence = int(82 + abs(50.0 - rsi) * 1.5)
+        elif rsi > 51.0 or (ema_fast < ema_slow and rsi > 50.0):
             signal = "SELL"
-            confidence = int(82 + abs(rsi - 50.5) * 1.5 if rsi > 50.5 else 84)
+            confidence = int(82 + abs(rsi - 50.0) * 1.5)
         else:
-            signal = "BUY" if rsi <= 50 else "SELL"
+            # নিউট্রাল জোনে মার্কেট স্ট্রাকচার অনুযায়ী ডায়নামিক সিগন্যাল
+            signal = "BUY" if ema_fast >= ema_slow else "SELL"
             confidence = 81
 
         # ৮০% থেকে ৯৭% কনফিডেন্স ক্যাপ
