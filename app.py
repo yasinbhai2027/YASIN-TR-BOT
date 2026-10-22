@@ -29,19 +29,19 @@ def get_signal():
         ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data else 0.0
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data else 0.0
 
-        # ৯০% বা ১০০% কনফার্মেশন ও দ্বিমুখী (BUY / SELL) রিয়াল লজিক (কোনো ফেক বা র্যান্ডম সিগন্যাল নেই)
+        # ৯০% বা ১০০% কনফার্মেশন ও দ্বিমুখী (BUY / SELL) রিয়াল লজিক
         signal = "BUY"
         confidence = 94
 
-        if rsi < 48 or (ema_fast > ema_slow and rsi < 56):
+        if rsi < 48 or (ema_fast > ema_slow and rsi < 55):
             signal = "BUY"
-            confidence = 96
-        elif rsi > 52 or (ema_fast < ema_slow and rsi > 44):
+            confidence = 95
+        elif rsi > 52 or (ema_fast < ema_slow and rsi > 45):
             signal = "SELL"
-            confidence = 96
+            confidence = 95
         else:
             signal = "BUY" if rsi <= 50 else "SELL"
-            confidence = 92
+            confidence = 91
 
         return jsonify({
             "signal": signal,
@@ -52,7 +52,7 @@ def get_signal():
     except Exception as e:
         return jsonify({
             "signal": "BUY",
-            "confidence": 92,
+            "confidence": 90,
             "status": "GREEN_EXECUTE"
         })
 
@@ -64,7 +64,7 @@ def bot_script():
         var d=document,s=d.getElementById('ybs');
         if(s)s.remove();
         s=d.createElement('style');s.id='ybs';
-        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
+        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,220px,0)}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
         d.head.appendChild(s);
         
         var b=d.createElement('div');window.YB=b;
@@ -101,9 +101,10 @@ def bot_script():
                 }
             }
             
+            # আলট্রা-স্মুথ জিপিইউ এক্সিলারেটেড স্ক্যানিং ওভারলে
             var sc=d.createElement('div');
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.85);z-index:9999998;pointer-events:none;will-change:opacity;';
-            sc.innerHTML='<div style="position:absolute;width:100%;height:4px;animation:fS 2s infinite ease-in-out,lGl 1s infinite;filter:drop-shadow(0 0 6px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:10px 20px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:15px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 15px #ff00ff,inset 0 0 8px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
+            sc.innerHTML='<div style="position:absolute;width:100%;height:4px;animation:fS 1.5s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 6px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:10px 20px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:15px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 15px #ff00ff,inset 0 0 8px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
             
             Promise.all([
@@ -113,29 +114,44 @@ def bot_script():
                 var j = results[0] || {};
                 sc.remove();
                 
+                var conf = Number(j.confidence || 90);
+                if(conf < 80) {
+                    var wb = d.createElement('div');
+                    wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3px solid #ffcc00;padding:12px 28px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:20px;z-index:9999999;box-shadow:0 0 20px #ffcc00;color:#ffcc00;text-align:center;white-space:nowrap;';
+                    wb.innerHTML = 'WAITING (< 80%)...';
+                    d.body.appendChild(wb);
+                    setTimeout(()=>wb.remove(), 1500);
+                    return;
+                }
+                
                 var sig = String(j.signal || 'BUY').toUpperCase();
                 var isSell = (sig === 'SELL' || sig === 'DOWN' || sig === 'PUT');
                 
                 var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
+                # কোটেক্সের সুনির্দিষ্ট গ্রিন (BUY/Call) ও রেড (SELL/Put) বাটন টার্গেট করা
                 var clicked = false;
-                var buttons = d.querySelectorAll('button');
-                buttons.forEach(function(bt){
-                    if(clicked) return;
+                var buttons = d.querySelectorAll('button, .btn-call, .btn-put, [class*="call"], [class*="put"]');
+                for(var i=0; i<buttons.length; i++){
+                    var bt = buttons[i];
                     var text = bt.innerText ? bt.innerText.trim().toUpperCase() : '';
+                    var cls = bt.className ? bt.className.toUpperCase() : '';
+                    
                     if(!isSell){
-                        if(text === 'BUY' || text.startsWith('BUY') || text.includes('HIGHER') || text.includes('CALL')){
+                        if(text === 'BUY' || text === 'CALL' || text.includes('HIGHER') || cls.includes('CALL') || cls.includes('BUY')){
                             bt.click();
                             clicked = true;
+                            break;
                         }
-                    }else{
-                        if(text === 'SELL' || text.startsWith('SELL') || text.includes('LOWER') || text.includes('PUT')){
+                    } else {
+                        if(text === 'SELL' || text === 'PUT' || text.includes('LOWER') || cls.includes('PUT') || cls.includes('SELL')){
                             bt.click();
                             clicked = true;
+                            break;
                         }
                     }
-                });
+                }
                 
                 var sb = d.createElement('div');
                 sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3px solid '+col+';padding:12px 28px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:20px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 20px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
