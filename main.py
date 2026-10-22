@@ -3,10 +3,8 @@ from pyquotex.stable_api import Quotex
 from app import start_server
 
 async def main():
-    # ফ্লাস্ক ওয়েব সার্ভিস চালু রাখা
     start_server()
     
-    # কোটেক্স একাউন্ট কানেকশন সেটআপ
     client = Quotex(
         email="your_quotex_email@gmail.com", 
         password="your_quotex_password",
@@ -23,7 +21,6 @@ async def main():
         payouts = await client.get_all_payout()
         print(f"📊 Current Live Payout Rates: {payouts}")
         
-        # ওটিসি বা লাইভ এসেটের রিয়েল-টাইম ক্যান্ডেল সাবস্ক্রাইব
         asset = "EURUSD_otc"
         await client.subscribe_candles(asset, 60)
         
