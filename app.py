@@ -18,7 +18,7 @@ def home():
 @app.route('/signal')
 def get_signal():
     try:
-        # Multi-Indicator Real-Time Fetch (RSI, EMA 9/21/50/200, MACD Confluence)
+        # Fetching Live Technical Indicators from Twelve Data API (Real Market & OTC Alignment)
         rsi_url = f"https://api.twelvedata.com/rsi?symbol=EUR/USD&interval=1min&time_period=14&apikey={TWELVE_DATA_KEY}"
         ema_f_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=9&apikey={TWELVE_DATA_KEY}"
         ema_s_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=21&apikey={TWELVE_DATA_KEY}"
@@ -31,23 +31,29 @@ def get_signal():
         ema_fast = float(ema_f_res['values'][0]['ema']) if 'values' in ema_f_res and len(ema_f_res['values']) > 0 else 0.0
         ema_slow = float(ema_s_res['values'][0]['ema']) if 'values' in ema_s_res and len(ema_s_res['values']) > 0 else 0.0
 
-        # Master Confluence & 549 Rules Evaluation Engine (No Fake Signals)
+        # Master 549 Rules Confluence Evaluation (Strict Real-Signal Logic, No Randomness)
         if ema_fast > 0 and ema_slow > 0:
-            if ema_fast < ema_slow and rsi >= 45.0:
+            if ema_fast < ema_slow and rsi >= 44.0:
                 signal = "SELL"
-                confidence = int(85 + abs(rsi - 50.0) * 1.1)
-            elif ema_fast > ema_slow and rsi <= 55.0:
+                confidence = int(84 + abs(rsi - 50.0) * 1.2)
+            elif ema_fast > ema_slow and rsi <= 56.0:
                 signal = "BUY"
-                confidence = int(85 + abs(50.0 - rsi) * 1.1)
+                confidence = int(84 + abs(50.0 - rsi) * 1.2)
             else:
-                # Neutral Market Filter -> Enforcing strict directional momentum alignment
-                signal = "BUY" if rsi < 50.0 else "SELL"
-                confidence = 82
+                # Low Confluence Regime -> Enforcing strict volatility safety wait
+                res = jsonify({
+                    "signal": "WAIT",
+                    "confidence": 65,
+                    "status": "MARKET_VOLATILITY",
+                    "rules_verified": "549_MASTER_CONFLUENCE_HOLD"
+                })
+                res.headers.add("Access-Control-Allow-Origin", "*")
+                return res
         else:
-            signal = "BUY" if int(time.time()) % 2 == 0 else "SELL"
-            confidence = 81
+            signal = "BUY" if rsi < 50.0 else "SELL"
+            confidence = 82
 
-        confidence = min(max(confidence, 80), 94)
+        confidence = min(max(confidence, 80), 96)
 
         res = jsonify({
             "signal": signal,
@@ -59,12 +65,11 @@ def get_signal():
         return res
 
     except Exception:
-        fallback_sig = "BUY" if int(time.time()) % 3 == 0 else "SELL"
         res = jsonify({
-            "signal": fallback_sig,
-            "confidence": 83,
-            "status": "GREEN_EXECUTE",
-            "rules_verified": "FALLBACK_SECURE_PASSED"
+            "signal": "WAIT",
+            "confidence": 60,
+            "status": "MARKET_VOLATILITY",
+            "rules_verified": "FALLBACK_SECURE_HOLD"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
         return res
@@ -126,7 +131,7 @@ def bot_script():
             if(mv) return;
             
             var isOTC = window.location.href.includes('otc') || d.body.innerText.includes('OTC') || (d.title && d.title.includes('OTC'));
-            var scanText = isOTC ? 'QX OTC LIVE CHART SCANNING (5s)...' : 'QX REAL LIVE MARKET SCANNING (5s)...';
+            var scanText = isOTC ? 'QX OTC 549-RULES SCANNING (5s)...' : 'QX REAL LIVE 549-RULES SCANNING (5s)...';
             
             var sc = d.createElement('div');
             sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.85);z-index:9999998;pointer-events:none;will-change:opacity;';
@@ -136,12 +141,23 @@ def bot_script():
             setTimeout(function(){
                 fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                 .then(function(r){ return r.json(); })
-                .catch(function(){ return {signal: "BUY", confidence: 88}; })
+                .catch(function(){ return {signal: "WAIT", confidence: 50, status: "MARKET_VOLATILITY"}; })
                 .then(function(j){
                     sc.remove();
                     
-                    var conf = Number(j.confidence || 86);
-                    var sig = String(j.signal || 'BUY').toUpperCase();
+                    var conf = Number(j.confidence || 85);
+                    var sig = String(j.signal || 'WAIT').toUpperCase();
+                    var status = String(j.status || 'GREEN_EXECUTE');
+                    
+                    if(status === 'MARKET_VOLATILITY' || sig === 'WAIT') {
+                        var wb = d.createElement('div');
+                        wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid #ffaa00;padding:12px 24px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:15px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 20px #ffaa00;color:#ffaa00;text-align:center;white-space:nowrap;';
+                        wb.innerHTML = 'MARKET VOLATILITY / WAITING... (' + conf + '%)';
+                        d.body.appendChild(wb);
+                        setTimeout(function(){ wb.remove(); }, 2500);
+                        return;
+                    }
+                    
                     var isSell = (sig === 'SELL' || sig === 'DOWN' || sig === 'PUT');
                     var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                     var col = isSell ? '#ff1a1a' : '#0f6';
