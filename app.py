@@ -130,18 +130,23 @@ def bot_script():
                 }
             }
             
+            // স্ক্যানিং ওভারলে চালু করা
             var sc=d.createElement('div');
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.92);z-index:9999998;pointer-events:none;';
             sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
             
-            fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
-            .then(r=>r.json())
-            .then(function(j){
+            // Promise.all ব্যবহার করে স্ক্যানিং অ্যানিমেশনটি ৩.৫ সেকেন্ড স্থায়ী করা হলো যাতে স্মুথলি ডেটা লোড হয়
+            Promise.all([
+                fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
+                new Promise(function(res){setTimeout(res, 3500);})
+            ]).then(function(results){
+                var j = results[0] || {};
                 sc.remove();
+                
                 var sig = String(j.signal || 'WAIT').toUpperCase();
                 
-                // ১. যদি ৯০% এর কম কনফার্মেশন থাকে তবে WAIT দেখাবে
+                // কনফার্মেশন কম বা মার্কেট খারাপ থাকলে WAIT দেখানো
                 if(sig === 'WAIT' || sig === 'HOLD') {
                     var sb = d.createElement('div');
                     sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid #ffcc00;padding:16px 38px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:28px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px #ffcc00;color:#ffcc00;';
@@ -151,11 +156,11 @@ def bot_script():
                     return;
                 }
                 
-                // ২. BUY বা SELL সিগন্যালের ক্ষেত্রে অটো-ক্লিক
                 var isSell = (sig === 'SELL');
                 var txt = isSell ? 'SELL' : 'BUY';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
+                // Quotex বাই/সেল বাটনে অটো-ক্লিক
                 var clicked = false;
                 var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
@@ -193,9 +198,6 @@ def bot_script():
                         }
                     }, 1000);
                 }
-            })
-            .catch(function(){
-                sc.remove();
             });
         };
     })();
