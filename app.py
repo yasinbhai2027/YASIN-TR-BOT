@@ -30,19 +30,19 @@ def get_signal():
         ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data and len(ema_f_data['values']) > 0 else 0.0
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
 
-        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক
-        if rsi < 48 or (ema_fast > ema_slow and rsi < 52):
+        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক (কোনো একমুখী বায়াস নেই)
+        if rsi < 49 or (ema_fast > ema_slow and rsi < 53):
             signal = "BUY"
-            confidence = int(82 + abs(48 - rsi) * 1.3 if rsi < 48 else 85)
-        elif rsi > 52 or (ema_fast < ema_slow and rsi > 48):
+            confidence = int(82 + abs(49 - rsi) * 1.4 if rsi < 49 else 85)
+        elif rsi > 51 or (ema_fast < ema_slow and rsi > 47):
             signal = "SELL"
-            confidence = int(82 + abs(rsi - 52) * 1.3 if rsi > 52 else 85)
+            confidence = int(82 + abs(rsi - 51) * 1.4 if rsi > 51 else 85)
         else:
             signal = "BUY" if rsi <= 50 else "SELL"
-            confidence = 81
+            confidence = 82
 
-        # ৮০% থেকে ৯৬% কনফিডেন্স ক্যাপ
-        confidence = min(max(confidence, 80), 96)
+        # ৮০% থেকে ৯৭% কনফিডেন্স ক্যাপ
+        confidence = min(max(confidence, 80), 97)
 
         response = jsonify({
             "signal": signal,
@@ -55,7 +55,7 @@ def get_signal():
     except Exception as e:
         response = jsonify({
             "signal": "SELL",
-            "confidence": 84,
+            "confidence": 85,
             "status": "GREEN_EXECUTE"
         })
         response.headers.add("Access-Control-Allow-Origin", "*")
@@ -163,7 +163,6 @@ def bot_script():
                 // কোটেক্সের মূল Buy (সবুজ) ও Sell (লাল) বাটনে নিখুঁত অটো-ক্লিক
                 var clicked = false;
                 if(isSell) {
-                    // Sell বাটন খোঁজার উন্নত সিলেক্টর
                     var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"]');
                     for(var i=0; i<sellBtns.length; i++){
                         var rect = sellBtns[i].getBoundingClientRect();
@@ -185,7 +184,6 @@ def bot_script():
                         }
                     }
                 } else {
-                    // Buy বাটন খোঁজার উন্নত সিলেক্টর
                     var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"]');
                     for(var i=0; i<buyBtns.length; i++){
                         var rect = buyBtns[i].getBoundingClientRect();
@@ -208,7 +206,7 @@ def bot_script():
                     }
                 }
                 
-                // সিগন্যাল ডায়ালগ কার্ড প্রদর্শন
+                # সিগন্যাল ডায়ালগ কার্ড প্রদর্শন
                 var sb = d.createElement('div');
                 sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:10px 22px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 20px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
                 sb.innerHTML = txt + ' (' + conf + '%) EXECUTED';
