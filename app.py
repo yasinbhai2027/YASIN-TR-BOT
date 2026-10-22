@@ -5,20 +5,16 @@ import time
 
 app = Flask(__name__)
 
-# Master API & Knowledge Base Configuration (549 Rules & Multi-Feed Integrated)
+# Master API Configuration (549 Rules Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
-GROQ_API_KEY = "gsk_W7pys4nkUoyGz69YSC3" + "QWGdyb3FYTlBpucHbvPYAf6jhIOoDTKAM"
-FINNHUB_KEY = "dbcaa19r01qqr3s0pf60" + "dbcaa19r01qqr3s0pf6g"
-QUANTEX_TOKEN = "qx_live_1xxOcsg5_3vEavHfZwAkGufh9NLLWJhUqG3T6H6oCEuoDWeJV"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max 549-Rules Master Engine Running 24/7!"
+    return "Quotex Ultra-Pro Max 549-Rules Engine Running 24/7!"
 
 @app.route('/signal')
 def get_signal():
     try:
-        # Multi-Indicator Real-Time Fetch (RSI, EMA & Price Action Validation)
         rsi_url = f"https://api.twelvedata.com/rsi?symbol=EUR/USD&interval=1min&time_period=14&apikey={TWELVE_DATA_KEY}"
         ema_f_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=9&apikey={TWELVE_DATA_KEY}"
         ema_s_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=21&apikey={TWELVE_DATA_KEY}"
@@ -31,7 +27,6 @@ def get_signal():
         ema_fast = float(ema_f_res['values'][0]['ema']) if 'values' in ema_f_res and len(ema_f_res['values']) > 0 else 0.0
         ema_slow = float(ema_s_res['values'][0]['ema']) if 'values' in ema_s_res and len(ema_s_res['values']) > 0 else 0.0
 
-        # Balanced Two-Sided Signal Distribution Logic (Ensuring accurate alternating BUY and SELL)
         current_time = int(time.time())
         if ema_fast > 0 and ema_slow > 0:
             if ema_fast < ema_slow and rsi >= 42.0:
@@ -52,8 +47,7 @@ def get_signal():
         res = jsonify({
             "signal": signal,
             "confidence": confidence,
-            "status": "GREEN_EXECUTE",
-            "rules_verified": "549_MASTER_LOGICS_PASSED"
+            "status": "GREEN_EXECUTE"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
         return res
@@ -63,8 +57,7 @@ def get_signal():
         res = jsonify({
             "signal": fallback_sig,
             "confidence": 84,
-            "status": "GREEN_EXECUTE",
-            "rules_verified": "FALLBACK_SECURE_PASSED"
+            "status": "GREEN_EXECUTE"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
         return res
@@ -150,7 +143,7 @@ def bot_script():
                                 if(sellBtns[i].getBoundingClientRect().width > 0) { sellBtns[i].click(); break; }
                             }
                         } else {
-                            var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success'], .section-deal__button-up');
+                            var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"], .section-deal__button-up');
                             for(var k=0; k<buyBtns.length; k++){
                                 if(buyBtns[k].getBoundingClientRect().width > 0) { buyBtns[k].click(); break; }
                             }
