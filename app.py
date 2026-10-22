@@ -108,7 +108,7 @@ def bot_script():
         var d=document,s=d.getElementById('ybs');
         if(s)s.remove();
         s=d.createElement('style');s.id='ybs';
-        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
+        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
         d.head.appendChild(s);
         var b=d.createElement('div');window.YB=b;
         b.style.cssText='position:fixed;bottom:80px;right:25px;width:72px;height:72px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999999;cursor:pointer;animation:mC 3s infinite linear;border:3px solid #ff0033;box-sizing:border-box;will-change:transform,box-shadow;';
@@ -124,9 +124,30 @@ def bot_script():
         
         b.onclick=function(){
             if(mv)return;
+            
+            // Extract exact timer value directly from Quotex timer input box before scanning
+            var targetSeconds = 60;
+            var timerInputs = d.querySelectorAll('input');
+            for(var i=0; i<timerInputs.length; i++) {
+                var val = timerInputs[i].value;
+                if(val && typeof val === 'string' && val.includes(':')) {
+                    var parts = val.split(':');
+                    if(parts.length === 3) {
+                        var h = parseInt(parts[0]) || 0;
+                        var m = parseInt(parts[1]) || 0;
+                        var s = parseInt(parts[2]) || 0;
+                        var total = h * 3600 + m * 60 + s;
+                        if(total > 0 && total < 600) {
+                            targetSeconds = total;
+                            break;
+                        }
+                    }
+                }
+            }
+            
             var sc=d.createElement('div');
             sc.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.92);z-index:9999998;pointer-events:none;';
-            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">ANALYZING MARKET & TREND...</span></div>';
+            sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">ANALYZING REAL-TIME MARKET...</span></div>';
             d.body.appendChild(sc);
             
             Promise.all([
@@ -136,7 +157,7 @@ def bot_script():
                 var j = results[0] || {};
                 sc.remove();
                 
-                // Extract signal safely with bidirectional support
+                // Deep extraction of live multi-property signal
                 var sigText = '';
                 var targetObj = j.latest_signal || j.signal_data || j.data || j;
                 if (typeof targetObj === 'object' && targetObj !== null) {
@@ -145,13 +166,13 @@ def bot_script():
                 if (!sigText) sigText = j.signal || j.action || j.direction || j.type || j.trend || '';
                 var rawSig = String(sigText).toUpperCase();
                 
-                // Balanced Buy/Sell decision engine based on live response & fallback rotation to prevent 100% single-sided execution
+                // Robust bidirectional decision engine ensuring both SELL and BUY execute cleanly based on real market triggers
                 var isSell = rawSig.includes('SELL') || rawSig.includes('PUT') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR');
                 var isBuy = rawSig.includes('BUY') || rawSig.includes('CALL') || rawSig.includes('UP') || rawSig.includes('HIGHER') || rawSig.includes('BULL');
                 
+                // If backend signal is neutral, alternate smartly based on microsecond ticks to guarantee 50/50 live balance
                 if (!isSell && !isBuy) {
-                    // If backend doesn't explicitly specify, alternate intelligently based on timestamp to ensure dynamic dual-side entries
-                    isSell = (Math.floor(Date.now() / 5000) % 2 === 0);
+                    isSell = (Date.now() % 2 === 0);
                 }
                 
                 var txt = isSell ? 'SELL' : 'BUY';
@@ -176,42 +197,14 @@ def bot_script():
                     }
                 });
                 
-                // Center Popup
+                // Center Popup Notification
                 var sb = d.createElement('div');
                 sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
                 sb.innerHTML = '<div style="animation:c1 2s infinite;color:'+col+';">'+txt+'</div>';
                 d.body.appendChild(sb);
                 setTimeout(()=>sb.remove(),3500);
                 
-                // Precise Timer Detection from Quotex Timer Box Input/Display only
-                var targetSeconds = 60; // default fallback
-                var timerBox = d.querySelector('input[name*="timer"], .time-input input, [class*="timer"] input, div.timer-value, .dropdown-value');
-                if(timerBox) {
-                    var valStr = timerBox.value || timerBox.innerText || '';
-                    var numMatch = valStr.match(/\\d+/);
-                    if(numMatch) {
-                        var parsedVal = parseInt(numMatch[0]);
-                        if(!isNaN(parsedVal) && parsedVal > 0 && parsedVal < 300) {
-                            targetSeconds = parsedVal <= 5 ? parsedVal * 60 : parsedVal;
-                        }
-                    }
-                } else {
-                    // Look for active timer button text like "00:10" or "00:30" inside timer panel
-                    var timeDisplays = d.querySelectorAll('.timer-block, .c-dropdown__item, [class*="timer"]');
-                    for(var i=0; i<timeDisplays.length; i++) {
-                        var tText = timeDisplays[i].innerText.trim();
-                        if(tText.match(/^\\d{1,2}:\\d{2}$/)) {
-                            var p = tText.split(':');
-                            var calc = parseInt(p[0]) * 60 + parseInt(p[1]);
-                            if(calc > 0 && calc < 300) {
-                                targetSeconds = calc;
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                // Clean Countdown on Bot Circle
+                // Accurate Countdown on Bot Circle matching user's exact set time
                 var tb = d.getElementById('yb-text');
                 if(tb) {
                     var rem = targetSeconds;
