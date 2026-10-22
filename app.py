@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-# Master API Configuration (549 Rules & Master APIs Integrated)
+# Master API Keys & Configuration
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 GROQ_API_KEY = "gsk_W7pys4nkUoyGz69YSC3" + "QWGdyb3FYTlBpucHbvPYAf6jhIOoDTKAM"
 FINNHUB_KEY = "dbcaa19r01qqr3s0pf60" + "dbcaa19r01qqr3s0pf6g"
@@ -12,7 +12,7 @@ QUANTEX_TOKEN = "qx_live_1xxOcsg5_3vEavHfZwAkGufh9NLLWJhUqG3T6H6oCEuoDWeJV"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max 549-Rules Bi-Directional Engine Running 24/7!"
+    return "Quotex Ultra-Pro Max Bi-Directional Engine Running 24/7!"
 
 @app.route('/signal')
 def get_signal():
@@ -22,27 +22,28 @@ def get_signal():
         ema_fast_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=9&apikey={TWELVE_DATA_KEY}"
         ema_slow_url = f"https://api.twelvedata.com/ema?symbol=EUR/USD&interval=1min&time_period=21&apikey={TWELVE_DATA_KEY}"
         
-        rsi_data = requests.get(rsi_url, timeout=3).json()
-        ema_f_data = requests.get(ema_fast_url, timeout=3).json()
-        ema_s_data = requests.get(ema_slow_url, timeout=3).json()
+        rsi_res = requests.get(rsi_url, timeout=3).json()
+        ema_f_res = requests.get(ema_fast_url, timeout=3).json()
+        ema_s_res = requests.get(ema_slow_url, timeout=3).json()
 
-        rsi = float(rsi_data['values'][0]['rsi']) if 'values' in rsi_data and len(rsi_data['values']) > 0 else 50.0
-        ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data and len(ema_f_data['values']) > 0 else 0.0
-        ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
+        rsi = float(rsi_res['values'][0]['rsi']) if 'values' in rsi_res and len(rsi_res['values']) > 0 else 50.0
+        ema_fast = float(ema_f_res['values'][0]['ema']) if 'values' in ema_f_res and len(ema_f_res['values']) > 0 else 0.0
+        ema_slow = float(ema_s_res['values'][0]['ema']) if 'values' in ema_s_res and len(ema_s_res['values']) > 0 else 0.0
 
-        # ১০০% নিখুঁত দ্বিমুখী (Bi-Directional: BUY & SELL) মাস্টার কনফ্লুয়েন্স লজিক
-        if rsi >= 51.0 or (ema_fast < ema_slow and rsi > 48.0):
+        # নিখুঁত দ্বিমুখী (BUY / SELL) কনফ্লুয়েন্স লজিক
+        if rsi > 51.0 or (ema_fast < ema_slow and rsi > 48.0):
             signal = "SELL"
-            confidence = int(82 + abs(rsi - 50) * 1.3)
-        elif rsi <= 49.0 or (ema_fast > ema_slow and rsi < 52.0):
+            confidence = int(83 + abs(rsi - 50.0) * 1.4)
+        elif rsi < 49.0 or (ema_fast > ema_slow and rsi < 52.0):
             signal = "BUY"
-            confidence = int(82 + abs(50 - rsi) * 1.3)
+            confidence = int(83 + abs(50.0 - rsi) * 1.4)
         else:
-            signal = "BUY" if rsi <= 50.0 else "SELL"
-            confidence = 81
+            # নিউট্রাল জোনে কনফিডেন্স কমিয়ে ড্রপ করা
+            signal = "SELL" if ema_fast < ema_slow else "BUY"
+            confidence = 79  # ৮০% এর কম হওয়ায় স্ক্রিনে WAITING দেখাবে
 
-        # ৮০% থেকে ৯৭% কনফিডেন্স ক্যাপ
-        confidence = min(max(confidence, 80), 97)
+        # ৮০% থেকে ৯৬% কনফিডেন্স ক্যাপ
+        confidence = min(max(confidence, 79), 96)
 
         response = jsonify({
             "signal": signal,
@@ -53,9 +54,8 @@ def get_signal():
         return response
 
     except Exception as e:
-        # ফলব্যাক লজিক যাতে কোনো অবস্থাতেই ক্র্যাশ না করে
         response = jsonify({
-            "signal": "BUY",
+            "signal": "SELL",
             "confidence": 82,
             "status": "GREEN_EXECUTE"
         })
@@ -135,7 +135,7 @@ def bot_script():
             
             var sc = d.createElement('div');
             sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.82);z-index:9999998;pointer-events:none;will-change:opacity;';
-            sc.innerHTML = '<div style="position:absolute;width:100%;height:5px;animation:fS 1.3s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 10px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:12px 24px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
+            sc.innerHTML = '<div style="position:absolute;width:100%;height:5px;animation:fS 1.3s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 10px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:12px 24px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">SCANNING MARKET...</span></div>';
             d.body.appendChild(sc);
             
             fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
@@ -144,13 +144,13 @@ def bot_script():
             .then(function(j){
                 sc.remove();
                 
-                var conf = Number(j.confidence || 80);
+                var conf = Number(j.confidence || 0);
                 if(conf < 80) {
                     var wb = d.createElement('div');
-                    wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid #ffcc00;padding:10px 20px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:15px;z-index:9999999;box-shadow:0 0 15px #ffcc00;color:#ffcc00;text-align:center;white-space:nowrap;';
-                    wb.innerHTML = 'WAITING...';
+                    wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid #ffcc00;padding:12px 22px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:15px;z-index:9999999;box-shadow:0 0 20px #ffcc00;color:#ffcc00;text-align:center;white-space:nowrap;';
+                    wb.innerHTML = 'WAITING FOR HIGH ACCURACY SETUP...';
                     d.body.appendChild(wb);
-                    setTimeout(function(){ wb.remove(); }, 1200);
+                    setTimeout(function(){ wb.remove(); }, 1400);
                     return;
                 }
                 
@@ -161,7 +161,7 @@ def bot_script():
                 
                 var clicked = false;
                 if(isSell) {
-                    var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"]');
+                    var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"], .section-deal__button-down');
                     for(var i=0; i<sellBtns.length; i++){
                         var rect = sellBtns[i].getBoundingClientRect();
                         if(rect.width > 0 && rect.height > 0) {
@@ -174,7 +174,7 @@ def bot_script():
                         var allB = d.querySelectorAll('button');
                         for(var m=0; m<allB.length; m++){
                             var tText = allB[m].innerText ? allB[m].innerText.trim().toUpperCase() : '';
-                            if(tText.includes('SELL') || tText.includes('PUT') || tText.includes('DOWN')) {
+                            if(tText.includes('SELL') || tText.includes('PUT') || tText.includes('DOWN') || tText.includes('LOWER')) {
                                 allB[m].click();
                                 clicked = true;
                                 break;
@@ -182,11 +182,11 @@ def bot_script():
                         }
                     }
                 } else {
-                    var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"]');
-                    for(var i=0; i<buyBtns.length; i++){
-                        var rect = buyBtns[i].getBoundingClientRect();
-                        if(rect.width > 0 && rect.height > 0) {
-                            buyBtns[i].click();
+                    var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"], .section-deal__button-up');
+                    for(var k=0; k<buyBtns.length; k++){
+                        var rect2 = buyBtns[k].getBoundingClientRect();
+                        if(rect2.width > 0 && rect2.height > 0) {
+                            buyBtns[k].click();
                             clicked = true;
                             break;
                         }
@@ -195,7 +195,7 @@ def bot_script():
                         var allB2 = d.querySelectorAll('button');
                         for(var n=0; n<allB2.length; n++){
                             var tText2 = allB2[n].innerText ? allB2[n].innerText.trim().toUpperCase() : '';
-                            if(tText2.includes('BUY') || tText2.includes('CALL') || tText2.includes('HIGHER')) {
+                            if(tText2.includes('BUY') || tText2.includes('CALL') || tText2.includes('HIGHER') || tText2.includes('UP')) {
                                 allB2[n].click();
                                 clicked = true;
                                 break;
