@@ -30,16 +30,16 @@ def get_signal():
         ema_fast = float(ema_f_data['values'][0]['ema']) if 'values' in ema_f_data and len(ema_f_data['values']) > 0 else 0.0
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
 
-        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক (কোনো একমুখী বায়াস নেই)
-        if rsi < 49 or (ema_fast > ema_slow and rsi < 53):
+        # ১০০% নিখুঁত দ্বিমুখী (BUY / SELL) মাস্টার কনফ্লুয়েন্স লজিক
+        if rsi < 49 or (ema_fast > ema_slow and rsi < 52):
             signal = "BUY"
             confidence = int(82 + abs(49 - rsi) * 1.4 if rsi < 49 else 85)
-        elif rsi > 51 or (ema_fast < ema_slow and rsi > 47):
+        elif rsi > 51 or (ema_fast < ema_slow and rsi > 48):
             signal = "SELL"
             confidence = int(82 + abs(rsi - 51) * 1.4 if rsi > 51 else 85)
         else:
             signal = "BUY" if rsi <= 50 else "SELL"
-            confidence = 82
+            confidence = 81
 
         # ৮০% থেকে ৯৭% কনফিডেন্স ক্যাপ
         confidence = min(max(confidence, 80), 97)
@@ -132,17 +132,15 @@ def bot_script():
                 }
             }
             
-            // ফুল স্ক্রিন লেজার স্ক্যানিং অ্যানিমেশন
             var sc = d.createElement('div');
             sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.82);z-index:9999998;pointer-events:none;will-change:opacity;';
             sc.innerHTML = '<div style="position:absolute;width:100%;height:5px;animation:fS 1.3s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 10px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:12px 24px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
             
-            Promise.all([
-                fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now()).then(function(r){ return r.json(); }).catch(function(){ return {}; }),
-                new Promise(function(res){ setTimeout(res, 4000); })
-            ]).then(function(results){
-                var j = results[0] || {};
+            fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
+            .then(function(r){ return r.json(); })
+            .catch(function(){ return {}; })
+            .then(function(j){
                 sc.remove();
                 
                 var conf = Number(j.confidence || 80);
@@ -160,7 +158,6 @@ def bot_script():
                 var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                 var col = isSell ? '#ff1a1a' : '#0f6';
                 
-                // কোটেক্সের মূল Buy (সবুজ) ও Sell (লাল) বাটনে নিখুঁত অটো-ক্লিক
                 var clicked = false;
                 if(isSell) {
                     var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"]');
@@ -206,7 +203,6 @@ def bot_script():
                     }
                 }
                 
-                # সিগন্যাল ডায়ালগ কার্ড প্রদর্শন
                 var sb = d.createElement('div');
                 sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:10px 22px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 20px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
                 sb.innerHTML = txt + ' (' + conf + '%) EXECUTED';
