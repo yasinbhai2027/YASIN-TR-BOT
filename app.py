@@ -108,7 +108,7 @@ def bot_script():
         var d=document,s=d.getElementById('ybs');
         if(s)s.remove();
         s=d.createElement('style');s.id='ybs';
-        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 8px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
+        s.innerHTML='@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 10px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%,100%{top:2%}50%{top:92%}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 18px #ff3300,0 0 30px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 18px #00ffff,0 0 30px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 18px #0f6,0 0 30px #ff3300}}';
         d.head.appendChild(s);
         var b=d.createElement('div');window.YB=b;
         b.style.cssText='position:fixed;bottom:80px;right:25px;width:72px;height:72px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999999;cursor:pointer;animation:mC 3s infinite linear;border:3px solid #ff0033;box-sizing:border-box;will-change:transform,box-shadow;';
@@ -128,7 +128,6 @@ def bot_script():
             sc.innerHTML='<div style="position:absolute;width:100%;height:5px;animation:fS 3s infinite ease-in-out,lGl 1.5s infinite;filter:drop-shadow(0 0 8px #fff);will-change:top;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:3.5px solid #0ff;padding:15px 30px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:20px;animation:mC 3s infinite;background:rgba(0,0,0,0.88);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
             d.body.appendChild(sc);
             
-            // Fetch live backend signal with cache busting (?t=timestamp)
             Promise.all([
                 fetch('https://yasin-tr-bot.onrender.com/?t='+Date.now()).then(r=>r.json()).catch(()=>({})),
                 new Promise(function(res){setTimeout(res,5000);})
@@ -136,36 +135,36 @@ def bot_script():
                 var j=results[0];
                 sc.remove();
                 
-                var sigObj=j.latest_signal||j;
-                var rawSig=String(sigObj.signal||j.signal||sigObj.action||j.action||'BUY').toUpperCase();
+                var sigObj = j.latest_signal || j.signal_data || j;
+                var sigVal = sigObj.signal || j.signal || sigObj.action || j.action || sigObj.direction || j.direction || sigObj.type || j.type || 'BUY';
+                var rawSig = String(sigVal).toUpperCase();
                 
-                // Determine SELL vs BUY
-                var isSell=rawSig.includes('PUT')||rawSig.includes('SELL')||rawSig.includes('DOWN')||rawSig.includes('LOWER');
-                var txt=isSell?'SELL':'BUY';
-                var col=isSell?'#ff1a1a':'#0f6';
+                // Robust check for SELL / DOWN / PUT / LOWER / BEAR
+                var isSell = rawSig.includes('PUT') || rawSig.includes('SELL') || rawSig.includes('DOWN') || rawSig.includes('LOWER') || rawSig.includes('BEAR') || rawSig === 'SELL' || rawSig === 'DOWN';
+                var txt = isSell ? 'SELL' : 'BUY';
+                var col = isSell ? '#ff1a1a' : '#0f6';
                 
-                // Ultra-precise Auto-Clicker targeting Quotex Buy / Sell buttons
-                var clicked=false;
-                var buttons=d.querySelectorAll('button');
+                var clicked = false;
+                var buttons = d.querySelectorAll('button');
                 buttons.forEach(function(bt){
                     if(clicked) return;
-                    var text=bt.innerText?bt.innerText.trim().toUpperCase():'';
+                    var text = bt.innerText ? bt.innerText.trim().toUpperCase() : '';
                     if(!isSell){
-                        if(text==='BUY' || text.startsWith('BUY')){
+                        if(text === 'BUY' || text.startsWith('BUY') || text.includes('HIGHER') || text.includes('CALL')){
                             bt.click();
-                            clicked=true;
+                            clicked = true;
                         }
                     }else{
-                        if(text==='SELL' || text.startsWith('SELL')){
+                        if(text === 'SELL' || text.startsWith('SELL') || text.includes('LOWER') || text.includes('PUT')){
                             bt.click();
-                            clicked=true;
+                            clicked = true;
                         }
                     }
                 });
                 
-                var sb=d.createElement('div');
-                sb.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
-                sb.innerHTML='<div style="animation:c1 2s infinite;color:'+col+';">'+txt+'</div>';
+                var sb = d.createElement('div');
+                sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:3.5px solid '+col+';padding:16px 38px;border-radius:16px;font-family:sans-serif;font-style:normal;font-weight:900;font-size:32px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 30px '+col+', inset 0 0 12px '+col+';';
+                sb.innerHTML = '<div style="animation:c1 2s infinite;color:'+col+';">'+txt+'</div>';
                 d.body.appendChild(sb);
                 setTimeout(()=>sb.remove(),3500);
             });
