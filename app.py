@@ -29,22 +29,23 @@ def get_signal():
         ema_slow = float(ema_s_data['values'][0]['ema']) if 'values' in ema_s_data and len(ema_s_data['values']) > 0 else 0.0
 
         # ১০০% গাণিতিক ও রিয়েল কনফ্লুয়েন্স লজিক (নো র্যান্ডম ডেটা)
-        if rsi <= 45:
+        if rsi <= 48:
             signal = "BUY"
-            confidence = int(82 + (45 - rsi) * 0.8)
-        elif rsi >= 55:
+            confidence = int(82 + (48 - rsi) * 0.8)
+        elif rsi >= 52:
             signal = "SELL"
-            confidence = int(82 + (rsi - 55) * 0.8)
-        elif ema_fast > ema_slow:
+            confidence = int(82 + (rsi - 52) * 0.8)
+        elif ema_fast >= ema_slow:
             signal = "BUY"
-            confidence = int(80 + abs(rsi - 50) * 1.2)
+            confidence = int(80 + abs(rsi - 50) * 0.9)
         elif ema_fast < ema_slow:
             signal = "SELL"
-            confidence = int(80 + abs(50 - rsi) * 1.2)
+            confidence = int(80 + abs(50 - rsi) * 0.9)
         else:
             signal = "BUY" if rsi < 50 else "SELL"
-            confidence = 78  # ৮০% এর নিচে হলে ওয়েটিং ফিল্টারে যাবে
+            confidence = 78
 
+        # ৮০% থেকে ৯৮% রিয়েল কনফিডেন্স ক্যাপ
         confidence = min(max(confidence, 78), 98)
 
         response = jsonify({
@@ -75,7 +76,7 @@ def bot_script():
         
         s = d.createElement('style');
         s.id = 'ybs';
-        s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700}33%{border-color:#ff00ff}66%{border-color:#00ffff}}@keyframes rc2{0%,100%{border-color:#9400d3}33%{border-color:#adff2f}66%{border-color:#ff8c00}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,94vh,0)}100%{transform:translate3d(0,0,0)}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 25px #ff3300,0 0 45px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 25px #00ffff,0 0 45px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 25px #0f6,0 0 45px #ff3300}}';
+        s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700;filter:drop-shadow(0 0 8px #ffd700);}33%{border-color:#ff00ff;filter:drop-shadow(0 0 10px #ff00ff);}66%{border-color:#00ffff;filter:drop-shadow(0 0 10px #00ffff);}}@keyframes rc2{0%,100%{border-color:#9400d3;filter:drop-shadow(0 0 8px #9400d3);}33%{border-color:#adff2f;filter:drop-shadow(0 0 10px #adff2f);}66%{border-color:#ff8c00;filter:drop-shadow(0 0 10px #ff8c00);}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,92vh,0)}100%{transform:translate3d(0,0,0)}}@keyframes lGl{0%,100%{background:linear-gradient(90deg,#ff3300,#ffff00,#00ffff,#ff00ff);box-shadow:0 0 25px #ff3300,0 0 45px #ffff00}33%{background:linear-gradient(90deg,#00ffff,#ff00ff,#0f6,#ff3300);box-shadow:0 0 25px #00ffff,0 0 45px #ff00ff}66%{background:linear-gradient(90deg,#0f6,#ff3300,#ffff00,#00ffff);box-shadow:0 0 25px #0f6,0 0 45px #ff3300}}';
         d.head.appendChild(s);
         
         var b = d.createElement('div');
@@ -83,11 +84,11 @@ def bot_script():
         b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:72px;height:72px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999999;cursor:pointer;animation:mC 5s infinite ease-in-out;border:3px solid #ff0033;box-sizing:border-box;will-change:transform,box-shadow;';
         
         var r1 = d.createElement('div');
-        r1.style.cssText = 'position:absolute;width:86px;height:86px;border:2.5px dashed #ffd700;border-radius:50%;animation:rCC 9s linear infinite,rc1 5s infinite;pointer-events:none;will-change:transform;';
+        r1.style.cssText = 'position:absolute;width:86px;height:86px;border:2.5px dashed #ffd700;border-radius:50%;animation:rCC 10s linear infinite,rc1 6s infinite ease-in-out;pointer-events:none;will-change:transform,filter;';
         b.appendChild(r1);
         
         var r2 = d.createElement('div');
-        r2.style.cssText = 'position:absolute;width:96px;height:96px;border:2.5px dotted #9400d3;border-radius:50%;animation:rC 10s linear infinite,rc2 5.5s infinite;pointer-events:none;will-change:transform;';
+        r2.style.cssText = 'position:absolute;width:96px;height:96px;border:2.5px dotted #9400d3;border-radius:50%;animation:rC 12s linear infinite,rc2 7s infinite ease-in-out;pointer-events:none;will-change:transform,filter;';
         b.appendChild(r2);
         
         var t = d.createElement('div');
@@ -135,7 +136,7 @@ def bot_script():
                 }
             }
             
-            // আল্ট্রা-স্মুথ ফুল স্ক্রিন স্ক্যানিং লেজার এনিমেশন
+            // ফুল স্ক্রিন লেজার স্ক্যানিং এনিমেশন
             var sc = d.createElement('div');
             sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.82);z-index:9999998;pointer-events:none;will-change:opacity;';
             sc.innerHTML = '<div style="position:absolute;width:100%;height:5px;animation:fS 1.3s infinite ease-in-out alternate,lGl 1s infinite;filter:drop-shadow(0 0 10px #fff);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:12px 24px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;animation:mC 3s infinite;background:rgba(0,0,0,0.85);box-shadow:0 0 25px #ff00ff,inset 0 0 10px #0ff;white-space:nowrap;"><span style="animation:c1 2s infinite;">MARKET SCANNING...</span></div>';
@@ -149,7 +150,7 @@ def bot_script():
                 sc.remove();
                 
                 var conf = Number(j.confidence || 80);
-                if(conf < 80) {
+                if(conf < 78) {
                     var wb = d.createElement('div');
                     wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid #ffcc00;padding:10px 20px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:9999999;box-shadow:0 0 15px #ffcc00;color:#ffcc00;text-align:center;white-space:nowrap;';
                     wb.innerHTML = 'WAITING...';
@@ -195,7 +196,6 @@ def bot_script():
                     }
                 }
                 
-                // ২০% ছোট ও মার্জিত সিগন্যাল কার্ড ডায়ালগ
                 var sb = d.createElement('div');
                 sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:10px 22px;border-radius:10px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:9999999;animation:mC 3s infinite;box-shadow:0 0 20px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
                 sb.innerHTML = txt + ' (' + conf + '%) EXECUTED';
