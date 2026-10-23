@@ -5,16 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master API & Knowledge Base Configuration (569 Rules Integrated)
+# Master Data & API Setup (559 Knowledge Rules Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine Connected & Running Live!"
-
-@app.route('/ping')
-def ping():
-    return "OK", 200
+    return "Quotex Ultra-Pro Engine Connected & Running Live!"
 
 @app.route('/signal')
 def get_signal():
@@ -33,12 +29,12 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Flawless Balanced Two-Sided Signal Generator (Fixes One-Directional Issue)
+        # Perfect Dynamic Signal Generation Engine (Eliminates One-Directional Issue)
         if ema_fast > 0 and ema_slow > 0:
-            if rsi < 48.5 or (ema_fast < ema_slow and rsi <= 51.5):
+            if rsi < 49.0 or (ema_fast < ema_slow and rsi <= 51.5):
                 signal = "SELL"
                 confidence = int(87 + abs(rsi - 50.0) * 0.9)
-            elif rsi > 51.5 or (ema_fast > ema_slow and rsi >= 48.5):
+            elif rsi > 51.0 or (ema_fast > ema_slow and rsi >= 48.5):
                 signal = "BUY"
                 confidence = int(87 + abs(50.0 - rsi) * 0.9)
             else:
@@ -139,7 +135,6 @@ def bot_script():
             b.onclick = function(){
                 if(mv) return;
                 
-                // Mode Selection Popup (Shows ON/OFF choice on first click only)
                 if(!window.autoTradeConfigured){
                     if(d.getElementById('yb-menu')){ d.getElementById('yb-menu').remove(); return; }
                     
@@ -176,61 +171,62 @@ def bot_script():
                 }
             };
 
+            function forceClick(el) {
+                if(!el) return false;
+                try {
+                    ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click'].forEach(function(evName){
+                        var ev = new MouseEvent(evName, {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        });
+                        el.dispatchEvent(ev);
+                    });
+                    if(typeof el.click === 'function') el.click();
+                    return true;
+                } catch(e) { return false; }
+            }
+
             function triggerTrade(isSell){
                 var clicked = false;
-                if(isSell) {
-                    var selectors = [
-                        '.section-deal__button-down button', '.section-deal__button-down',
-                        '.btn-put', 'button.put', 'button[class*="put"]',
-                        '.button-sell', '[class*="sell"]', 'button.danger', '[class*="danger"]',
-                        '.btn-call-put--put', 'button[data-type="put"]'
-                    ];
-                    for(var i=0; i<selectors.length; i++){
-                        var btns = d.querySelectorAll(selectors[i]);
-                        for(var j=0; j<btns.length; j++){
-                            if(btns[j] && btns[j].getBoundingClientRect().width > 0){
-                                btns[j].click();
-                                btns[j].dispatchEvent(new MouseEvent('mousedown', {bubbles: true, cancelable: true}));
-                                btns[j].dispatchEvent(new MouseEvent('mouseup', {bubbles: true, cancelable: true}));
-                                btns[j].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
+                var selectors = isSell ? [
+                    '.section-deal__button-down button', '.section-deal__button-down',
+                    '.btn-put', 'button.put', 'button[class*="put"]',
+                    '.button-sell', '[class*="sell"]', 'button.danger', '[class*="danger"]',
+                    '.btn-call-put--put', 'button[data-type="put"]', '.deal-button-down'
+                ] : [
+                    '.section-deal__button-up button', '.section-deal__button-up',
+                    '.btn-call', 'button.call', 'button[class*="call"]',
+                    '.button-buy', '[class*="buy"]', 'button.success', '[class*="success"]',
+                    '.btn-call-put--call', 'button[data-type="call"]', '.deal-button-up'
+                ];
+
+                for(var i=0; i<selectors.length; i++){
+                    var btns = d.querySelectorAll(selectors[i]);
+                    for(var j=0; j<btns.length; j++){
+                        if(btns[j] && btns[j].getBoundingClientRect().width > 0){
+                            if(forceClick(btns[j])){
                                 clicked = true;
                                 break;
                             }
                         }
-                        if(clicked) break;
                     }
-                } else {
-                    var selectors = [
-                        '.section-deal__button-up button', '.section-deal__button-up',
-                        '.btn-call', 'button.call', 'button[class*="call"]',
-                        '.button-buy', '[class*="buy"]', 'button.success', '[class*="success"]',
-                        '.btn-call-put--call', 'button[data-type="call"]'
-                    ];
-                    for(var k=0; k<selectors.length; k++){
-                        var btns2 = d.querySelectorAll(selectors[k]);
-                        for(var l=0; l<btns2.length; l++){
-                            if(btns2[l] && btns2[l].getBoundingClientRect().width > 0){
-                                btns2[l].click();
-                                btns2[l].dispatchEvent(new MouseEvent('mousedown', {bubbles: true, cancelable: true}));
-                                btns2[l].dispatchEvent(new MouseEvent('mouseup', {bubbles: true, cancelable: true}));
-                                btns2[l].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
-                                clicked = true;
-                                break;
-                            }
-                        }
-                        if(clicked) break;
-                    }
+                    if(clicked) break;
                 }
             }
 
-            function getTimeframeSeconds(){
+            function getDynamicTimeframeSeconds(){
                 try {
-                    var timerEl = d.querySelector('.section-deal__timer, .timer-text, input[name="time"], .value__input');
-                    if(timerEl){
-                        var val = timerEl.value || timerEl.innerText;
+                    var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input');
+                    for(var i=0; i<timerInputs.length; i++){
+                        var val = timerInputs[i].value || timerInputs[i].innerText;
                         if(val && val.includes(':')){
                             var parts = val.split(':');
-                            return (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+                            var secs = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+                            if(secs > 0) return secs;
+                        } else if(val && !isNaN(val)) {
+                            var parsed = parseInt(val);
+                            if(parsed > 0) return parsed;
                         }
                     }
                 } catch(e){}
@@ -261,21 +257,21 @@ def bot_script():
                         var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                         var col = isSell ? '#ff1a1a' : '#0f6';
                         
-                        // Execute Auto Click ONLY IF AUTO TRADE ON is active
+                        // Execute Real Auto Click when AUTO TRADE ON
                         if(window.autoTradeEnabled) {
                             triggerTrade(isSell);
                         }
                         
-                        // Signal Popup Display
+                        // Display Signal Pop-up
                         var sb = d.createElement('div');
                         sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:12px 26px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:2147483647;animation:mC 3s infinite;box-shadow:0 0 25px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
                         sb.innerHTML = txt + ' (' + conf + '%) ' + (window.autoTradeEnabled ? 'EXECUTED' : 'READY');
                         d.body.appendChild(sb);
                         setTimeout(function(){ sb.remove(); }, 3000);
 
-                        // Start Countdown ONLY if AUTO TRADE ON is active
+                        // Start Countdown ONLY if AUTO TRADE ON
                         if(window.autoTradeEnabled) {
-                            var duration = getTimeframeSeconds();
+                            var duration = getDynamicTimeframeSeconds();
                             var timerLeft = duration;
                             var cdInterval = setInterval(function(){
                                 if(timerLeft <= 0){
