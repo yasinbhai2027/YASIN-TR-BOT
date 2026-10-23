@@ -5,12 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master API & Knowledge Base Configuration (569 Rules Integrated)
+# Master Twelve Data & Quotex Rules Engine
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine Connected & Running Live!"
+    return "Quotex Ultra-Pro Engine v5.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -33,7 +33,7 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Balanced Two-Sided Signal Logic
+        # Perfect Balanced Signal Logic (Fixes Single Direction Issue)
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
@@ -86,25 +86,25 @@ def bot_script():
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes slowBorder1{0%,100%{border-color:#00ffff;}33%{border-color:#ff00ff;}66%{border-color:#00ff66;}}@keyframes slowBorder2{0%,100%{border-color:#ff00ff;}33%{border-color:#00ff66;}66%{border-color:#ffff00;}}@keyframes slowBorder3{0%,100%{border-color:#00ff66;}33%{border-color:#ffff00;}66%{border-color:#ff0055;}}@keyframes btnSlowRgb{0%,100%{background:linear-gradient(45deg,#ff0055,#00ffff);}50%{background:linear-gradient(45deg,#00ff66,#ff00ff);}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes bGlow1{0%,100%{border-color:#00ffff;}33%{border-color:#ff00ff;}66%{border-color:#00ff66;}}@keyframes bGlow2{0%,100%{border-color:#ff00ff;}33%{border-color:#00ff66;}66%{border-color:#ffff00;}}@keyframes bGlow3{0%,100%{border-color:#00ff66;}33%{border-color:#ffff00;}66%{border-color:#ff0055;}}@keyframes outerGlow{0%,100%{border-color:#00ffff;box-shadow:0 0 12px rgba(0,255,255,0.3);}50%{border-color:#ff00ff;box-shadow:0 0 12px rgba(255,0,255,0.3);}}@keyframes btnSlowRgb{0%,100%{background:linear-gradient(45deg,#ff0055,#00ffff);}50%{background:linear-gradient(45deg,#00ff66,#ff00ff);}}';
             d.head.appendChild(s);
             
-            // Round Bot Widget
+            // Floating Round Widget
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:54px;height:54px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 5s infinite ease-in-out;border:2.5px solid #ff0033;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:52px;height:52px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 5s infinite ease-in-out;border:2px solid #ff0033;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:64px;height:64px;border:2px dashed #ffd700;border-radius:50%;animation:rCC 12s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:62px;height:62px;border:1.8px dashed #ffd700;border-radius:50%;animation:rCC 12s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:74px;height:74px;border:2px dotted #9400d3;border-radius:50%;animation:rC 15s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:70px;height:70px;border:1.8px dotted #9400d3;border-radius:50%;animation:rC 15s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
-            t.style.cssText = 'width:44px;height:44px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7px;animation:slowGlow 4s infinite;display:block;">YS</span><span style="font-size:6px;animation:slowGlow 4s infinite;display:block;">BOT</span>';
+            t.style.cssText = 'width:42px;height:42px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
+            t.innerHTML = '<span style="font-size:7px;animation:slowGlow 3s infinite;display:block;">YS</span><span style="font-size:6px;animation:slowGlow 3s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -139,9 +139,10 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                // 10-15% Smaller width and refined compact padding
-                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:235px;background:#030407;border:2px solid #00ffff;border-radius:10px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,0.98);overflow:hidden;';
+                // 10-15% Compact Width
+                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:225px;background:#030407;border:1.8px solid #00ffff;border-radius:10px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.4s ease-out forwards;';
                 
+                // Draggable Setup
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
                     if(e.target.tagName === 'BUTTON') return;
@@ -162,18 +163,18 @@ def bot_script():
 
                 // Header
                 var header = d.createElement('div');
-                header.style.cssText = 'background:#0a0d14;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
+                header.style.cssText = 'background:#090c12;padding:6px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
                 
                 var titleArea = d.createElement('div');
-                titleArea.style.cssText = 'display:flex;align-items:center;gap:4px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:8px;padding:2px 4px;border-radius:3px;font-weight:900;animation:slowGlow 4s infinite;">YS</span><span style="font-size:10px;font-weight:900;animation:slowGlow 4s infinite;">YASIN TR BOT</span>';
+                titleArea.style.cssText = 'display:flex;align-items:center;gap:3px;';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:7.5px;padding:1px 3px;border-radius:3px;font-weight:900;">YS</span><span style="font-size:9.5px;font-weight:900;animation:slowGlow 3s infinite;">YASIN TR BOT</span>';
                 
-                var activeBadge = d.span = d.createElement('span');
-                activeBadge.style.cssText = 'font-size:7.5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:3px;margin-left:2px;';
+                var activeBadge = d.createElement('span');
+                activeBadge.style.cssText = 'font-size:7px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:2px;margin-left:2px;';
                 activeBadge.innerHTML = '<span style="width:4px;height:4px;background:#00e676;border-radius:50%;box-shadow:0 0 5px #00e676;"></span> LIVE BOT ACTIVE';
 
                 var minBtn = d.createElement('button');
-                minBtn.style.cssText = 'background:#00c853;border:none;width:16px;height:16px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:900;box-shadow:0 0 6px #00c853;';
+                minBtn.style.cssText = 'background:#00c853;border:none;width:15px;height:15px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px;font-weight:900;box-shadow:0 0 5px #00c853;';
                 minBtn.innerHTML = '-';
                 minBtn.onclick = function(){
                     panel.remove();
@@ -189,29 +190,27 @@ def bot_script():
                 header.appendChild(minBtn);
                 panel.appendChild(header);
                 
-                // AUTO TRADE ON & MARKET SCANNING Buttons Bar
+                // AUTO TRADE ON & MARKET SCANNING Buttons
                 var modeBar = d.createElement('div');
-                modeBar.id = 'yb-mode-bar';
-                modeBar.style.cssText = 'padding:6px 8px;background:#0a0c12;border-bottom:1px solid #1a1f2c;display:flex;gap:5px;justify-content:space-between;align-items:center;';
+                modeBar.style.cssText = 'padding:5px 6px;background:#07090e;border-bottom:1px solid #1a1f2c;display:flex;gap:4px;justify-content:space-between;align-items:center;';
                 
                 var btnOn = d.createElement('button');
-                btnOn.style.cssText = 'flex:1;padding:5px 6px;border:none;border-radius:5px;font-weight:900;font-size:8.5px;color:#fff;cursor:pointer;animation:btnSlowRgb 3s infinite linear;box-shadow:0 0 6px #00ffff;text-align:center;';
+                btnOn.style.cssText = 'flex:1;padding:4px 5px;border:none;border-radius:4px;font-weight:900;font-size:8px;color:#fff;cursor:pointer;animation:btnSlowRgb 3s infinite linear;box-shadow:0 0 5px #00ffff;text-align:center;';
                 btnOn.innerHTML = 'AUTO TRADE ON';
                 btnOn.onclick = function(){
                     window.autoTradeEnabled = true;
-                    btnOn.style.outline = '2px solid #00ff66';
-                    if(d.getElementById('scan-btn')) d.getElementById('scan-btn').style.outline = 'none';
+                    btnOn.style.outline = '1.5px solid #00ff66';
+                    scanBtn.style.outline = 'none';
                     run20sEngine(panel, true);
                 };
                 
                 var scanBtn = d.createElement('button');
-                scanBtn.id = 'scan-btn';
-                scanBtn.style.cssText = 'flex:1;padding:5px 6px;border:none;border-radius:5px;font-weight:900;font-size:8.5px;color:#fff;cursor:pointer;animation:btnSlowRgb 3s infinite linear;box-shadow:0 0 6px #ffff00;text-align:center;';
+                scanBtn.style.cssText = 'flex:1;padding:4px 5px;border:none;border-radius:4px;font-weight:900;font-size:8px;color:#fff;cursor:pointer;animation:btnSlowRgb 3s infinite linear;box-shadow:0 0 5px #ffff00;text-align:center;';
                 scanBtn.innerHTML = 'MARKET SCANNING';
                 scanBtn.onclick = function(){
                     window.autoTradeEnabled = false;
                     btnOn.style.outline = 'none';
-                    scanBtn.style.outline = '2px solid #ffff00';
+                    scanBtn.style.outline = '1.5px solid #ffff00';
                     run20sEngine(panel, false);
                 };
                 
@@ -219,33 +218,39 @@ def bot_script():
                 modeBar.appendChild(scanBtn);
                 panel.appendChild(modeBar);
                 
-                // Body Fields with Double Outer Borders & Slow Slower Animations
-                var body = d.createElement('div');
-                body.style.cssText = 'padding:7px 9px;font-size:9.5px;display:flex;flex-direction:column;gap:5px;';
-                
-                function createRow(label, valId, animName){
+                // Double Outer Border Wrapper as requested
+                var wrapper = d.createElement('div');
+                wrapper.style.cssText = 'margin:5px;padding:5px;border:1.5px solid #00ffff;border-radius:7px;background:rgba(0,0,0,0.3);animation:outerGlow 4s infinite ease-in-out;display:flex;flex-direction:column;gap:4px;';
+
+                function createRow(label, valId, animClass){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 7px;border:1.5px solid #00ffff;border-radius:5px;background:rgba(255,255,255,0.015);box-shadow:inset 0 0 5px rgba(0,255,255,0.1);animation:'+animName+' 5s infinite ease-in-out;';
-                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:9.5px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:9.5px;animation:slowGlow 4s infinite;">SCANNING...</span>';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3.5px 6px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:'+animClass+' 4s infinite ease-in-out;';
+                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:8.5px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:8.5px;color:#ffd700;">WAITING...</span>';
                     return row;
                 }
                 
-                body.appendChild(createRow('PAIR', 'p-pair', 'slowBorder1'));
-                body.appendChild(createRow('PAYOUT', 'p-payout', 'slowBorder2'));
-                body.appendChild(createRow('PRICE', 'p-price', 'slowBorder3'));
-                body.appendChild(createRow('SIGNAL', 'p-signal', 'slowBorder1'));
-                body.appendChild(createRow('COUNTDOWN', 'p-countdown', 'slowBorder2'));
+                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'bGlow1'));
+                wrapper.appendChild(createRow('PAYOUT', 'p-payout', 'bGlow2'));
+                wrapper.appendChild(createRow('MARKET PRICE', 'p-price', 'bGlow3'));
+                
+                // Signal line dynamically updated to Qx OTC / Qx Real
+                var sigRow = d.createElement('div');
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3.5px 6px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8.5px;">Qx OTC SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8.5px;color:#ffd700;">WAITING...</span>';
+                wrapper.appendChild(sigRow);
+
+                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
                 
                 var serverRow = d.createElement('div');
-                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 7px;border:1.5px solid #00ff66;border-radius:5px;background:rgba(255,255,255,0.015);box-shadow:inset 0 0 5px rgba(0,255,102,0.1);animation:slowBorder3 5s infinite ease-in-out;';
-                serverRow.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:9.5px;">SERVER</span><span id="p-server" style="color:#00e676;font-weight:900;font-size:9.5px;">Connected</span>';
-                body.appendChild(serverRow);
+                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3.5px 6px;border:1.2px solid #00ff66;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow3 4s infinite ease-in-out;';
+                serverRow.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:8.5px;">SERVER</span><span id="p-server" style="color:#00e676;font-weight:900;font-size:8.5px;">Connected</span>';
+                wrapper.appendChild(serverRow);
                 
-                panel.appendChild(body);
+                panel.appendChild(wrapper);
                 d.body.appendChild(panel);
                 
-                // Auto trigger initial scan
-                run20sEngine(panel, false);
+                // Initial Default Display Update
+                updatePairAndPriceInitial(panel);
             }
 
             function forceClick(el) {
@@ -321,7 +326,17 @@ def bot_script():
                         return payoutEl.innerText.trim();
                     }
                 } catch(e){}
-                return "81%";
+                return "91%";
+            }
+
+            function updatePairAndPriceInitial(panel){
+                var pairEl = panel.querySelector('#p-pair');
+                var sigLabelEl = panel.querySelector('#p-sig-label');
+                var currentPair = getRealPairName();
+                if(pairEl) pairEl.innerText = currentPair;
+                if(sigLabelEl){
+                    sigLabelEl.innerText = currentPair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
+                }
             }
 
             function run20sEngine(panel, isAutoTradeMode){
@@ -329,15 +344,21 @@ def bot_script():
                 var payoutEl = panel.querySelector('#p-payout');
                 var priceEl = panel.querySelector('#p-price');
                 var signalEl = panel.querySelector('#p-signal');
+                var sigLabelEl = panel.querySelector('#p-sig-label');
                 var cdEl = panel.querySelector('#p-countdown');
                 var serverEl = panel.querySelector('#p-server');
                 
-                var scanTime = 20; // Exact 20 seconds deep scanning
+                var scanTime = 20; // Exact 20s scanning
                 
                 var scanInterval = setInterval(function(){
                     scanTime--;
                     
-                    if(pairEl) pairEl.innerText = getRealPairName();
+                    var activePair = getRealPairName();
+                    if(pairEl) pairEl.innerText = activePair;
+                    if(sigLabelEl){
+                        sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
+                    }
+                    
                     if(payoutEl) payoutEl.innerText = 'SCANNING...';
                     if(priceEl) priceEl.innerText = 'SCANNING...';
                     if(signalEl) signalEl.innerText = 'SCANNING...';
@@ -377,15 +398,15 @@ def bot_script():
                             }
                             
                             if(serverEl) {
-                                serverEl.innerHTML = 'Connected <span style="font-size:7.5px;background:#1a1f2c;padding:1px 3px;border-radius:3px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
+                                serverEl.innerHTML = 'Connected <span style="font-size:7px;background:#1a1f2c;padding:1px 3px;border-radius:3px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                             }
 
-                            // Execute Auto Trade if AUTO TRADE ON mode is active
+                            // Auto Click Execution if AUTO TRADE ON mode
                             if(isAutoTradeMode) {
                                 triggerTrade(isDown);
                             }
 
-                            // Accurate Dynamic Timeframe Countdown matching user settings
+                            // Dynamic User Timeframe Countdown
                             var tfSecs = getDynamicTimeframeSeconds();
                             var cdLeft = tfSecs;
                             if(cdEl) cdEl.innerText = cdLeft + 's';
@@ -401,7 +422,7 @@ def bot_script():
                     }
                 }, 1000);
             }
-        } catch(e) { console.error("YasinBot Final Fix Error:", e); }
+        } catch(e) { console.error("YasinBot Final v5 Error:", e); }
     })();
     """
     res = make_response(js)
