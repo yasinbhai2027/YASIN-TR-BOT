@@ -5,7 +5,7 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master API & Knowledge Base Configuration (569 Rules Integrated)
+# Master Data Configuration (569 Rules Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
@@ -33,7 +33,7 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Perfect Balanced Two-Sided Signal Logic (Fixes Single Direction Issue)
+        # Two-Sided Balanced Signal Logic
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
@@ -82,29 +82,29 @@ def bot_script():
             var oldS = d.getElementById('ybs');
             if(oldS){ oldS.remove(); }
             
-            window.autoTradeEnabled = true;
+            window.autoTradeEnabled = false;
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033,inset 0 0 8px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 15px #00ffff,inset 0 0 8px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff,inset 0 0 8px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 15px #00ff66,inset 0 0 8px #ff00ff}}@keyframes panelIn{0%{opacity:0;transform:scale(0.8) translateY(20px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes panelOut{0%{opacity:1;transform:scale(1) translateY(0);}100%{opacity:0;transform:scale(0.8) translateY(20px);}}@keyframes fadeScan{0%,100%{opacity:1;}50%{opacity:0.25;}}@keyframes titleGlow{0%,100%{color:#00ffff;text-shadow:0 0 8px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 8px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 8px #00ff66;}}@keyframes rowGlow1{0%,100%{border-color:rgba(0,255,255,0.25);}50%{border-color:rgba(255,0,255,0.25);}}@keyframes rowGlow2{0%,100%{border-color:rgba(255,0,255,0.25);}50%{border-color:rgba(0,255,102,0.25);}}@keyframes rowGlow3{0%,100%{border-color:rgba(0,255,102,0.25);}50%{border-color:rgba(255,204,0,0.25);}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes fastGlow{0%,100%{color:#00ffff;text-shadow:0 0 10px #00ffff;}25%{color:#ff00ff;text-shadow:0 0 10px #ff00ff;}50%{color:#00ff66;text-shadow:0 0 10px #00ff66;}75%{color:#ffff00;text-shadow:0 0 10px #ffff00;}}@keyframes bGlow1{0%,100%{border-color:#00ffff;color:#00ffff;}50%{border-color:#ff00ff;color:#ff00ff;}}@keyframes bGlow2{0%,100%{border-color:#ff00ff;color:#ff00ff;}50%{border-color:#00ff66;color:#00ff66;}}@keyframes bGlow3{0%,100%{border-color:#00ff66;color:#00ff66;}50%{border-color:#ffff00;color:#ffff00;}}@keyframes bGlow4{0%,100%{border-color:#ffff00;color:#ffff00;}50%{border-color:#ff0055;color:#ff0055;}}@keyframes btnRgb{0%{background:linear-gradient(45deg,#ff0055,#00ffff);}50%{background:linear-gradient(45deg,#00ff66,#ff00ff);}100%{background:linear-gradient(45deg,#ff0055,#00ffff);}}';
             d.head.appendChild(s);
             
             // Round Bot Widget
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:58px;height:58px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 6s infinite ease-in-out;border:2.5px solid #ff0033;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:58px;height:58px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 4s infinite ease-in-out;border:2.5px solid #ff0033;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:68px;height:68px;border:2px dashed #ffd700;border-radius:50%;animation:rCC 10s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:68px;height:68px;border:2px dashed #ffd700;border-radius:50%;animation:rCC 8s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:78px;height:78px;border:2px dotted #9400d3;border-radius:50%;animation:rC 13s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:78px;height:78px;border:2px dotted #9400d3;border-radius:50%;animation:rC 10s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
             t.style.cssText = 'width:48px;height:48px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:8px;animation:titleGlow 3s infinite;display:block;">YASIN</span><span style="font-size:6px;color:#ff8c00;display:block;">TR</span><span style="font-size:7px;animation:titleGlow 3s infinite;display:block;">BOT</span>';
+            t.innerHTML = '<span style="font-size:8px;animation:fastGlow 1s infinite;display:block;">YS</span><span style="font-size:7px;animation:fastGlow 1s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -139,7 +139,7 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:245px;background:#080a0f;border:1.8px solid #00ffff;border-radius:12px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,0.95);overflow:hidden;animation:panelIn 0.4s ease-out forwards;';
+                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:260px;background:#030407;border:2px solid #00ffff;border-radius:12px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,0.98);overflow:hidden;';
                 
                 // Draggable Panel
                 var pDx, pX, pY;
@@ -160,58 +160,94 @@ def bot_script():
                 };
                 panel.onmouseup = panel.ontouchend = function(){ pDx = false; };
 
+                // Header with Name + LIVE BOT ACTIVE + Minus Button
                 var header = d.createElement('div');
-                header.style.cssText = 'background:#11141e;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
+                header.style.cssText = 'background:#0a0d14;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
                 
                 var titleArea = d.createElement('div');
-                titleArea.style.cssText = 'display:flex;align-items:center;gap:6px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:9px;padding:2px 5px;border-radius:3px;font-weight:900;animation:titleGlow 3s infinite;">YS</span> <span style="font-size:11px;font-weight:900;animation:titleGlow 3s infinite;">YASIN TR BOT</span>';
+                titleArea.style.cssText = 'display:flex;align-items:center;gap:4px;';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:9px;padding:2px 4px;border-radius:3px;font-weight:900;animation:fastGlow 0.5s infinite;">YS</span><span style="font-size:10px;font-weight:900;animation:fastGlow 0.5s infinite;">YASIN TR BOT</span>';
                 
+                var activeBadge = d.createElement('span');
+                activeBadge.style.cssText = 'font-size:8px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:3px;margin-left:2px;';
+                activeBadge.innerHTML = '<span style="width:5px;height:5px;background:#00e676;border-radius:50%;box-shadow:0 0 6px #00e676;"></span> LIVE BOT ACTIVE';
+
                 var minBtn = d.createElement('button');
                 minBtn.style.cssText = 'background:#00c853;border:none;width:18px;height:18px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:14px;font-weight:900;box-shadow:0 0 8px #00c853;';
                 minBtn.innerHTML = '-';
                 minBtn.onclick = function(){
-                    panel.style.animation = 'panelOut 0.3s ease-in forwards';
-                    setTimeout(function(){
-                        panel.remove();
-                        b.style.display = 'flex';
-                    }, 300);
+                    panel.remove();
+                    b.style.display = 'flex';
                 };
                 
-                header.appendChild(titleArea);
+                var headLeft = d.createElement('div');
+                headLeft.style.cssText = 'display:flex;align-items:center;gap:4px;';
+                headLeft.appendChild(titleArea);
+                headLeft.appendChild(activeBadge);
+
+                header.appendChild(headLeft);
                 header.appendChild(minBtn);
                 panel.appendChild(header);
                 
-                var subHeader = d.createElement('div');
-                subHeader.style.cssText = 'padding:6px 12px;background:#0c0f17;font-size:9px;color:#00e676;font-weight:700;border-bottom:1px solid #1a1f2c;display:flex;align-items:center;gap:5px;';
-                subHeader.innerHTML = '<span style="width:6px;height:6px;background:#00e676;border-radius:50%;display:inline-block;box-shadow:0 0 6px #00e676;animation:fadeScan 1.5s infinite;"></span> <span style="animation:fadeScan 1.5s infinite;">LIVE BOT ACTIVE</span>';
-                panel.appendChild(subHeader);
+                // AUTO TRADE ON / OFF Sub-Header Bar
+                var modeBar = d.createElement('div');
+                modeBar.id = 'yb-mode-bar';
+                modeBar.style.cssText = 'padding:6px 8px;background:#0a0c12;border-bottom:1px solid #1a1f2c;display:flex;gap:6px;justify-content:center;align-items:center;';
                 
+                var btnOn = d.createElement('button');
+                btnOn.style.cssText = 'padding:5px 10px;border:none;border-radius:5px;font-weight:900;font-size:9px;color:#fff;cursor:pointer;animation:btnRgb 1s infinite linear;box-shadow:0 0 8px #00ffff;';
+                btnOn.innerHTML = 'AUTO TRADE ON';
+                btnOn.onclick = function(){
+                    window.autoTradeEnabled = true;
+                    btnOn.style.outline = '2px solid #00ff66';
+                    btnOff.style.outline = 'none';
+                    run20sEngine(panel, true);
+                };
+                
+                var btnOff = d.createElement('button');
+                btnOff.style.cssText = 'padding:5px 10px;border:none;border-radius:5px;font-weight:900;font-size:9px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 8px #ff0055;';
+                btnOff.innerHTML = 'AUTO TRADE OFF';
+                btnOff.onclick = function(){
+                    window.autoTradeEnabled = false;
+                    btnOff.remove(); // Remove AUTO TRADE OFF option
+                    
+                    var scanBtn = d.createElement('button');
+                    scanBtn.style.cssText = 'padding:5px 10px;border:none;border-radius:5px;font-weight:900;font-size:9px;color:#fff;cursor:pointer;animation:btnRgb 1s infinite linear;box-shadow:0 0 8px #ffff00;';
+                    scanBtn.innerHTML = 'MARKET SCANNING';
+                    scanBtn.onclick = function(){
+                        run20sEngine(panel, false);
+                    };
+                    modeBar.appendChild(scanBtn);
+                };
+                
+                modeBar.appendChild(btnOn);
+                modeBar.appendChild(btnOff);
+                panel.appendChild(modeBar);
+                
+                // Body Fields with Distinct Borders and Colors
                 var body = d.createElement('div');
-                body.style.cssText = 'padding:10px 12px;font-size:10px;display:flex;flex-direction:column;gap:7px;';
+                body.style.cssText = 'padding:8px 10px;font-size:10px;display:flex;flex-direction:column;gap:6px;';
                 
-                function createRow(label, valId, animName){
+                function createRow(label, valId, animClass){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:rgba(255,255,255,0.02);animation:'+animName+' 4s infinite ease-in-out;';
-                    row.innerHTML = '<span style="color:#848e9c;font-weight:600;">'+label+'</span><span id="'+valId+'" style="color:#f0b90b;font-weight:700;animation:fadeScan 1.8s infinite;">SCANNING...</span>';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border:1.5px solid #00ffff;border-radius:6px;background:rgba(255,255,255,0.02);animation:'+animClass+' 2s infinite ease-in-out;';
+                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:10px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:10px;animation:fastGlow 1s infinite;">READY</span>';
                     return row;
                 }
                 
-                body.appendChild(createRow('PAIR', 'p-pair', 'rowGlow1'));
-                body.appendChild(createRow('PAYOUT', 'p-payout', 'rowGlow2'));
-                body.appendChild(createRow('PRICE', 'p-price', 'rowGlow3'));
-                body.appendChild(createRow('SIGNAL', 'p-signal', 'rowGlow1'));
-                body.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rowGlow2'));
+                body.appendChild(createRow('PAIR', 'p-pair', 'bGlow1'));
+                body.appendChild(createRow('PAYOUT', 'p-payout', 'bGlow2'));
+                body.appendChild(createRow('PRICE', 'p-price', 'bGlow3'));
+                body.appendChild(createRow('SIGNAL', 'p-signal', 'bGlow4'));
+                body.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow1'));
                 
                 var serverRow = d.createElement('div');
-                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:rgba(255,255,255,0.02);margin-top:2px;';
-                serverRow.innerHTML = '<span style="color:#848e9c;font-weight:600;">SERVER</span><span id="p-server" style="color:#00e676;font-weight:700;">Connected</span>';
+                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border:1.5px solid #00ff66;border-radius:6px;background:rgba(255,255,255,0.02);animation:bGlow3 2s infinite ease-in-out;';
+                serverRow.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:10px;">SERVER</span><span id="p-server" style="color:#00e676;font-weight:900;font-size:10px;">Connected</span>';
                 body.appendChild(serverRow);
                 
                 panel.appendChild(body);
                 d.body.appendChild(panel);
-                
-                runDeep30sEngine(panel);
             }
 
             function forceClick(el) {
@@ -290,7 +326,7 @@ def bot_script():
                 return "93%";
             }
 
-            function runDeep30sEngine(panel){
+            function run20sEngine(panel, isAutoTradeMode){
                 var pairEl = panel.querySelector('#p-pair');
                 var payoutEl = panel.querySelector('#p-payout');
                 var priceEl = panel.querySelector('#p-price');
@@ -298,11 +334,7 @@ def bot_script():
                 var cdEl = panel.querySelector('#p-countdown');
                 var serverEl = panel.querySelector('#p-server');
                 
-                var realPair = getRealPairName();
-                if(pairEl) pairEl.innerText = realPair;
-
-                // 30 Seconds Fading Deep Scanning Engine
-                var scanTime = 30;
+                var scanTime = 20; // 20 Seconds Deep Scanning
                 
                 var scanInterval = setInterval(function(){
                     scanTime--;
@@ -316,11 +348,6 @@ def bot_script():
                     if(scanTime <= 0){
                         clearInterval(scanInterval);
                         
-                        // Stop Fading Animations on Values
-                        if(payoutEl) payoutEl.style.animation = 'none';
-                        if(priceEl) priceEl.style.animation = 'none';
-                        if(signalEl) signalEl.style.animation = 'none';
-                        
                         fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                         .then(function(r){ return r.json(); })
                         .catch(function(){ return {signal: "UP", confidence: 93, conf_level: "HIGH"}; })
@@ -333,7 +360,6 @@ def bot_script():
                             
                             if(payoutEl) payoutEl.innerText = getRealPayoutText();
                             
-                            // Real Market Live Price Display
                             var livePriceVal = "0.57834";
                             try {
                                 var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
@@ -356,18 +382,15 @@ def bot_script():
                                 serverEl.innerHTML = 'Connected <span style="font-size:8px;background:#1a1f2c;padding:1px 4px;border-radius:3px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                             }
 
-                            // Execute Auto Trade
-                            if(window.autoTradeEnabled) {
+                            // Execute Auto Trade ONLY IF Auto Trade Mode IS ON
+                            if(isAutoTradeMode) {
                                 triggerTrade(isDown);
                             }
 
-                            // Accurate Dynamic Timeframe Countdown
+                            // Dynamic Timeframe Countdown
                             var tfSecs = getDynamicTimeframeSeconds();
                             var cdLeft = tfSecs;
-                            if(cdEl) {
-                                cdEl.style.animation = 'none';
-                                cdEl.innerText = cdLeft + 's';
-                            }
+                            if(cdEl) cdEl.innerText = cdLeft + 's';
                             
                             var cdTimer = setInterval(function(){
                                 cdLeft--;
@@ -380,7 +403,7 @@ def bot_script():
                     }
                 }, 1000);
             }
-        } catch(e) { console.error("YasinBot Master Panel Error:", e); }
+        } catch(e) { console.error("YasinBot Final Update Error:", e); }
     })();
     """
     res = make_response(js)
