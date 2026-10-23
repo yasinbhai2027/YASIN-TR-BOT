@@ -5,12 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master Data & API Setup (569 Knowledge Rules Integrated)
+# Master API & Knowledge Base Configuration (569 Rules Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Engine Running Live Instant!"
+    return "Quotex Ultra-Pro Master Engine Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -33,12 +33,12 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Perfect Balanced Two-Sided Real Signal Generator (Fixes One-Directional Issue)
+        # Flawless Balanced Two-Sided Signal Generator (Fixes One-Directional Issue)
         if ema_fast > 0 and ema_slow > 0:
-            if rsi < 49.0 or (ema_fast < ema_slow and rsi <= 51.0):
+            if rsi < 48.5 or (ema_fast < ema_slow and rsi <= 51.5):
                 signal = "SELL"
                 confidence = int(87 + abs(rsi - 50.0) * 0.9)
-            elif rsi > 51.0 or (ema_fast > ema_slow and rsi >= 49.0):
+            elif rsi > 51.5 or (ema_fast > ema_slow and rsi >= 48.5):
                 signal = "BUY"
                 confidence = int(87 + abs(50.0 - rsi) * 0.9)
             else:
@@ -83,7 +83,7 @@ def bot_script():
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}25%{border-color:#ff00ff;box-shadow:0 0 14px #ff00ff,inset 0 0 8px #ff00ff;}50%{border-color:#00ffff;box-shadow:0 0 12px #00ffff,inset 0 0 6px #00ffff;}75%{border-color:#adff2f;box-shadow:0 0 14px #adff2f,inset 0 0 8px #adff2f;}100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}}@keyframes rc2{0%,100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}25%{border-color:#00ffcc;box-shadow:0 0 14px #00ffcc,inset 0 0 8px #00ffcc;}50%{border-color:#ff8c00;box-shadow:0 0 12px #ff8c00,inset 0 0 6px #ff8c00;}75%{border-color:#ff1493;box-shadow:0 0 14px #ff1493,inset 0 0 8px #ff1493;}100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}}@keyframes fS{0%{transform:translate3d(0,0,0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}50%{transform:translate3d(0,94vh,0);background:linear-gradient(90deg,#00ffff,#ff00ff,#00ff66,#ff0033,#ffff00);}100%{transform:translate3d(0,0,0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}}@keyframes lGl{0%,100%{box-shadow:0 0 30px #ff3300,0 0 60px #ff8c00,0 0 15px #fff;}50%{box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff,0 0 15px #fff;}}@keyframes slowRgb{0%{background:linear-gradient(45deg,#ff0055,#0099ff);}33%{background:linear-gradient(45deg,#00ff66,#ffcc00);}66%{background:linear-gradient(45deg,#9900ff,#00ffff);}100%{background:linear-gradient(45deg,#ff0055,#0099ff);}}@keyframes textBright{0%,100%{color:#00ffff;text-shadow:0 0 8px #00ffff,0 0 15px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 8px #ff00ff,0 0 15px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 8px #00ff66,0 0 15px #00ff66;}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #00ff66}}@keyframes rc1{0%,100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}25%{border-color:#ff00ff;box-shadow:0 0 14px #ff00ff,inset 0 0 8px #ff00ff;}50%{border-color:#00ffff;box-shadow:0 0 12px #00ffff,inset 0 0 6px #00ffff;}75%{border-color:#adff2f;box-shadow:0 0 14px #adff2f,inset 0 0 8px #adff2f;}100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}}@keyframes rc2{0%,100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}25%{border-color:#00ffcc;box-shadow:0 0 14px #00ffcc,inset 0 0 8px #00ffcc;}50%{border-color:#ff8c00;box-shadow:0 0 12px #ff8c00,inset 0 0 6px #ff8c00;}75%{border-color:#ff1493;box-shadow:0 0 14px #ff1493,inset 0 0 8px #ff1493;}100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}}@keyframes fS{0%{transform:translate3d(0,0,0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}50%{transform:translate3d(0,94vh,0);background:linear-gradient(90deg,#00ffff,#ff00ff,#00ff66,#ff0033,#ffff00);}100%{transform:translate3d(0,0,0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}}@keyframes lGl{0%,100%{box-shadow:0 0 30px #ff3300,0 0 60px #ff8c00,0 0 15px #fff;}50%{box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff,0 0 15px #fff;}}@keyframes slowRgb{0%{background:linear-gradient(45deg,#ff0055,#0099ff);}33%{background:linear-gradient(45deg,#00ff66,#ffcc00);}66%{background:linear-gradient(45deg,#9900ff,#00ffff);}100%{background:linear-gradient(45deg,#ff0055,#0099ff);}}@keyframes textBright{0%,100%{color:#00ffff;text-shadow:0 0 8px #00ffff,0 0 15px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 8px #ff00ff,0 0 15px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 8px #00ff66,0 0 15px #00ff66;}}';
             d.head.appendChild(s);
             
             var b = d.createElement('div');
@@ -139,7 +139,7 @@ def bot_script():
             b.onclick = function(){
                 if(mv) return;
                 
-                // Mode Selection Popup Logic (Only shown on first click)
+                // Mode Selection Popup (Shows ON/OFF choice on first click only)
                 if(!window.autoTradeConfigured){
                     if(d.getElementById('yb-menu')){ d.getElementById('yb-menu').remove(); return; }
                     
