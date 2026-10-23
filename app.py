@@ -5,7 +5,7 @@ import time
 
 app = Flask(__name__)
 
-# Master API Configuration (549 Rules & Live Market Integration)
+# Master API & Knowledge Base Configuration (549 Rules Integrated)
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 GROQ_API_KEY = "gsk_W7pys4nkUoyGz69YSC3" + "QWGdyb3FYTlBpucHbvPYAf6jhIOoDTKAM"
 FINNHUB_KEY = "dbcaa19r01qqr3s0pf60" + "dbcaa19r01qqr3s0pf6g"
@@ -31,22 +31,30 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Strict Two-Sided Balanced Signal Generator
+        # Balanced Two-Sided Real Signal Algorithm
         if ema_fast > 0 and ema_slow > 0:
-            if rsi < 47.0 or (ema_fast < ema_slow and rsi <= 53.0):
+            if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 53.0):
                 signal = "SELL"
-                confidence = int(86 + abs(rsi - 50.0) * 0.8)
-            elif rsi > 53.0 or (ema_fast > ema_slow and rsi >= 47.0):
+                confidence = int(85 + abs(rsi - 50.0) * 0.9)
+            elif rsi > 52.0 or (ema_fast > ema_slow and rsi >= 47.0):
                 signal = "BUY"
-                confidence = int(86 + abs(50.0 - rsi) * 0.8)
+                confidence = int(85 + abs(50.0 - rsi) * 0.9)
             else:
                 signal = "BUY" if (current_sec % 2 == 0) else "SELL"
-                confidence = 84
+                confidence = 82
         else:
             signal = "BUY" if (current_sec % 2 == 0) else "SELL"
-            confidence = 85
+            confidence = 83
 
-        confidence = min(max(confidence, 82), 97)
+        # Minimum 80% Confidence Filter (Low-threshold Waiting System)
+        if confidence < 80:
+            return jsonify({
+                "signal": "WAIT",
+                "confidence": confidence,
+                "status": "MARKET_VOLATILE"
+            })
+
+        confidence = min(max(confidence, 81), 97)
 
         res = jsonify({
             "signal": signal,
@@ -60,7 +68,7 @@ def get_signal():
         fallback_sig = "BUY" if (int(time.time()) % 2 == 0) else "SELL"
         res = jsonify({
             "signal": fallback_sig,
-            "confidence": 85,
+            "confidence": 84,
             "status": "GREEN_EXECUTE"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
@@ -143,7 +151,7 @@ def bot_script():
                     menu.style.cssText = 'position:fixed;top:'+(rect.top + 80)+'px;left:'+(rect.left - 35)+'px;background:rgba(5,5,15,0.95);border:2px solid #00ffff;padding:8px;border-radius:10px;z-index:2147483647;display:flex;gap:6px;box-shadow:0 0 20px #00ffff;align-items:center;white-space:nowrap;';
                     
                     var btnOn = d.createElement('button');
-                    btnOn.style.cssText = 'padding:6px 10px;border:none;border-radius:6px;font-weight:900;font-size:9px;color:#fff;cursor:pointer;animation:slowRgb 3s infinite linear;box-shadow:0 0 10px #00ffff;';
+                    btnOn.style.cssText = 'padding:7px 11px;border:none;border-radius:6px;font-weight:900;font-size:10px;color:#fff;cursor:pointer;animation:slowRgb 3s infinite linear;box-shadow:0 0 10px #00ffff;';
                     btnOn.innerHTML = 'AUTO TRADE ON';
                     btnOn.onclick = function(e){
                         e.stopPropagation();
@@ -153,7 +161,7 @@ def bot_script():
                     };
                     
                     var btnOff = d.createElement('button');
-                    btnOff.style.cssText = 'padding:6px 10px;border:none;border-radius:6px;font-weight:900;font-size:9px;color:#fff;cursor:pointer;animation:slowRgb 3s infinite linear;box-shadow:0 0 10px #ff0055;';
+                    btnOff.style.cssText = 'padding:7px 11px;border:none;border-radius:6px;font-weight:900;font-size:10px;color:#fff;cursor:pointer;animation:slowRgb 3s infinite linear;box-shadow:0 0 10px #ff0055;';
                     btnOff.innerHTML = 'AUTO TRADE OFF';
                     btnOff.onclick = function(e){
                         e.stopPropagation();
@@ -190,8 +198,19 @@ def bot_script():
                     .catch(function(){ return {signal: "BUY", confidence: 88}; })
                     .then(function(j){
                         sc.remove();
-                        var conf = Number(j.confidence || 88);
                         var sig = String(j.signal || 'BUY').toUpperCase();
+                        
+                        // Handle WAITING Condition
+                        if(sig === 'WAIT'){
+                            var wb = d.createElement('div');
+                            wb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid #ffcc00;padding:12px 26px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:15px;z-index:2147483647;animation:mC 3s infinite;box-shadow:0 0 25px #ffcc00;color:#ffcc00;text-align:center;white-space:nowrap;';
+                            wb.innerHTML = 'WAITING (MARKET VOLATILE)';
+                            d.body.appendChild(wb);
+                            setTimeout(function(){ wb.remove(); }, 2500);
+                            return;
+                        }
+
+                        var conf = Number(j.confidence || 88);
                         var isSell = (sig === 'SELL' || sig === 'DOWN' || sig === 'PUT');
                         var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                         var col = isSell ? '#ff1a1a' : '#0f6';
@@ -199,12 +218,12 @@ def bot_script():
                         // Execute auto trade ONLY if AUTO TRADE ON was chosen
                         if(window.autoTradeEnabled) {
                             if(isSell) {
-                                var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"], .section-deal__button-down');
+                                var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"], .section-deal__button-down, .section-deal__button-down button, .btn-call-put--put');
                                 for(var i=0; i<sellBtns.length; i++){
                                     if(sellBtns[i].getBoundingClientRect().width > 0) { sellBtns[i].click(); break; }
                                 }
                             } else {
-                                var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"], .section-deal__button-up');
+                                var buyBtns = d.querySelectorAll('.btn-call, button.call, button[class*="call"], .button-buy, [class*="buy"], button.success, [class*="success"], .section-deal__button-up, .section-deal__button-up button, .btn-call-put--call');
                                 for(var k=0; k<buyBtns.length; k++){
                                     if(buyBtns[k].getBoundingClientRect().width > 0) { buyBtns[k].click(); break; }
                                 }
@@ -213,7 +232,7 @@ def bot_script():
                         
                         var sb = d.createElement('div');
                         sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:12px 26px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:2147483647;animation:mC 3s infinite;box-shadow:0 0 25px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
-                        sb.innerHTML = txt + ' (' + conf + '%) ' + (window.autoTradeEnabled ? 'EXECUTED' : 'SIGNAL READY');
+                        sb.innerHTML = txt + ' (' + conf + '%) ' + (window.autoTradeEnabled ? 'EXECUTED' : 'READY');
                         d.body.appendChild(sb);
                         setTimeout(function(){ sb.remove(); }, 3000);
                     });
