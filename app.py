@@ -5,7 +5,7 @@ import time
 
 app = Flask(__name__)
 
-# Master API & Knowledge Base Configuration (549 Rules Integrated)
+# Master API Configuration
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 GROQ_API_KEY = "gsk_W7pys4nkUoyGz69YSC3" + "QWGdyb3FYTlBpucHbvPYAf6jhIOoDTKAM"
 FINNHUB_KEY = "dbcaa19r01qqr3s0pf60" + "dbcaa19r01qqr3s0pf6g"
@@ -31,12 +31,12 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Strictly Balanced Two-Sided Signal Generator (Ensures non-directional alternating signals)
+        # Strictly Balanced Two-Sided Signal Logic
         if ema_fast > 0 and ema_slow > 0:
-            if rsi < 45.0 or (ema_fast < ema_slow and rsi <= 55.0):
+            if rsi < 46.0 or (ema_fast < ema_slow and rsi <= 54.0):
                 signal = "SELL"
                 confidence = int(86 + abs(rsi - 50.0) * 0.8)
-            elif rsi > 55.0 or (ema_fast > ema_slow and rsi >= 45.0):
+            elif rsi > 54.0 or (ema_fast > ema_slow and rsi >= 46.0):
                 signal = "BUY"
                 confidence = int(86 + abs(50.0 - rsi) * 0.8)
             else:
@@ -76,11 +76,12 @@ def bot_script():
             var oldS = d.getElementById('ybs');
             if(oldS){ oldS.remove(); }
             
+            window.autoTradeConfigured = false;
             window.autoTradeEnabled = true;
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}25%{border-color:#ff00ff;box-shadow:0 0 14px #ff00ff,inset 0 0 8px #ff00ff;}50%{border-color:#00ffff;box-shadow:0 0 12px #00ffff,inset 0 0 6px #00ffff;}75%{border-color:#adff2f;box-shadow:0 0 14px #adff2f,inset 0 0 8px #adff2f;}100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}}@keyframes rc2{0%,100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}25%{border-color:#00ffcc;box-shadow:0 0 14px #00ffcc,inset 0 0 8px #00ffcc;}50%{border-color:#ff8c00;box-shadow:0 0 12px #ff8c00,inset 0 0 6px #ff8c00;}75%{border-color:#ff1493;box-shadow:0 0 14px #ff1493,inset 0 0 8px #ff1493;}100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%{transform:translateY(0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}50%{transform:translateY(94vh);background:linear-gradient(90deg,#00ffff,#ff00ff,#00ff66,#ff0033,#ffff00);}100%{transform:translateY(0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}}@keyframes lGl{0%,100%{box-shadow:0 0 30px #ff3300,0 0 60px #ff8c00,0 0 15px #fff;}50%{box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff,0 0 15px #fff;}}@keyframes btnGlow{0%{background:linear-gradient(45deg,#ff0055,#00ffff);}33%{background:linear-gradient(45deg,#00ff66,#ff00ff);}66%{background:linear-gradient(45deg,#ffff00,#ff3300);}100%{background:linear-gradient(45deg,#ff0055,#00ffff);}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 25px #ff0033,inset 0 0 12px #ff0033}25%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 12px #00ffff}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff,inset 0 0 15px #ff00ff}75%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 12px #ff00ff}}@keyframes rc1{0%,100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}25%{border-color:#ff00ff;box-shadow:0 0 14px #ff00ff,inset 0 0 8px #ff00ff;}50%{border-color:#00ffff;box-shadow:0 0 12px #00ffff,inset 0 0 6px #00ffff;}75%{border-color:#adff2f;box-shadow:0 0 14px #adff2f,inset 0 0 8px #adff2f;}100%{border-color:#ffd700;box-shadow:0 0 12px #ffd700,inset 0 0 6px #ffd700;}}@keyframes rc2{0%,100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}25%{border-color:#00ffcc;box-shadow:0 0 14px #00ffcc,inset 0 0 8px #00ffcc;}50%{border-color:#ff8c00;box-shadow:0 0 12px #ff8c00,inset 0 0 6px #ff8c00;}75%{border-color:#ff1493;box-shadow:0 0 14px #ff1493,inset 0 0 8px #ff1493;}100%{border-color:#9400d3;box-shadow:0 0 12px #9400d3,inset 0 0 6px #9400d3;}}@keyframes c1{0%,100%{color:#0ff}33%{color:#ff00ff}66%{color:#0f6}}@keyframes c2{0%,100%{color:#ff3300}33%{color:#ffff00}66%{color:#00ffff}}@keyframes fS{0%{transform:translateY(0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}50%{transform:translateY(94vh);background:linear-gradient(90deg,#00ffff,#ff00ff,#00ff66,#ff0033,#ffff00);}100%{transform:translateY(0);background:linear-gradient(90deg,#ff1a1a,#ff8c00,#ffff00,#00ffff,#ff00ff);}}@keyframes lGl{0%,100%{box-shadow:0 0 30px #ff3300,0 0 60px #ff8c00,0 0 15px #fff;}50%{box-shadow:0 0 30px #00ffff,0 0 60px #ff00ff,0 0 15px #fff;}}@keyframes rgbGlow{0%{background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00);}25%{background:linear-gradient(45deg,#48ff00,#00ffd5,#002bfd);}50%{background:linear-gradient(45deg,#7a00ff,#ff00c8,#ff0000);}75%{background:linear-gradient(45deg,#00ffd5,#002bfd,#7a00ff);}100%{background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00);}}';
             d.head.appendChild(s);
             
             var b = d.createElement('div');
@@ -118,42 +119,58 @@ def bot_script():
                 b.style.top = ny + 'px';
                 b.style.bottom = 'auto';
                 b.style.right = 'auto';
+                
+                var existingMenu = d.getElementById('yb-menu');
+                if(existingMenu){
+                    existingMenu.style.left = (nx - 40) + 'px';
+                    existingMenu.style.top = (ny + 80) + 'px';
+                    existingMenu.style.bottom = 'auto';
+                    existingMenu.style.right = 'auto';
+                }
             };
             b.onmouseup = b.ontouchend = function(){ dx = false; };
             
             b.onclick = function(){
                 if(mv) return;
                 
-                // Show Menu with AUTO ON / AUTO OFF
-                if(d.getElementById('yb-menu')){ d.getElementById('yb-menu').remove(); return; }
-                
-                var menu = d.createElement('div');
-                menu.id = 'yb-menu';
-                menu.style.cssText = 'position:fixed;bottom:160px;right:20px;background:rgba(5,5,15,0.95);border:2px solid #00ffff;padding:10px;border-radius:12px;z-index:2147483647;display:flex;gap:8px;box-shadow:0 0 20px #00ffff;align-items:center;';
-                
-                var btnOn = d.createElement('button');
-                btnOn.style.cssText = 'padding:6px 12px;border:none;border-radius:6px;font-weight:900;font-size:11px;color:#fff;cursor:pointer;animation:btnGlow 0.5s infinite linear;';
-                btnOn.innerHTML = 'AUTO ON ' + (window.autoTradeEnabled ? '✓' : '');
-                btnOn.onclick = function(e){
-                    e.stopPropagation();
-                    window.autoTradeEnabled = true;
-                    menu.remove();
+                // Show options ONLY if not configured yet
+                if(!window.autoTradeConfigured){
+                    if(d.getElementById('yb-menu')){ d.getElementById('yb-menu').remove(); return; }
+                    
+                    var rect = b.getBoundingClientRect();
+                    var menu = d.createElement('div');
+                    menu.id = 'yb-menu';
+                    menu.style.cssText = 'position:fixed;top:'+(rect.top + 80)+'px;left:'+(rect.left - 40)+'px;background:rgba(5,5,15,0.95);border:2px solid #00ffff;padding:8px;border-radius:12px;z-index:2147483647;display:flex;gap:8px;box-shadow:0 0 20px #00ffff;align-items:center;white-space:nowrap;';
+                    
+                    var btnOn = d.createElement('button');
+                    btnOn.style.cssText = 'padding:8px 12px;border:none;border-radius:8px;font-weight:900;font-size:10px;color:#fff;cursor:pointer;animation:rgbGlow 1s infinite linear;box-shadow:0 0 10px #00ffff;';
+                    btnOn.innerHTML = 'AUTO TRADE ON';
+                    btnOn.onclick = function(e){
+                        e.stopPropagation();
+                        window.autoTradeEnabled = true;
+                        window.autoTradeConfigured = true;
+                        menu.remove();
+                        startScanning();
+                    };
+                    
+                    var btnOff = d.createElement('button');
+                    btnOff.style.cssText = 'padding:8px 12px;border:none;border-radius:8px;font-weight:900;font-size:10px;color:#fff;cursor:pointer;animation:rgbGlow 1s infinite linear;box-shadow:0 0 10px #ff0055;';
+                    btnOff.innerHTML = 'AUTO TRADE OFF';
+                    btnOff.onclick = function(e){
+                        e.stopPropagation();
+                        window.autoTradeEnabled = false;
+                        window.autoTradeConfigured = true;
+                        menu.remove();
+                        startScanning();
+                    };
+                    
+                    menu.appendChild(btnOn);
+                    menu.appendChild(btnOff);
+                    d.body.appendChild(menu);
+                } else {
+                    // Already selected once, direct scan execution
                     startScanning();
-                };
-                
-                var btnOff = d.createElement('button');
-                btnOff.style.cssText = 'padding:6px 12px;border:none;border-radius:6px;font-weight:900;font-size:11px;color:#fff;cursor:pointer;background:#ff0033;box-shadow:0 0 10px #ff0033;';
-                btnOff.innerHTML = 'AUTO OFF ' + (!window.autoTradeEnabled ? '✓' : '');
-                btnOff.onclick = function(e){
-                    e.stopPropagation();
-                    window.autoTradeEnabled = false;
-                    menu.remove();
-                    startScanning();
-                };
-                
-                menu.appendChild(btnOn);
-                menu.appendChild(btnOff);
-                d.body.appendChild(menu);
+                }
             };
 
             function startScanning(){
@@ -166,7 +183,6 @@ def bot_script():
                 var sc = d.createElement('div');
                 sc.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.85);z-index:2147483646;pointer-events:none;';
                 
-                // Intense Smooth Laser Fire Animation
                 sc.innerHTML = '<div style="position:absolute;top:0;left:0;width:100%;height:8px;animation:fS 1.5s infinite ease-in-out alternate,lGl 0.8s infinite;filter:drop-shadow(0 0 20px #ff0055);will-change:transform;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:2.5px solid #0ff;padding:14px 28px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:14px;animation:mC 3s infinite;background:rgba(0,0,0,0.92);box-shadow:0 0 30px #ff00ff,inset 0 0 12px #0ff;white-space:nowrap;text-align:center;"><span style="animation:c1 2s infinite;">'+scanText+'</span></div>';
                 d.body.appendChild(sc);
                 
@@ -182,7 +198,7 @@ def bot_script():
                         var txt = isSell ? 'SELL SIGNAL' : 'BUY SIGNAL';
                         var col = isSell ? '#ff1a1a' : '#0f6';
                         
-                        // Execute Auto Click ONLY if AUTO ON
+                        // Execute click ONLY when AUTO TRADE ON
                         if(window.autoTradeEnabled) {
                             if(isSell) {
                                 var sellBtns = d.querySelectorAll('.btn-put, button.put, button[class*="put"], .button-sell, [class*="sell"], button.danger, [class*="danger"], .section-deal__button-down');
@@ -199,7 +215,7 @@ def bot_script():
                         
                         var sb = d.createElement('div');
                         sb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#05050f;border:2.5px solid '+col+';padding:12px 26px;border-radius:12px;font-family:sans-serif;font-weight:900;font-size:16px;z-index:2147483647;animation:mC 3s infinite;box-shadow:0 0 25px '+col+';color:'+col+';text-align:center;white-space:nowrap;';
-                        sb.innerHTML = txt + ' (' + conf + '%) ' + (window.autoTradeEnabled ? 'EXECUTED' : 'SIGNAL READY');
+                        sb.innerHTML = txt + ' (' + conf + '%) ' + (window.autoTradeEnabled ? 'EXECUTED' : 'READY');
                         d.body.appendChild(sb);
                         setTimeout(function(){ sb.remove(); }, 3000);
                     });
