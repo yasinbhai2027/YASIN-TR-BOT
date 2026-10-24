@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v7.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v8.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -33,7 +33,7 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Two-Sided Balanced Signal Logic (Fixes Single Direction Issue)
+        # Balanced Two-Sided Signal Logic (Fixes Single Direction Issue)
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
@@ -206,7 +206,7 @@ def bot_script():
                     window.autoTradeEnabled = true;
                     btnOn.style.outline = '1.5px solid #00ff66';
                     btnOff.style.outline = 'none';
-                    run20sEngine(panel, true);
+                    runContinuousEngine(panel, true);
                 };
 
                 btnOff.onclick = function(){
@@ -219,7 +219,7 @@ def bot_script():
                         scanBtn.style.cssText = 'flex:1;padding:3px 4px;border:none;border-radius:4px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;animation:btnScanGlow 3s infinite linear;text-align:center;';
                         scanBtn.innerHTML = 'MARKET SCANNING';
                         scanBtn.onclick = function(){
-                            run20sEngine(panel, false);
+                            runContinuousEngine(panel, false);
                         };
                         modeBar.appendChild(scanBtn);
                     }
@@ -229,7 +229,7 @@ def bot_script():
                 modeBar.appendChild(btnOff);
                 panel.appendChild(modeBar);
                 
-                // Outer Double Border Wrapper
+                // Outer Double Border Wrapper with Initial WAITING State
                 var wrapper = d.createElement('div');
                 wrapper.style.cssText = 'margin:5px;padding:5px;border:1.2px solid #00ffff;border-radius:6px;background:rgba(0,0,0,0.3);animation:outerGlow 4s infinite ease-in-out;display:flex;flex-direction:column;gap:5px;';
 
@@ -246,7 +246,7 @@ def bot_script():
                 
                 var sigRow = d.createElement('div');
                 sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">Qx OTC SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">Qx REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
@@ -258,8 +258,6 @@ def bot_script():
                 
                 panel.appendChild(wrapper);
                 d.body.appendChild(panel);
-                
-                updateRealScreenData(panel);
             }
 
             function forceClick(el) {
@@ -338,17 +336,7 @@ def bot_script():
                 return "93%";
             }
 
-            function updateRealScreenData(panel){
-                var pairEl = panel.querySelector('#p-pair');
-                var sigLabelEl = panel.querySelector('#p-sig-label');
-                var currentPair = getRealPairName();
-                if(pairEl) pairEl.innerText = currentPair;
-                if(sigLabelEl){
-                    sigLabelEl.innerText = currentPair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
-                }
-            }
-
-            function run20sEngine(panel, isAutoTradeMode){
+            function runContinuousEngine(panel, isAutoTradeMode){
                 var pairEl = panel.querySelector('#p-pair');
                 var payoutEl = panel.querySelector('#p-payout');
                 var priceEl = panel.querySelector('#p-price');
@@ -356,84 +344,91 @@ def bot_script():
                 var sigLabelEl = panel.querySelector('#p-sig-label');
                 var cdEl = panel.querySelector('#p-countdown');
                 var serverEl = panel.querySelector('#p-server');
-                
-                var scanTime = 20; // 20s Scanning for ALL fields
-                
-                var scanInterval = setInterval(function(){
-                    scanTime--;
+
+                function executeScanAndTrade(){
+                    var scanTime = 20; // 20s Scanning for all fields
                     
-                    var activePair = getRealPairName();
-                    if(pairEl) pairEl.innerText = activePair;
-                    if(sigLabelEl){
-                        sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
-                    }
-                    
-                    if(payoutEl) payoutEl.innerText = 'SCANNING...';
-                    if(priceEl) priceEl.innerText = 'SCANNING...';
-                    if(signalEl) signalEl.innerText = 'SCANNING...';
-                    if(cdEl) cdEl.innerText = scanTime + 's';
-                    if(serverEl) serverEl.innerText = 'SCANNING...';
-                    
-                    if(scanTime <= 0){
-                        clearInterval(scanInterval);
+                    var scanInterval = setInterval(function(){
+                        scanTime--;
                         
-                        fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
-                        .then(function(r){ return r.json(); })
-                        .catch(function(){ return {signal: "UP", confidence: 93, conf_level: "HIGH"}; })
-                        .then(function(j){
-                            var rawSig = String(j.signal || 'UP').toUpperCase();
-                            var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
-                            var sigText = isDown ? 'DOWN' : 'UP';
-                            var conf = Number(j.confidence || 93);
-                            var confLevel = String(j.conf_level || 'HIGH');
+                        var activePair = getRealPairName();
+                        if(pairEl) pairEl.innerText = activePair;
+                        if(sigLabelEl){
+                            sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
+                        }
+                        
+                        if(payoutEl) payoutEl.innerText = 'SCANNING...';
+                        if(priceEl) priceEl.innerText = 'SCANNING...';
+                        if(signalEl) signalEl.innerText = 'SCANNING...';
+                        if(cdEl) cdEl.innerText = scanTime + 's';
+                        if(serverEl) serverEl.innerText = 'SCANNING...';
+                        
+                        if(scanTime <= 0){
+                            clearInterval(scanInterval);
                             
-                            if(payoutEl) payoutEl.innerText = getRealPayoutText();
-                            
-                            // Real Screen Live Price Fetching
-                            var livePriceVal = "0.86417";
-                            try {
-                                var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
-                                for(var p=0; p<priceTargets.length; p++){
-                                    var pel = d.querySelector(priceTargets[p]);
-                                    if(pel && pel.innerText && !isNaN(parseFloat(pel.innerText))){
-                                        livePriceVal = pel.innerText.trim();
-                                        break;
+                            fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
+                            .then(function(r){ return r.json(); })
+                            .catch(function(){ return {signal: "UP", confidence: 93, conf_level: "HIGH"}; })
+                            .then(function(j){
+                                var rawSig = String(j.signal || 'UP').toUpperCase();
+                                var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
+                                var sigText = isDown ? 'DOWN' : 'UP';
+                                var conf = Number(j.confidence || 93);
+                                var confLevel = String(j.conf_level || 'HIGH');
+                                
+                                if(payoutEl) payoutEl.innerText = getRealPayoutText();
+                                
+                                var livePriceVal = "0.86417";
+                                try {
+                                    var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
+                                    for(var p=0; p<priceTargets.length; p++){
+                                        var pel = d.querySelector(priceTargets[p]);
+                                        if(pel && pel.innerText && !isNaN(parseFloat(pel.innerText))){
+                                            livePriceVal = pel.innerText.trim();
+                                            break;
+                                        }
                                     }
+                                } catch(e){}
+                                if(priceEl) priceEl.innerText = livePriceVal;
+                                
+                                if(signalEl) {
+                                    signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
+                                    signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
                                 }
-                            } catch(e){}
-                            if(priceEl) priceEl.innerText = livePriceVal;
-                            
-                            if(signalEl) {
-                                signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
-                                signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
-                            }
-                            
-                            if(serverEl) {
-                                serverEl.innerHTML = 'Connected <span style="font-size:6.5px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
-                            }
-
-                            // Instant Auto Click Execution if AUTO TRADE ON mode
-                            if(isAutoTradeMode) {
-                                triggerTrade(isDown);
-                            }
-
-                            // Accurate Dynamic Timeframe Countdown Sync
-                            var tfSecs = getDynamicTimeframeSeconds();
-                            var cdLeft = tfSecs;
-                            if(cdEl) cdEl.innerText = cdLeft + 's';
-                            
-                            var cdTimer = setInterval(function(){
-                                cdLeft--;
-                                if(cdEl) cdEl.innerText = cdLeft > 0 ? (cdLeft + 's') : 'Executed';
-                                if(cdLeft <= 0){
-                                    clearInterval(cdTimer);
+                                
+                                if(serverEl) {
+                                    serverEl.innerHTML = 'Connected <span style="font-size:6.5px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                                 }
-                            }, 1000);
-                        });
-                    }
-                }, 1000);
+
+                                // Auto Click Execution if AUTO TRADE ON mode
+                                if(window.autoTradeEnabled && isAutoTradeMode) {
+                                    triggerTrade(isDown);
+                                }
+
+                                // Dynamic Timeframe Countdown & Auto Restart Loop
+                                var tfSecs = getDynamicTimeframeSeconds();
+                                var cdLeft = tfSecs;
+                                if(cdEl) cdEl.innerText = cdLeft + 's';
+                                
+                                var cdTimer = setInterval(function(){
+                                    cdLeft--;
+                                    if(cdEl) cdEl.innerText = cdLeft > 0 ? (cdLeft + 's') : 'Executed';
+                                    if(cdLeft <= 0){
+                                        clearInterval(cdTimer);
+                                        // If Auto Trade is ON, loop back to scanning automatically after trade time ends
+                                        if(window.autoTradeEnabled){
+                                            executeScanAndTrade();
+                                        }
+                                    }
+                                }, 1000);
+                            });
+                        }
+                    }, 1000);
+                }
+
+                executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v7 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v8 Error:", e); }
     })();
     """
     res = make_response(js)
