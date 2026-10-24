@@ -5,12 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master Twelve Data & Quotex Technical Analysis Engine
+# Master Twelve Data API Engine Integration
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v8.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v9.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -33,7 +33,7 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Balanced Two-Sided Signal Logic (Fixes Single Direction Issue)
+        # Perfect Two-Sided Balanced Signal Strategy
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
@@ -89,7 +89,7 @@ def bot_script():
             s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes bGlow1{0%,100%{border-color:#00ffff;}33%{border-color:#ff00ff;}66%{border-color:#00ff66;}}@keyframes bGlow2{0%,100%{border-color:#ff00ff;}33%{border-color:#00ff66;}66%{border-color:#ffff00;}}@keyframes bGlow3{0%,100%{border-color:#00ff66;}33%{border-color:#ffff00;}66%{border-color:#ff0055;}}@keyframes outerGlow{0%,100%{border-color:#00ffff;box-shadow:0 0 10px rgba(0,255,255,0.3);}50%{border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,0.3);}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
             d.head.appendChild(s);
             
-            // Round Floating Widget
+            // Round Floating Bot Widget
             var b = d.createElement('div');
             window.YB = b;
             b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:50px;height:50px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 5s infinite ease-in-out;border:2px solid #ff0033;box-sizing:border-box;will-change:transform;';
@@ -188,18 +188,18 @@ def bot_script():
                 header.appendChild(minBtn);
                 panel.appendChild(header);
                 
-                // 20% Smaller Top Buttons Bar
+                // 15% Smaller Buttons Bar
                 var modeBar = d.createElement('div');
                 modeBar.id = 'mode-bar-container';
                 modeBar.style.cssText = 'padding:5px 6px;background:#06080d;border-bottom:1px solid #1a1f2c;display:flex;gap:6px;justify-content:space-between;align-items:center;';
                 
                 var btnOn = d.createElement('button');
-                btnOn.style.cssText = 'flex:1;padding:3px 4px;border:none;border-radius:4px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;animation:btnOnGlow 3s infinite linear;text-align:center;';
+                btnOn.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;animation:btnOnGlow 3s infinite linear;text-align:center;';
                 btnOn.innerHTML = 'AUTO TRADE ON';
                 
                 var btnOff = d.createElement('button');
                 btnOff.id = 'btn-auto-off';
-                btnOff.style.cssText = 'flex:1;padding:3px 4px;border:none;border-radius:4px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 5px #ff0055;text-align:center;';
+                btnOff.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 5px #ff0055;text-align:center;';
                 btnOff.innerHTML = 'AUTO TRADE OFF';
 
                 btnOn.onclick = function(){
@@ -211,12 +211,12 @@ def bot_script():
 
                 btnOff.onclick = function(){
                     window.autoTradeEnabled = false;
-                    btnOff.style.display = 'none'; // Hide OFF button
+                    btnOff.style.display = 'none';
                     
                     if(!d.getElementById('btn-manual-scan')){
                         var scanBtn = d.createElement('button');
                         scanBtn.id = 'btn-manual-scan';
-                        scanBtn.style.cssText = 'flex:1;padding:3px 4px;border:none;border-radius:4px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;animation:btnScanGlow 3s infinite linear;text-align:center;';
+                        scanBtn.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;animation:btnScanGlow 3s infinite linear;text-align:center;';
                         scanBtn.innerHTML = 'MARKET SCANNING';
                         scanBtn.onclick = function(){
                             runContinuousEngine(panel, false);
@@ -229,7 +229,7 @@ def bot_script():
                 modeBar.appendChild(btnOff);
                 panel.appendChild(modeBar);
                 
-                // Outer Double Border Wrapper with Initial WAITING State
+                // Outer Double Border Wrapper (Default WAITING Mode)
                 var wrapper = d.createElement('div');
                 wrapper.style.cssText = 'margin:5px;padding:5px;border:1.2px solid #00ffff;border-radius:6px;background:rgba(0,0,0,0.3);animation:outerGlow 4s infinite ease-in-out;display:flex;flex-direction:column;gap:5px;';
 
@@ -246,7 +246,7 @@ def bot_script():
                 
                 var sigRow = d.createElement('div');
                 sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">Qx REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
@@ -310,20 +310,26 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return 15;
+                return 10;
             }
 
             function getRealPairName(){
                 try {
-                    var selectors = ['.asset-select__button .asset-name', '.asset-name', '.current-symbol', '.pair-name', '.select-asset__name', '.active-asset', '.section-deal__asset-name'];
+                    var selectors = [
+                        '.section-deal__asset-name', '.asset-select__button .asset-name', 
+                        '.asset-name', '.current-symbol', '.pair-name', '.select-asset__name', '.active-asset'
+                    ];
                     for(var i=0; i<selectors.length; i++){
-                        var el = d.querySelector(selectors[i]);
-                        if(el && el.innerText && el.innerText.trim().length > 2){
-                            return el.innerText.trim();
+                        var els = d.querySelectorAll(selectors[i]);
+                        for(var j=0; j<els.length; j++){
+                            var txt = els[j].innerText ? els[j].innerText.trim() : "";
+                            if(txt && txt.length > 2 && !txt.includes("Deposit")){
+                                return txt;
+                            }
                         }
                     }
                 } catch(e){}
-                return "EUR/GBP";
+                return "USD/CHF (OTC)";
             }
 
             function getRealPayoutText(){
@@ -333,7 +339,7 @@ def bot_script():
                         return payoutEl.innerText.trim();
                     }
                 } catch(e){}
-                return "93%";
+                return "92%";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -346,7 +352,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20; // 20s Scanning for all fields
+                    var scanTime = 20; // Exact 20s Scanning for all fields
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -354,7 +360,7 @@ def bot_script():
                         var activePair = getRealPairName();
                         if(pairEl) pairEl.innerText = activePair;
                         if(sigLabelEl){
-                            sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'Qx OTC SIGNAL' : 'Qx REAL SIGNAL';
+                            sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'QX OTC SIGNAL' : 'QX REAL SIGNAL';
                         }
                         
                         if(payoutEl) payoutEl.innerText = 'SCANNING...';
@@ -378,7 +384,8 @@ def bot_script():
                                 
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
                                 
-                                var livePriceVal = "0.86417";
+                                // Direct Chart Real-Price Tracking
+                                var livePriceVal = "0.82672";
                                 try {
                                     var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
                                     for(var p=0; p<priceTargets.length; p++){
@@ -400,12 +407,12 @@ def bot_script():
                                     serverEl.innerHTML = 'Connected <span style="font-size:6.5px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                                 }
 
-                                // Auto Click Execution if AUTO TRADE ON mode
+                                // Automatic Click Execution if AUTO TRADE ON mode
                                 if(window.autoTradeEnabled && isAutoTradeMode) {
                                     triggerTrade(isDown);
                                 }
 
-                                // Dynamic Timeframe Countdown & Auto Restart Loop
+                                // Timeframe Sync Countdown & Auto Loop Restart
                                 var tfSecs = getDynamicTimeframeSeconds();
                                 var cdLeft = tfSecs;
                                 if(cdEl) cdEl.innerText = cdLeft + 's';
@@ -415,7 +422,7 @@ def bot_script():
                                     if(cdEl) cdEl.innerText = cdLeft > 0 ? (cdLeft + 's') : 'Executed';
                                     if(cdLeft <= 0){
                                         clearInterval(cdTimer);
-                                        // If Auto Trade is ON, loop back to scanning automatically after trade time ends
+                                        // Continuous Auto Loop
                                         if(window.autoTradeEnabled){
                                             executeScanAndTrade();
                                         }
@@ -428,7 +435,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v8 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v9 Error:", e); }
     })();
     """
     res = make_response(js)
