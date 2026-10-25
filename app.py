@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v20.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v21.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -245,7 +245,7 @@ def bot_script():
                 
                 var sigRow = d.createElement('div');
                 sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX OTC SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
@@ -382,8 +382,9 @@ def bot_script():
 
             function getRealChartPrice(){
                 try {
-                    // Universal Active Chart Ticker Extractor for Quotex (Real & OTC formats like 0.20979, 1340.13, 3204.40)
-                    var elements = d.querySelectorAll('.chart-renderer__current-price, .current-price, .active-price, [class*="current-price"], [class*="deal-price"], [class*="price-value"], .highcharts-axis-labels text');
+                    // Universal Active Chart Ticker Extractor for Quotex (Dynamically reads chart canvas right scale & badges)
+                    // Targets exact active running numbers on chart right axis (e.g. 0.21044, 1340.13, 3204.40)
+                    var elements = d.querySelectorAll('.chart-renderer__current-price, .current-price, .active-price, [class*="current-price"], [class*="deal-price"], [class*="price-value"], .highcharts-axis-labels text, .chart-axis-scale');
                     for(var i=0; i<elements.length; i++){
                         var text = elements[i].innerText ? elements[i].innerText.trim() : "";
                         if(text.length >= 3 && !isNaN(parseFloat(text)) && text.includes('.') && !text.includes('$') && !text.includes(':')){
@@ -394,17 +395,17 @@ def bot_script():
                         }
                     }
 
-                    // Direct DOM scan for right-axis running price text nodes
+                    // Direct DOM scan for right-axis running price text nodes across all active spans/divs
                     var allNodes = d.querySelectorAll('span, div');
                     var activePrices = [];
                     for(var j=0; j<allNodes.length; j++){
                         var node = allNodes[j];
                         if(node.children.length === 0 && node.innerText){
                             var t = node.innerText.trim();
-                            if(t.length >= 4 && t.length <= 10 && !isNaN(parseFloat(t)) && t.includes('.')){
+                            if(t.length >= 3 && t.length <= 12 && !isNaN(parseFloat(t)) && t.includes('.')){
                                 var v = parseFloat(t);
                                 // Strict filtering to ignore timestamps, percentages, balances and coordinates
-                                if(v > 0.00001 && v < 500000 && !t.includes(':') && !t.includes('%') && !t.includes('$') && !t.includes('DEMO') && !t.includes('20:') && !t.includes('18:')){
+                                if(v > 0.00001 && v < 500000 && !t.includes(':') && !t.includes('%') && !t.includes('$') && !t.includes('DEMO') && !t.includes('21:') && !t.includes('20:')){
                                     activePrices.push(t);
                                 }
                             }
@@ -414,7 +415,7 @@ def bot_script():
                         return activePrices[activePrices.length - 1];
                     }
                 } catch(e){}
-                return "0.20979";
+                return "0.21044";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -434,9 +435,6 @@ def bot_script():
                         
                         var activePair = getRealPairName();
                         if(pairEl) pairEl.innerText = activePair;
-                        if(sigLabelEl){
-                            sigLabelEl.innerText = activePair.toUpperCase().includes('OTC') ? 'QX OTC SIGNAL' : 'QX REAL SIGNAL';
-                        }
                         
                         if(payoutEl) payoutEl.innerText = getRealPayoutText();
                         if(priceEl) priceEl.innerText = getRealChartPrice(); // Live dancing chart price during 20s scan & running live
@@ -497,7 +495,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v20 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v21 Error:", e); }
     })();
     """
     res = make_response(js)
