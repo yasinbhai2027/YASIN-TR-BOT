@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v9.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v10.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -263,8 +263,15 @@ def bot_script():
             function forceClick(el) {
                 if(!el) return false;
                 try {
+                    var box = el.getBoundingClientRect();
+                    var cx = box.left + (box.width / 2);
+                    var cy = box.top + (box.height / 2);
+                    
                     ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click'].forEach(function(evName){
-                        var ev = new MouseEvent(evName, {bubbles: true, cancelable: true, view: window});
+                        var ev = new MouseEvent(evName, {
+                            bubbles: true, cancelable: true, view: window,
+                            clientX: cx,clientY: cy,screenX: cx,screenY: cy
+                        });
                         el.dispatchEvent(ev);
                     });
                     if(typeof el.click === 'function') el.click();
@@ -277,11 +284,13 @@ def bot_script():
                 var selectors = isSell ? [
                     '.section-deal__button-down button', '.section-deal__button-down',
                     '.btn-put', 'button.put', 'button[class*="put"]',
-                    '.button-sell', '[class*="sell"]', '.btn-call-put--put', '.deal-button-down'
+                    '.button-sell', '[class*="sell"]', '.btn-call-put--put', '.deal-button-down',
+                    'button[class*="down"]', 'button[class*="put"]', '.call-put__button_down'
                 ] : [
                     '.section-deal__button-up button', '.section-deal__button-up',
                     '.btn-call', 'button.call', 'button[class*="call"]',
-                    '.button-buy', '[class*="buy"]', '.btn-call-put--call', '.deal-button-up'
+                    '.button-buy', '[class*="buy"]', '.btn-call-put--call', '.deal-button-up',
+                    'button[class*="up"]', 'button[class*="call"]', '.call-put__button_up'
                 ];
 
                 for(var i=0; i<selectors.length; i++){
@@ -293,11 +302,23 @@ def bot_script():
                     }
                     if(clicked) break;
                 }
+                
+                if(!clicked) {
+                    var allBtns = d.querySelectorAll('button');
+                    for(var k=0; k<allBtns.length; k++){
+                        var txt = (allBtns[k].innerText || "").toUpperCase();
+                        if(isSell && (txt.includes('PUT') || txt.includes('SELL') || txt.includes('DOWN'))){
+                            if(forceClick(allBtns[k])) break;
+                        } else if(!isSell && (txt.includes('CALL') || txt.includes('BUY') || txt.includes('UP'))){
+                            if(forceClick(allBtns[k])) break;
+                        }
+                    }
+                }
             }
 
             function getDynamicTimeframeSeconds(){
                 try {
-                    var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input');
+                    var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
                     for(var i=0; i<timerInputs.length; i++){
                         var val = timerInputs[i].value || timerInputs[i].innerText;
                         if(val && val.includes(':')){
@@ -310,26 +331,27 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return 10;
+                return 15;
             }
 
             function getRealPairName(){
                 try {
                     var selectors = [
-                        '.section-deal__asset-name', '.asset-select__button .asset-name', 
-                        '.asset-name', '.current-symbol', '.pair-name', '.select-asset__name', '.active-asset'
+                        '.asset-select__button .asset-name', '.current-symbol', 
+                        '.pair-name', '.select-asset__name', '.active-asset', 
+                        '.section-deal__asset-name', '.asset-name', '[class*="asset"]'
                     ];
                     for(var i=0; i<selectors.length; i++){
                         var els = d.querySelectorAll(selectors[i]);
                         for(var j=0; j<els.length; j++){
                             var txt = els[j].innerText ? els[j].innerText.trim() : "";
-                            if(txt && txt.length > 2 && !txt.includes("Deposit")){
+                            if(txt && txt.length > 2 && !txt.includes("Deposit") && !txt.includes("DEMO")){
                                 return txt;
                             }
                         }
                     }
                 } catch(e){}
-                return "USD/CHF (OTC)";
+                return "USD/JPY";
             }
 
             function getRealPayoutText(){
@@ -339,7 +361,7 @@ def bot_script():
                         return payoutEl.innerText.trim();
                     }
                 } catch(e){}
-                return "92%";
+                return "93%";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -352,7 +374,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20; // Exact 20s Scanning for all fields
+                    var scanTime = 20; // 20s Scanning for all fields
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -385,7 +407,7 @@ def bot_script():
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
                                 
                                 // Direct Chart Real-Price Tracking
-                                var livePriceVal = "0.82672";
+                                var livePriceVal = "159.079";
                                 try {
                                     var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
                                     for(var p=0; p<priceTargets.length; p++){
@@ -435,7 +457,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v9 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v10 Error:", e); }
     })();
     """
     res = make_response(js)
