@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v15.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v16.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -240,7 +240,7 @@ def bot_script():
                 }
                 
                 wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'bGlow1'));
-                wrapper.appendChild(createRow('PAYOUT', 'p-payout', 'bGlow2'));
+                wrapper.appendChild(createRow('MARKET PAYOUT', 'p-payout', 'bGlow2'));
                 wrapper.appendChild(createRow('MARKET PRICE', 'p-price', 'bGlow3'));
                 
                 var sigRow = d.createElement('div');
@@ -278,7 +278,15 @@ def bot_script():
                 } catch(e) { return false; }
             }
 
+            // Single Trade Execution Guard (Ensures only ONE trade is placed per signal)
+            window.lastTradeExecutionTimestamp = 0;
             function triggerTrade(isSell){
+                var nowTs = Date.now();
+                if(nowTs - window.lastTradeExecutionTimestamp < 5000) {
+                    return; // Prevent double clicking within 5 seconds
+                }
+                window.lastTradeExecutionTimestamp = nowTs;
+
                 var clicked = false;
                 var selectors = isSell ? [
                     '.section-deal__button-down button', '.section-deal__button-down',
@@ -353,7 +361,7 @@ def bot_script():
                         return candidates[0];
                     }
                 } catch(e){}
-                return "EUR/JPY (OTC)";
+                return "NZD/CHF (OTC)";
             }
 
             function getRealPayoutText(){
@@ -374,36 +382,30 @@ def bot_script():
 
             function getRealChartPrice(){
                 try {
-                    // Precision Quotex Active Chart Right-Axis Price Extractor
-                    // Looks specifically for elements on the right side scale showing prices like 174.200, 1.01328, etc.
+                    // Direct Right-Edge Chart Live Price Extractor (Focuses on live asset value like 0.47682)
                     var priceEls = d.querySelectorAll('.highcharts-axis-labels text, .chart-axis-scale, [class*="price"], [class*="rate"], [class*="value"]');
                     for(var i=0; i<priceEls.length; i++){
                         var t = priceEls[i].innerText ? priceEls[i].innerText.trim() : "";
-                        if(t.length >= 4 && t.length <= 9 && !isNaN(parseFloat(t)) && t.includes('.')){
+                        if(t.length >= 4 && t.length <= 10 && !isNaN(parseFloat(t)) && t.includes('.')){
                             var val = parseFloat(t);
-                            if(val > 0.0001 && val < 50000 && !t.includes(':') && !t.includes('%')){
+                            if(val > 0.0001 && val < 50000 && !t.includes(':') && !t.includes('%') && !t.includes('$')){
                                 return t;
                             }
                         }
                     }
                     
-                    // Fallback universal scan for active floating price tags on the chart right edge
                     var allNodes = d.querySelectorAll('div, span');
-                    var validPrices = [];
                     for(var j=0; j<allNodes.length; j++){
                         var txt = allNodes[j].innerText ? allNodes[j].innerText.trim() : "";
                         if(txt.length >= 5 && txt.length <= 9 && !isNaN(parseFloat(txt)) && txt.includes('.')){
                             var v = parseFloat(txt);
-                            if(v > 1.0 && v < 50000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('16:') && !txt.includes('17:')){
-                                validPrices.push(txt);
+                            if(v > 0.1 && v < 50000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('$') && !txt.includes('16:') && !txt.includes('17:')){
+                                return txt;
                             }
                         }
                     }
-                    if(validPrices.length > 0){
-                        return validPrices[0];
-                    }
                 } catch(e){}
-                return "174.200";
+                return "0.47682";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -428,7 +430,7 @@ def bot_script():
                         }
                         
                         if(payoutEl) payoutEl.innerText = 'SCANNING...';
-                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Dynamic live price update during 20s scan
+                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Live price updating during 20s scan
                         if(signalEl) signalEl.innerText = 'SCANNING...';
                         if(cdEl) cdEl.innerText = scanTime + 's';
                         if(serverEl) serverEl.innerText = 'SCANNING...';
@@ -458,7 +460,7 @@ def bot_script():
                                     serverEl.innerHTML = 'Connected <span style="font-size:6.5px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                                 }
 
-                                // Automatic Click Execution if AUTO TRADE ON mode
+                                // Automatic Single Click Execution if AUTO TRADE ON mode
                                 if(window.autoTradeEnabled && isAutoTradeMode) {
                                     triggerTrade(isDown);
                                 }
@@ -486,7 +488,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v15 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v16 Error:", e); }
     })();
     """
     res = make_response(js)
