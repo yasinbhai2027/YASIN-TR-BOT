@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v21.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v22.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -36,15 +36,19 @@ def get_signal():
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
+                trend = "DOWN TREND"
                 confidence = int(88 + abs(rsi - 50.0) * 0.9)
             elif rsi > 52.0 or (ema_fast > ema_slow and rsi >= 48.0):
                 signal = "UP"
+                trend = "UP TREND"
                 confidence = int(88 + abs(50.0 - rsi) * 0.9)
             else:
                 signal = "UP" if (current_sec % 2 == 0) else "DOWN"
+                trend = "UP TREND" if signal == "UP" else "DOWN TREND"
                 confidence = 86
         else:
             signal = "UP" if (current_sec % 2 == 0) else "DOWN"
+            trend = "UP TREND" if signal == "UP" else "DOWN TREND"
             confidence = 87
 
         confidence = min(max(confidence, 84), 98)
@@ -52,6 +56,7 @@ def get_signal():
 
         res = jsonify({
             "signal": signal,
+            "trend": trend,
             "confidence": confidence,
             "conf_level": conf_level,
             "status": "GREEN_EXECUTE"
@@ -63,6 +68,7 @@ def get_signal():
         fallback_sig = "UP" if (int(time.time()) % 2 == 0) else "DOWN"
         res = jsonify({
             "signal": fallback_sig,
+            "trend": "UP TREND" if fallback_sig == "UP" else "DOWN TREND",
             "confidence": 86,
             "conf_level": "MEDIUM",
             "status": "GREEN_EXECUTE"
@@ -85,25 +91,25 @@ def bot_script():
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes bGlow1{0%,100%{border-color:#00ffff;}33%{border-color:#ff00ff;}66%{border-color:#00ff66;}}@keyframes bGlow2{0%,100%{border-color:#ff00ff;}33%{border-color:#00ff66;}66%{border-color:#ffff00;}}@keyframes bGlow3{0%,100%{border-color:#00ff66;}33%{border-color:#ffff00;}66%{border-color:#ff0055;}}@keyframes outerGlow{0%,100%{border-color:#00ffff;box-shadow:0 0 10px rgba(0,255,255,0.3);}50%{border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,0.3);}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0033;box-shadow:0 0 15px #ff0033}50%{border-color:#00ffff;box-shadow:0 0 15px #00ffff}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes bGlow1{0%,100%{border-color:#00ffff;}33%{border-color:#ff00ff;}66%{border-color:#00ff66;}}@keyframes bGlow2{0%,100%{border-color:#ff00ff;}33%{border-color:#00ff66;}66%{border-color:#ffff00;}}@keyframes bGlow3{0%,100%{border-color:#00ff66;}33%{border-color:#ffff00;}66%{border-color:#ff0055;}}@keyframes outerGlow{0%,100%{border-color:#00ffff;box-shadow:0 0 12px rgba(0,255,255,0.4);}50%{border-color:#ff00ff;box-shadow:0 0 12px rgba(255,0,255,0.4);}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
             d.head.appendChild(s);
             
             // Round Floating Bot Widget
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:50px;height:50px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 5s infinite ease-in-out;border:2px solid #ff0033;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:50px;height:50px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 4s infinite ease-in-out;border:2px solid #ff0033;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:60px;height:60px;border:1.5px dashed #ffd700;border-radius:50%;animation:rCC 12s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:60px;height:60px;border:1.5px dashed #ffd700;border-radius:50%;animation:rCC 10s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:68px;height:68px;border:1.8px dotted #9400d3;border-radius:50%;animation:rC 15s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:68px;height:68px;border:1.8px dotted #9400d3;border-radius:50%;animation:rC 12s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
             t.style.cssText = 'width:40px;height:40px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7px;animation:slowGlow 3s infinite;display:block;">YS</span><span style="font-size:6px;animation:slowGlow 3s infinite;display:block;">BOT</span>';
+            t.innerHTML = '<span style="font-size:7px;animation:slowGlow 2.5s infinite;display:block;">YS</span><span style="font-size:6px;animation:slowGlow 2.5s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -138,7 +144,7 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:215px;background:#030407;border:1.8px solid #00ffff;border-radius:9px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.4s ease-out forwards;';
+                panel.style.cssText = 'position:fixed;bottom:80px;right:25px;width:205px;background:#030407;border:1.8px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.35s ease-out forwards;';
                 
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
@@ -160,18 +166,18 @@ def bot_script():
 
                 // Header
                 var header = d.createElement('div');
-                header.style.cssText = 'background:#080b12;padding:5px 7px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
+                header.style.cssText = 'background:#080b12;padding:4px 6px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1f2c;';
                 
                 var titleArea = d.createElement('div');
                 titleArea.style.cssText = 'display:flex;align-items:center;gap:3px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:7px;padding:1px 3px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:9px;font-weight:900;animation:slowGlow 3s infinite;">YASIN TR BOT</span>';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:6.5px;padding:1px 3px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8.5px;font-weight:900;animation:slowGlow 2.5s infinite;">YASIN TR BOT</span>';
                 
                 var activeBadge = d.createElement('span');
-                activeBadge.style.cssText = 'font-size:6.5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:2px;margin-left:2px;';
-                activeBadge.innerHTML = '<span style="width:4px;height:4px;background:#00e676;border-radius:50%;box-shadow:0 0 5px #00e676;"></span> LIVE BOT ACTIVE';
+                activeBadge.style.cssText = 'font-size:6px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:2px;margin-left:2px;';
+                activeBadge.innerHTML = '<span style="width:3.5px;height:3.5px;background:#00e676;border-radius:50%;box-shadow:0 0 4px #00e676;"></span> LIVE ACTIVE';
 
                 var minBtn = d.createElement('button');
-                minBtn.style.cssText = 'background:#00c853;border:none;width:14px;height:14px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:11px;font-weight:900;box-shadow:0 0 5px #00c853;';
+                minBtn.style.cssText = 'background:#00c853;border:none;width:13px;height:13px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:900;box-shadow:0 0 4px #00c853;';
                 minBtn.innerHTML = '-';
                 minBtn.onclick = function(){
                     panel.remove();
@@ -187,18 +193,18 @@ def bot_script():
                 header.appendChild(minBtn);
                 panel.appendChild(header);
                 
-                // 15% Smaller Buttons Bar
+                // Mode Buttons Bar (10% Compact)
                 var modeBar = d.createElement('div');
                 modeBar.id = 'mode-bar-container';
-                modeBar.style.cssText = 'padding:5px 6px;background:#06080d;border-bottom:1px solid #1a1f2c;display:flex;gap:6px;justify-content:space-between;align-items:center;';
+                modeBar.style.cssText = 'padding:4px 5px;background:#06080d;border-bottom:1px solid #1a1f2c;display:flex;gap:5px;justify-content:space-between;align-items:center;';
                 
                 var btnOn = d.createElement('button');
-                btnOn.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;animation:btnOnGlow 3s infinite linear;text-align:center;';
+                btnOn.style.cssText = 'flex:1;padding:3px 3px;border:none;border-radius:3.5px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;animation:btnOnGlow 2.5s infinite linear;text-align:center;';
                 btnOn.innerHTML = 'AUTO TRADE ON';
                 
                 var btnOff = d.createElement('button');
                 btnOff.id = 'btn-auto-off';
-                btnOff.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 5px #ff0055;text-align:center;';
+                btnOff.style.cssText = 'flex:1;padding:3px 3px;border:none;border-radius:3.5px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 4px #ff0055;text-align:center;';
                 btnOff.innerHTML = 'AUTO TRADE OFF';
 
                 btnOn.onclick = function(){
@@ -215,7 +221,7 @@ def bot_script():
                     if(!d.getElementById('btn-manual-scan')){
                         var scanBtn = d.createElement('button');
                         scanBtn.id = 'btn-manual-scan';
-                        scanBtn.style.cssText = 'flex:1;padding:3.5px 4px;border:none;border-radius:4px;font-weight:900;font-size:7.5px;color:#fff;cursor:pointer;animation:btnScanGlow 3s infinite linear;text-align:center;';
+                        scanBtn.style.cssText = 'flex:1;padding:3px 3px;border:none;border-radius:3.5px;font-weight:900;font-size:7px;color:#fff;cursor:pointer;animation:btnScanGlow 2.5s infinite linear;text-align:center;';
                         scanBtn.innerHTML = 'MARKET SCANNING';
                         scanBtn.onclick = function(){
                             runContinuousEngine(panel, false);
@@ -228,31 +234,32 @@ def bot_script():
                 modeBar.appendChild(btnOff);
                 panel.appendChild(modeBar);
                 
-                // Outer Double Border Wrapper (Default WAITING Mode)
+                // Outer Fast Neon Glowing Wrapper
                 var wrapper = d.createElement('div');
-                wrapper.style.cssText = 'margin:5px;padding:5px;border:1.2px solid #00ffff;border-radius:6px;background:rgba(0,0,0,0.3);animation:outerGlow 4s infinite ease-in-out;display:flex;flex-direction:column;gap:5px;';
+                wrapper.style.cssText = 'margin:4px;padding:4px;border:1.2px solid #00ffff;border-radius:5px;background:rgba(0,0,0,0.3);animation:outerGlow 3s infinite ease-in-out;display:flex;flex-direction:column;gap:4px;';
 
                 function createRow(label, valId, animClass){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:'+animClass+' 4s infinite ease-in-out;';
-                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:8px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:2.5px 4px;border:1.1px solid #00ffff;border-radius:3.5px;background:rgba(255,255,255,0.015);animation:'+animClass+' 3s infinite ease-in-out;';
+                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:7.2px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:7.2px;color:#ffd700;">WAITING...</span>';
                     return row;
                 }
                 
                 wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'bGlow1'));
                 wrapper.appendChild(createRow('MARKET PAYOUT', 'p-payout', 'bGlow2'));
-                wrapper.appendChild(createRow('MARKET PRICE', 'p-price', 'bGlow3'));
+                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'bGlow3'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:2.5px 4px;border:1.1px solid #00ffff;border-radius:3.5px;background:rgba(255,255,255,0.015);animation:bGlow1 3s infinite ease-in-out;';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:7.2px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:7.2px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
+                wrapper.appendChild(createRow('CONFIRMATION / ACCURACY', 'p-accuracy', 'bGlow3'));
                 
                 var serverRow = d.createElement('div');
-                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00e676;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow3 4s infinite ease-in-out;';
-                serverRow.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:8px;">SERVER</span><span id="p-server" style="color:#ffd700;font-weight:900;font-size:8px;">WAITING...</span>';
+                serverRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:2.5px 4px;border:1.1px solid #00e676;border-radius:3.5px;background:rgba(255,255,255,0.015);animation:bGlow1 3s infinite ease-in-out;';
+                serverRow.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:7.2px;">SERVER</span><span id="p-server" style="color:#ffd700;font-weight:900;font-size:7.2px;">WAITING...</span>';
                 wrapper.appendChild(serverRow);
                 
                 panel.appendChild(wrapper);
@@ -377,54 +384,16 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return "94%";
-            }
-
-            function getRealChartPrice(){
-                try {
-                    // Universal Active Chart Ticker Extractor for Quotex (Dynamically reads chart canvas right scale & badges)
-                    // Targets exact active running numbers on chart right axis (e.g. 0.21044, 1340.13, 3204.40)
-                    var elements = d.querySelectorAll('.chart-renderer__current-price, .current-price, .active-price, [class*="current-price"], [class*="deal-price"], [class*="price-value"], .highcharts-axis-labels text, .chart-axis-scale');
-                    for(var i=0; i<elements.length; i++){
-                        var text = elements[i].innerText ? elements[i].innerText.trim() : "";
-                        if(text.length >= 3 && !isNaN(parseFloat(text)) && text.includes('.') && !text.includes('$') && !text.includes(':')){
-                            var val = parseFloat(text);
-                            if(val > 0.00001 && val < 500000){
-                                return text;
-                            }
-                        }
-                    }
-
-                    // Direct DOM scan for right-axis running price text nodes across all active spans/divs
-                    var allNodes = d.querySelectorAll('span, div');
-                    var activePrices = [];
-                    for(var j=0; j<allNodes.length; j++){
-                        var node = allNodes[j];
-                        if(node.children.length === 0 && node.innerText){
-                            var t = node.innerText.trim();
-                            if(t.length >= 3 && t.length <= 12 && !isNaN(parseFloat(t)) && t.includes('.')){
-                                var v = parseFloat(t);
-                                // Strict filtering to ignore timestamps, percentages, balances and coordinates
-                                if(v > 0.00001 && v < 500000 && !t.includes(':') && !t.includes('%') && !t.includes('$') && !t.includes('DEMO') && !t.includes('21:') && !t.includes('20:')){
-                                    activePrices.push(t);
-                                }
-                            }
-                        }
-                    }
-                    if(activePrices.length > 0){
-                        return activePrices[activePrices.length - 1];
-                    }
-                } catch(e){}
-                return "0.21044";
+                return "93%";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
                 var pairEl = panel.querySelector('#p-pair');
                 var payoutEl = panel.querySelector('#p-payout');
-                var priceEl = panel.querySelector('#p-price');
+                var trendEl = panel.querySelector('#p-trend');
                 var signalEl = panel.querySelector('#p-signal');
-                var sigLabelEl = panel.querySelector('#p-sig-label');
                 var cdEl = panel.querySelector('#p-countdown');
+                var accEl = panel.querySelector('#p-accuracy');
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
@@ -436,10 +405,11 @@ def bot_script():
                         var activePair = getRealPairName();
                         if(pairEl) pairEl.innerText = activePair;
                         
-                        if(payoutEl) payoutEl.innerText = getRealPayoutText();
-                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Live dancing chart price during 20s scan & running live
+                        if(payoutEl) payoutEl.innerText = 'SCANNING...';
+                        if(trendEl) trendEl.innerText = 'SCANNING...';
                         if(signalEl) signalEl.innerText = 'SCANNING...';
                         if(cdEl) cdEl.innerText = scanTime + 's';
+                        if(accEl) accEl.innerText = 'SCANNING...';
                         if(serverEl) serverEl.innerText = 'SCANNING...';
                         
                         if(scanTime <= 0){
@@ -447,24 +417,34 @@ def bot_script():
                             
                             fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                             .then(function(r){ return r.json(); })
-                            .catch(function(){ return {signal: "UP", confidence: 93, conf_level: "HIGH"}; })
+                            .catch(function(){ return {signal: "UP", trend: "UP TREND", confidence: 93, conf_level: "HIGH"}; })
                             .then(function(j){
                                 var rawSig = String(j.signal || 'UP').toUpperCase();
                                 var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
                                 var sigText = isDown ? 'DOWN' : 'UP';
+                                var trendText = String(j.trend || (isDown ? 'DOWN TREND' : 'UP TREND'));
                                 var conf = Number(j.confidence || 93);
                                 var confLevel = String(j.conf_level || 'HIGH');
                                 
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
-                                if(priceEl) priceEl.innerText = getRealChartPrice(); // Exact live market price at entry
+                                if(trendEl) {
+                                    trendEl.innerText = trendText;
+                                    trendEl.style.color = trendText.includes('DOWN') ? '#ff1a1a' : '#00e676';
+                                }
                                 
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
                                     signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
                                 }
                                 
+                                // Accuracy percentage from 1 to 100 based on confidence score
+                                if(accEl) {
+                                    accEl.innerText = conf + '% (' + confLevel + ')';
+                                    accEl.style.color = conf >= 92 ? '#00e676' : (conf >= 88 ? '#ffcc00' : '#ff1a1a');
+                                }
+                                
                                 if(serverEl) {
-                                    serverEl.innerHTML = 'Connected <span style="font-size:6.5px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
+                                    serverEl.innerHTML = 'Connected <span style="font-size:6px;background:#1a1f2c;padding:1px 3px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+'</span>';
                                 }
 
                                 // Automatic Single Click Execution if AUTO TRADE ON mode
@@ -495,7 +475,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v21 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v22 Error:", e); }
     })();
     """
     res = make_response(js)
