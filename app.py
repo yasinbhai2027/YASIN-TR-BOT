@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v10.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v11.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -33,7 +33,6 @@ def get_signal():
 
         current_sec = int(time.time())
         
-        # Perfect Two-Sided Balanced Signal Strategy
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
@@ -318,9 +317,10 @@ def bot_script():
 
             function getDynamicTimeframeSeconds(){
                 try {
-                    var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
-                    for(var i=0; i<timerInputs.length; i++){
-                        var val = timerInputs[i].value || timerInputs[i].innerText;
+                    // Direct DOM search for user selected timeframe/timer widget
+                    var timerNodes = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
+                    for(var i=0; i<timerNodes.length; i++){
+                        var val = timerNodes[i].value || timerNodes[i].innerText;
                         if(val && val.includes(':')){
                             var parts = val.split(':');
                             var secs = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
@@ -330,38 +330,50 @@ def bot_script():
                             if(parsed > 0 && parsed < 300) return parsed;
                         }
                     }
+                    // Fallback to active timer display element on screen
+                    var activeTimerEl = d.querySelector('.current-time, .timer-display, [class*="timer-value"]');
+                    if(activeTimerEl && activeTimerEl.innerText){
+                        var tText = activeTimerEl.innerText.trim();
+                        if(tText.includes(':')){
+                            var p = tText.split(':');
+                            var s = (parseInt(p[0]) * 60) + parseInt(p[1]);
+                            if(s > 0 && s < 300) return s;
+                        }
+                    }
                 } catch(e){}
-                return 15;
+                return 15; // default fallback
             }
 
             function getRealPairName(){
                 try {
+                    // Comprehensive selectors covering Quotex mobile & desktop asset headers
                     var selectors = [
-                        '.asset-select__button .asset-name', '.current-symbol', 
-                        '.pair-name', '.select-asset__name', '.active-asset', 
-                        '.section-deal__asset-name', '.asset-name', '[class*="asset"]'
+                        '.section-deal__asset-name', '.asset-select__button .asset-name', 
+                        '.current-symbol', '.pair-name', '.select-asset__name', 
+                        '.active-asset', '.asset-name', '[class*="asset"]'
                     ];
                     for(var i=0; i<selectors.length; i++){
                         var els = d.querySelectorAll(selectors[i]);
                         for(var j=0; j<els.length; j++){
                             var txt = els[j].innerText ? els[j].innerText.trim() : "";
-                            if(txt && txt.length > 2 && !txt.includes("Deposit") && !txt.includes("DEMO")){
+                            if(txt && txt.length > 2 && !txt.includes("Deposit") && !txt.includes("DEMO") && !txt.includes("Live")){
                                 return txt;
                             }
                         }
                     }
                 } catch(e){}
-                return "USD/JPY";
+                return "USD/PKR (OTC)";
             }
 
             function getRealPayoutText(){
                 try {
+                    // Direct live payout locator from Quotex trading panel
                     var payoutEl = d.querySelector('.payout-percent, .asset-payout, .section-deal__payout, [class*="payout"]');
                     if(payoutEl && payoutEl.innerText && payoutEl.innerText.includes('%')){
                         return payoutEl.innerText.trim();
                     }
                 } catch(e){}
-                return "93%";
+                return "95%";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -374,7 +386,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20; // 20s Scanning for all fields
+                    var scanTime = 20; // Exact 20s Live Scanning
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -406,8 +418,8 @@ def bot_script():
                                 
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
                                 
-                                // Direct Chart Real-Price Tracking
-                                var livePriceVal = "159.079";
+                                // Direct Chart Real-Price Tracking from live DOM
+                                var livePriceVal = "288.653";
                                 try {
                                     var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
                                     for(var p=0; p<priceTargets.length; p++){
@@ -457,7 +469,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v10 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v11 Error:", e); }
     })();
     """
     res = make_response(js)
