@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v13.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v14.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -317,29 +317,24 @@ def bot_script():
 
             function getDynamicTimeframeSeconds(){
                 try {
-                    var timerNodes = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
-                    for(var i=0; i<timerNodes.length; i++){
-                        var val = timerNodes[i].value || timerNodes[i].innerText;
+                    // Check trade panel timer input field (e.g. 16:44 or duration seconds)
+                    var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
+                    for(var i=0; i<timerInputs.length; i++){
+                        var val = timerInputs[i].value || timerInputs[i].innerText;
                         if(val && val.includes(':')){
                             var parts = val.split(':');
-                            var secs = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
-                            if(secs > 0 && secs < 300) return secs;
+                            var targetSecs = (parseInt(parts[0]) * 3600) + (parseInt(parts[1]) * 60) + (parts[2] ? parseInt(parts[2]) : 0);
+                            var now = new Date();
+                            var currentSecsToday = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+                            var diff = targetSecs - currentSecsToday;
+                            if(diff > 0 && diff < 300) return diff;
                         } else if(val && !isNaN(val)) {
                             var parsed = parseInt(val);
                             if(parsed > 0 && parsed < 300) return parsed;
                         }
                     }
-                    var activeTimerEl = d.querySelector('.current-time, .timer-display, [class*="timer-value"]');
-                    if(activeTimerEl && activeTimerEl.innerText){
-                        var tText = activeTimerEl.innerText.trim();
-                        if(tText.includes(':')){
-                            var p = tText.split(':');
-                            var s = (parseInt(p[0]) * 60) + parseInt(p[1]);
-                            if(s > 0 && s < 300) return s;
-                        }
-                    }
                 } catch(e){}
-                return 15;
+                return 15; // default fallback countdown
             }
 
             function getRealPairName(){
@@ -359,7 +354,7 @@ def bot_script():
                         return candidates[0];
                     }
                 } catch(e){}
-                return "EUR/JPY (OTC)";
+                return "NZD/CAD (OTC)";
             }
 
             function getRealPayoutText(){
@@ -380,29 +375,26 @@ def bot_script():
 
             function getRealChartPrice(){
                 try {
-                    // Universal Chart Price Extractor from Quotex Mobile & Desktop Live DOM
-                    var priceCandidates = [];
-                    var allEls = d.querySelectorAll('div, span');
-                    for(var i=0; i<allEls.length; i++){
-                        var el = allEls[i];
-                        if(el.children.length === 0 && el.innerText){
-                            var txt = el.innerText.trim();
-                            // Quotex chart prices are usually floats with 3 to 5 decimal places or 2-3 digits like 174.076, 0.864, etc.
-                            if(txt.length >= 3 && txt.length <= 10 && !isNaN(parseFloat(txt)) && txt.includes('.')){
-                                var val = parseFloat(txt);
-                                // Filter out timestamps, percentages, and small numbers
-                                if(val > 0.0001 && val < 50000 && !txt.endsWith('%') && !txt.includes(':')){
-                                    priceCandidates.push(txt);
-                                }
+                    // Advanced Precise Live Chart Price Extractor from Quotex Canvas / DOM Overlay
+                    var scaleNodes = d.querySelectorAll('div, span');
+                    var prices = [];
+                    for(var i = 0; i < scaleNodes.length; i++){
+                        var txt = scaleNodes[i].innerText ? scaleNodes[i].innerText.trim() : "";
+                        // Quotex currency pairs prices format like 0.78724, 1.01250, etc. (5 digits after decimal or standard float)
+                        if(txt.length >= 5 && txt.length <= 10 && txt.includes('.') && !isNaN(parseFloat(txt))){
+                            var val = parseFloat(txt);
+                            // Filter out timestamps, percentages, and UI coordinate numbers
+                            if(val > 0.0001 && val < 50000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('16:')){
+                                prices.push(val);
                             }
                         }
                     }
-                    if(priceCandidates.length > 0){
-                        // Return the most relevant live chart price
-                        return priceCandidates[priceCandidates.length - 1];
+                    if(prices.length > 0){
+                        // Return the most active live price appearing on the right chart axis
+                        return String(prices[0]);
                     }
                 } catch(e){}
-                return "174.076";
+                return "0.78724";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -427,7 +419,7 @@ def bot_script():
                         }
                         
                         if(payoutEl) payoutEl.innerText = 'SCANNING...';
-                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Live price tracking during scanning
+                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Live price updating during 20s scan
                         if(signalEl) signalEl.innerText = 'SCANNING...';
                         if(cdEl) cdEl.innerText = scanTime + 's';
                         if(serverEl) serverEl.innerText = 'SCANNING...';
@@ -446,7 +438,7 @@ def bot_script():
                                 var confLevel = String(j.conf_level || 'HIGH');
                                 
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
-                                if(priceEl) priceEl.innerText = getRealChartPrice(); // Exact live market price at entry
+                                if(priceEl) priceEl.innerText = getRealChartPrice(); // Exact live market price at signal delivery
                                 
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
@@ -462,7 +454,7 @@ def bot_script():
                                     triggerTrade(isDown);
                                 }
 
-                                // Timeframe Sync Countdown & Auto Loop Restart
+                                // Dynamic Timeframe Sync Countdown & Auto Loop Restart
                                 var tfSecs = getDynamicTimeframeSeconds();
                                 var cdLeft = tfSecs;
                                 if(cdEl) cdEl.innerText = cdLeft + 's';
@@ -485,7 +477,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v13 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v14 Error:", e); }
     })();
     """
     res = make_response(js)
