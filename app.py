@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v11.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v12.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -317,7 +317,6 @@ def bot_script():
 
             function getDynamicTimeframeSeconds(){
                 try {
-                    // Direct DOM search for user selected timeframe/timer widget
                     var timerNodes = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
                     for(var i=0; i<timerNodes.length; i++){
                         var val = timerNodes[i].value || timerNodes[i].innerText;
@@ -330,7 +329,6 @@ def bot_script():
                             if(parsed > 0 && parsed < 300) return parsed;
                         }
                     }
-                    // Fallback to active timer display element on screen
                     var activeTimerEl = d.querySelector('.current-time, .timer-display, [class*="timer-value"]');
                     if(activeTimerEl && activeTimerEl.innerText){
                         var tText = activeTimerEl.innerText.trim();
@@ -341,36 +339,43 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return 15; // default fallback
+                return 15;
             }
 
             function getRealPairName(){
                 try {
-                    // Comprehensive selectors covering Quotex mobile & desktop asset headers
-                    var selectors = [
-                        '.section-deal__asset-name', '.asset-select__button .asset-name', 
-                        '.current-symbol', '.pair-name', '.select-asset__name', 
-                        '.active-asset', '.asset-name', '[class*="asset"]'
-                    ];
-                    for(var i=0; i<selectors.length; i++){
-                        var els = d.querySelectorAll(selectors[i]);
-                        for(var j=0; j<els.length; j++){
-                            var txt = els[j].innerText ? els[j].innerText.trim() : "";
-                            if(txt && txt.length > 2 && !txt.includes("Deposit") && !txt.includes("DEMO") && !txt.includes("Live")){
-                                return txt;
+                    // Universal Deep DOM Parser for Quotex Mobile & Desktop Asset Header
+                    var candidates = [];
+                    var allEls = d.querySelectorAll('div, span, button');
+                    for(var i = 0; i < allEls.length; i++){
+                        var el = allEls[i];
+                        if(el.children.length === 0 && el.innerText){
+                            var txt = el.innerText.trim();
+                            // Look for currency/crypto pair format like AUD/CAD, EUR/USD, etc.
+                            if(txt.length >= 6 && txt.length <= 18 && (txt.includes('/') || txt.includes('OTC')) && !txt.includes('Deposit') && !txt.includes('DEMO')){
+                                candidates.push(txt);
                             }
                         }
                     }
+                    if(candidates.length > 0){
+                        return candidates[0]; // Returns the active live selected pair
+                    }
                 } catch(e){}
-                return "USD/PKR (OTC)";
+                return "AUD/CAD";
             }
 
             function getRealPayoutText(){
                 try {
-                    // Direct live payout locator from Quotex trading panel
-                    var payoutEl = d.querySelector('.payout-percent, .asset-payout, .section-deal__payout, [class*="payout"]');
-                    if(payoutEl && payoutEl.innerText && payoutEl.innerText.includes('%')){
-                        return payoutEl.innerText.trim();
+                    // Dynamic live payout parser from screen
+                    var payoutNodes = d.querySelectorAll('div, span');
+                    for(var i=0; i<payoutNodes.length; i++){
+                        var txt = payoutNodes[i].innerText ? payoutNodes[i].innerText.trim() : "";
+                        if(txt.endsWith('%') && txt.length <= 4 && !txt.includes('0%')){
+                            var num = parseInt(txt);
+                            if(num >= 50 && num <= 98){
+                                return txt;
+                            }
+                        }
                     }
                 } catch(e){}
                 return "95%";
@@ -419,7 +424,7 @@ def bot_script():
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
                                 
                                 // Direct Chart Real-Price Tracking from live DOM
-                                var livePriceVal = "288.653";
+                                var livePriceVal = "1.01328";
                                 try {
                                     var priceTargets = ['.current-price', '.chart-price', '.deal-price', '[class*="price"]'];
                                     for(var p=0; p<priceTargets.length; p++){
@@ -469,7 +474,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v11 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v12 Error:", e); }
     })();
     """
     res = make_response(js)
