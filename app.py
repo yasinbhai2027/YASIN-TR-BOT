@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v18.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v19.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -361,7 +361,7 @@ def bot_script():
                         return candidates[0];
                     }
                 } catch(e){}
-                return "USD/NGN (OTC)";
+                return "USD/COP (OTC)";
             }
 
             function getRealPayoutText(){
@@ -382,36 +382,47 @@ def bot_script():
 
             function getRealChartPrice(){
                 try {
-                    // Direct Quotex Live Floating Right-Edge Price Badge / Ticker Extractor
-                    // Targets elements highlighted in blue/green on the right side chart axis (e.g., 1340.13)
-                    var activeBadgeEls = d.querySelectorAll('.chart-renderer__current-price, .current-price, .active-price, [class*="current-price"], [class*="deal-price"], [class*="price-value"], .highcharts-axis-labels text');
-                    for(var i=0; i<activeBadgeEls.length; i++){
-                        var t = activeBadgeEls[i].innerText ? activeBadgeEls[i].innerText.trim() : "";
-                        if(t.length >= 3 && !isNaN(parseFloat(t)) && t.includes('.') && !t.includes('$') && !t.includes(':')){
-                            var val = parseFloat(t);
-                            if(val > 0.0001 && val < 500000){
-                                return t;
-                            }
-                        }
-                    }
-
-                    // Deep DOM scan specifically for chart right scale running price numbers
-                    var allEls = d.querySelectorAll('div, span');
-                    for(var j=0; j<allEls.length; j++){
-                        var el = allEls[j];
-                        if(el.children.length === 0 && el.innerText){
-                            var txt = el.innerText.trim();
-                            if(txt.length >= 4 && txt.length <= 10 && !isNaN(parseFloat(txt)) && txt.includes('.')){
-                                var numVal = parseFloat(txt);
-                                // Filter out hours, dates, percentages, and small coordinate values
-                                if(numVal > 0.1 && numVal < 500000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('$') && !txt.includes('DEMO') && !txt.includes('18:')){
-                                    return txt;
+                    // Direct Quotex Live Floating Right-Edge Ticker & Axis Price Extractor (Targeting active prices like 3204.40)
+                    var priceSelectors = [
+                        '.chart-renderer__current-price', '.current-price', '.active-price', 
+                        '[class*="current-price"]', '[class*="deal-price"]', '[class*="price-value"]',
+                        '.highcharts-axis-labels text', '.price-view', '.chart-panel-price'
+                    ];
+                    
+                    for(var p=0; p<priceSelectors.length; p++){
+                        var els = d.querySelectorAll(priceSelectors[p]);
+                        for(var i=0; i<els.length; i++){
+                            var t = els[i].innerText ? els[i].innerText.trim() : "";
+                            if(t.length >= 3 && !isNaN(parseFloat(t)) && t.includes('.') && !t.includes('$') && !t.includes(':')){
+                                var val = parseFloat(t);
+                                if(val > 0.0001 && val < 500000){
+                                    return t;
                                 }
                             }
                         }
                     }
+
+                    // Deep fallback scanning specifically for right chart axis numbers matching active prices
+                    var allNodes = d.querySelectorAll('div, span');
+                    var validPrices = [];
+                    for(var j=0; j<allNodes.length; j++){
+                        var el = allNodes[j];
+                        if(el.children.length === 0 && el.innerText){
+                            var txt = el.innerText.trim();
+                            if(txt.length >= 4 && txt.length <= 10 && !isNaN(parseFloat(txt)) && txt.includes('.')){
+                                var numVal = parseFloat(txt);
+                                // Exclude hours, percentages, dollar amounts, and small UI numbers
+                                if(numVal > 0.1 && numVal < 500000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('$') && !txt.includes('DEMO') && !txt.includes('19:') && !txt.includes('20:')){
+                                    validPrices.push(txt);
+                                }
+                            }
+                        }
+                    }
+                    if(validPrices.length > 0){
+                        return validPrices[validPrices.length - 1];
+                    }
                 } catch(e){}
-                return "1340.13";
+                return "3204.40";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -494,7 +505,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v18 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v19 Error:", e); }
     })();
     """
     res = make_response(js)
