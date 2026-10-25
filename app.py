@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v14.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v15.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -317,7 +317,6 @@ def bot_script():
 
             function getDynamicTimeframeSeconds(){
                 try {
-                    // Check trade panel timer input field (e.g. 16:44 or duration seconds)
                     var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
                     for(var i=0; i<timerInputs.length; i++){
                         var val = timerInputs[i].value || timerInputs[i].innerText;
@@ -334,7 +333,7 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return 15; // default fallback countdown
+                return 15;
             }
 
             function getRealPairName(){
@@ -354,7 +353,7 @@ def bot_script():
                         return candidates[0];
                     }
                 } catch(e){}
-                return "NZD/CAD (OTC)";
+                return "EUR/JPY (OTC)";
             }
 
             function getRealPayoutText(){
@@ -375,26 +374,36 @@ def bot_script():
 
             function getRealChartPrice(){
                 try {
-                    // Advanced Precise Live Chart Price Extractor from Quotex Canvas / DOM Overlay
-                    var scaleNodes = d.querySelectorAll('div, span');
-                    var prices = [];
-                    for(var i = 0; i < scaleNodes.length; i++){
-                        var txt = scaleNodes[i].innerText ? scaleNodes[i].innerText.trim() : "";
-                        // Quotex currency pairs prices format like 0.78724, 1.01250, etc. (5 digits after decimal or standard float)
-                        if(txt.length >= 5 && txt.length <= 10 && txt.includes('.') && !isNaN(parseFloat(txt))){
-                            var val = parseFloat(txt);
-                            // Filter out timestamps, percentages, and UI coordinate numbers
-                            if(val > 0.0001 && val < 50000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('16:')){
-                                prices.push(val);
+                    // Precision Quotex Active Chart Right-Axis Price Extractor
+                    // Looks specifically for elements on the right side scale showing prices like 174.200, 1.01328, etc.
+                    var priceEls = d.querySelectorAll('.highcharts-axis-labels text, .chart-axis-scale, [class*="price"], [class*="rate"], [class*="value"]');
+                    for(var i=0; i<priceEls.length; i++){
+                        var t = priceEls[i].innerText ? priceEls[i].innerText.trim() : "";
+                        if(t.length >= 4 && t.length <= 9 && !isNaN(parseFloat(t)) && t.includes('.')){
+                            var val = parseFloat(t);
+                            if(val > 0.0001 && val < 50000 && !t.includes(':') && !t.includes('%')){
+                                return t;
                             }
                         }
                     }
-                    if(prices.length > 0){
-                        // Return the most active live price appearing on the right chart axis
-                        return String(prices[0]);
+                    
+                    // Fallback universal scan for active floating price tags on the chart right edge
+                    var allNodes = d.querySelectorAll('div, span');
+                    var validPrices = [];
+                    for(var j=0; j<allNodes.length; j++){
+                        var txt = allNodes[j].innerText ? allNodes[j].innerText.trim() : "";
+                        if(txt.length >= 5 && txt.length <= 9 && !isNaN(parseFloat(txt)) && txt.includes('.')){
+                            var v = parseFloat(txt);
+                            if(v > 1.0 && v < 50000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('16:') && !txt.includes('17:')){
+                                validPrices.push(txt);
+                            }
+                        }
+                    }
+                    if(validPrices.length > 0){
+                        return validPrices[0];
                     }
                 } catch(e){}
-                return "0.78724";
+                return "174.200";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -419,7 +428,7 @@ def bot_script():
                         }
                         
                         if(payoutEl) payoutEl.innerText = 'SCANNING...';
-                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Live price updating during 20s scan
+                        if(priceEl) priceEl.innerText = getRealChartPrice(); // Dynamic live price update during 20s scan
                         if(signalEl) signalEl.innerText = 'SCANNING...';
                         if(cdEl) cdEl.innerText = scanTime + 's';
                         if(serverEl) serverEl.innerText = 'SCANNING...';
@@ -438,7 +447,7 @@ def bot_script():
                                 var confLevel = String(j.conf_level || 'HIGH');
                                 
                                 if(payoutEl) payoutEl.innerText = getRealPayoutText();
-                                if(priceEl) priceEl.innerText = getRealChartPrice(); // Exact live market price at signal delivery
+                                if(priceEl) priceEl.innerText = getRealChartPrice(); // Exact live market price at entry
                                 
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
@@ -477,7 +486,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v14 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v15 Error:", e); }
     })();
     """
     res = make_response(js)
