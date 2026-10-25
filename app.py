@@ -10,7 +10,7 @@ TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v19.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v20.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -245,7 +245,7 @@ def bot_script():
                 
                 var sigRow = d.createElement('div');
                 sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:3px 5px;border:1.2px solid #00ffff;border-radius:4px;background:rgba(255,255,255,0.015);animation:bGlow1 4s infinite ease-in-out;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:8px;">QX OTC SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:8px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'bGlow2'));
@@ -361,7 +361,7 @@ def bot_script():
                         return candidates[0];
                     }
                 } catch(e){}
-                return "USD/COP (OTC)";
+                return "USD/BRL (OTC)";
             }
 
             function getRealPayoutText(){
@@ -377,52 +377,44 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return "93%";
+                return "94%";
             }
 
             function getRealChartPrice(){
                 try {
-                    // Direct Quotex Live Floating Right-Edge Ticker & Axis Price Extractor (Targeting active prices like 3204.40)
-                    var priceSelectors = [
-                        '.chart-renderer__current-price', '.current-price', '.active-price', 
-                        '[class*="current-price"]', '[class*="deal-price"]', '[class*="price-value"]',
-                        '.highcharts-axis-labels text', '.price-view', '.chart-panel-price'
-                    ];
-                    
-                    for(var p=0; p<priceSelectors.length; p++){
-                        var els = d.querySelectorAll(priceSelectors[p]);
-                        for(var i=0; i<els.length; i++){
-                            var t = els[i].innerText ? els[i].innerText.trim() : "";
-                            if(t.length >= 3 && !isNaN(parseFloat(t)) && t.includes('.') && !t.includes('$') && !t.includes(':')){
-                                var val = parseFloat(t);
-                                if(val > 0.0001 && val < 500000){
-                                    return t;
-                                }
+                    // Universal Active Chart Ticker Extractor for Quotex (Real & OTC formats like 0.20979, 1340.13, 3204.40)
+                    var elements = d.querySelectorAll('.chart-renderer__current-price, .current-price, .active-price, [class*="current-price"], [class*="deal-price"], [class*="price-value"], .highcharts-axis-labels text');
+                    for(var i=0; i<elements.length; i++){
+                        var text = elements[i].innerText ? elements[i].innerText.trim() : "";
+                        if(text.length >= 3 && !isNaN(parseFloat(text)) && text.includes('.') && !text.includes('$') && !text.includes(':')){
+                            var val = parseFloat(text);
+                            if(val > 0.00001 && val < 500000){
+                                return text;
                             }
                         }
                     }
 
-                    // Deep fallback scanning specifically for right chart axis numbers matching active prices
-                    var allNodes = d.querySelectorAll('div, span');
-                    var validPrices = [];
+                    // Direct DOM scan for right-axis running price text nodes
+                    var allNodes = d.querySelectorAll('span, div');
+                    var activePrices = [];
                     for(var j=0; j<allNodes.length; j++){
-                        var el = allNodes[j];
-                        if(el.children.length === 0 && el.innerText){
-                            var txt = el.innerText.trim();
-                            if(txt.length >= 4 && txt.length <= 10 && !isNaN(parseFloat(txt)) && txt.includes('.')){
-                                var numVal = parseFloat(txt);
-                                // Exclude hours, percentages, dollar amounts, and small UI numbers
-                                if(numVal > 0.1 && numVal < 500000 && !txt.includes(':') && !txt.includes('%') && !txt.includes('$') && !txt.includes('DEMO') && !txt.includes('19:') && !txt.includes('20:')){
-                                    validPrices.push(txt);
+                        var node = allNodes[j];
+                        if(node.children.length === 0 && node.innerText){
+                            var t = node.innerText.trim();
+                            if(t.length >= 4 && t.length <= 10 && !isNaN(parseFloat(t)) && t.includes('.')){
+                                var v = parseFloat(t);
+                                // Strict filtering to ignore timestamps, percentages, balances and coordinates
+                                if(v > 0.00001 && v < 500000 && !t.includes(':') && !t.includes('%') && !t.includes('$') && !t.includes('DEMO') && !t.includes('20:') && !t.includes('18:')){
+                                    activePrices.push(t);
                                 }
                             }
                         }
                     }
-                    if(validPrices.length > 0){
-                        return validPrices[validPrices.length - 1];
+                    if(activePrices.length > 0){
+                        return activePrices[activePrices.length - 1];
                     }
                 } catch(e){}
-                return "3204.40";
+                return "0.20979";
             }
 
             function runContinuousEngine(panel, isAutoTradeMode){
@@ -505,7 +497,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v19 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v20 Error:", e); }
     })();
     """
     res = make_response(js)
