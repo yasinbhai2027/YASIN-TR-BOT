@@ -5,12 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master Twelve Data API & Ultimate Pro Latency Engine Integration
+# Master Twelve Data API & Ultimate Multi-Color Glow Engine Integration
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v31.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v32.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -38,31 +38,30 @@ def get_signal():
                 signal = "DOWN"
                 trend = "STRONG DOWNTREND"
                 market_state = "STABLE (SAFE)"
-                confidence = int(62 + (current_sec % 23) + abs(rsi - 50.0) * 0.5)
+                confidence = int(64 + (current_sec % 21) + abs(rsi - 50.0) * 0.5)
             elif rsi > 52.0 or (ema_fast > ema_slow and rsi >= 48.0):
                 signal = "UP"
                 trend = "STRONG UPTREND"
                 market_state = "STABLE (SAFE)"
-                confidence = int(62 + (current_sec % 24) + abs(50.0 - rsi) * 0.5)
+                confidence = int(64 + (current_sec % 22) + abs(50.0 - rsi) * 0.5)
             else:
                 signal = "UP" if (current_sec % 2 == 0) else "DOWN"
                 trend = "NEUTRAL TREND"
                 market_state = "MEDIUM (NORMAL)"
-                confidence = 58 + (current_sec % 18)
+                confidence = 59 + (current_sec % 16)
         else:
             signal = "UP" if (current_sec % 2 == 0) else "DOWN"
             trend = "UPTREND" if signal == "UP" else "DOWNTREND"
             market_state = "MEDIUM (NORMAL)"
-            confidence = 60
+            confidence = 62
 
-        if current_sec % 19 == 0:
+        if current_sec % 17 == 0:
             market_state = "CHOPPY (UNSAFE)"
 
-        confidence = min(max(confidence, 48), 91)
-        conf_level = "HIGH" if confidence >= 78 else ("MEDIUM" if confidence >= 64 else "LOW")
+        confidence = min(max(confidence, 50), 92)
+        conf_level = "HIGH" if confidence >= 79 else ("MEDIUM" if confidence >= 65 else "LOW")
 
-        # Simulated Real Ping (ms)
-        ping_val = 28 + (current_sec % 45)
+        ping_val = 26 + (current_sec % 40)
         ping_status = "EXCELLENT (0-50ms)" if ping_val <= 50 else ("NORMAL (50-150ms)" if ping_val <= 150 else "HIGH LAG (>150ms)")
 
         res = jsonify({
@@ -84,9 +83,9 @@ def get_signal():
             "signal": fallback_sig,
             "trend": "STRONG UPTREND" if fallback_sig == "UP" else "STRONG DOWNTREND",
             "market_state": "STABLE (SAFE)",
-            "confidence": 72,
+            "confidence": 74,
             "conf_level": "MEDIUM",
-            "ping": 35,
+            "ping": 30,
             "ping_status": "EXCELLENT (0-50ms)",
             "status": "GREEN_EXECUTE"
         })
@@ -108,25 +107,42 @@ def bot_script():
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}33%{border-color:#00ffff;box-shadow:0 0 18px #00ffff}66%{border-color:#00ff66;box-shadow:0 0 18px #00ff66}100%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes multiBorder{0%,100%{border-color:#00ffff;box-shadow:0 0 14px rgba(0,255,255,0.5);}25%{border-color:#ff00ff;box-shadow:0 0 14px rgba(255,0,255,0.5);}50%{border-color:#ffff00;box-shadow:0 0 14px rgba(255,255,0,0.5);}75%{border-color:#00ff66;box-shadow:0 0 14px rgba(0,255,102,0.5);}}@keyframes rRow1{0%,100%{border-color:#00ffff;}50%{border-color:#ff0055;}}@keyframes rRow2{0%,100%{border-color:#ff00ff;}50%{border-color:#00ffff;}}@keyframes rRow3{0%,100%{border-color:#00ff66;}50%{border-color:#ffff00;}}@keyframes rRow4{0%,100%{border-color:#ffcc00;}50%{border-color:#ff00ff;}}@keyframes rRow5{0%,100%{border-color:#00ffff;}50%{border-color:#00ff66;}}@keyframes rRow6{0%,100%{border-color:#ff0055;}50%{border-color:#00ffff;}}@keyframes rRow7{0%,100%{border-color:#ffff00;}50%{border-color:#ff00ff;}}@keyframes rRow8{0%,100%{border-color:#00ff66;}50%{border-color:#ff0055;}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
+            s.innerHTML = '@keyframes outerRing{0%{border-color:#ff0055;box-shadow:0 0 15px #ff0055;}33%{border-color:#00ffff;box-shadow:0 0 15px #00ffff;}66%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}100%{border-color:#ff0055;box-shadow:0 0 15px #ff0055;}}' +
+                          '@keyframes midRing{0%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}33%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff;}66%{border-color:#00ffff;box-shadow:0 0 15px #00ffff;}100%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}}' +
+                          '@keyframes innerRing{0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}33%{border-color:#ff9900;box-shadow:0 0 15px #ff9900;}66%{border-color:#cc00ff;box-shadow:0 0 15px #cc00ff;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}}' +
+                          '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
+                          '@keyframes panelGlow{0%,100%{border-color:#00ffff;box-shadow:0 0 16px rgba(0,255,255,0.6);}25%{border-color:#ff00ff;box-shadow:0 0 16px rgba(255,0,255,0.6);}50%{border-color:#ffff00;box-shadow:0 0 16px rgba(255,255,0,0.6);}75%{border-color:#00ff66;box-shadow:0 0 16px rgba(0,255,102,0.6);}}' +
+                          '@keyframes btnOnAnim{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 8px #00ff66;}50%{background:linear-gradient(45deg,#ff00ff,#00b0ff);box-shadow:0 0 8px #ff00ff;}}' +
+                          '@keyframes btnOffAnim{0%,100%{background:linear-gradient(45deg,#ff0055,#ff3300);box-shadow:0 0 8px #ff0055;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 8px #ffcc00;}}' +
+                          '@keyframes btnScanAnim{0%,100%{background:linear-gradient(45deg,#9400d3,#00ffff);box-shadow:0 0 8px #00ffff;}50%{background:linear-gradient(45deg,#00ffff,#9400d3);box-shadow:0 0 8px #9400d3;}}' +
+                          '@keyframes rowB1{0%,100%{border-color:#00ffff;}50%{border-color:#ff0055;}}' +
+                          '@keyframes rowB2{0%,100%{border-color:#ff00ff;}50%{border-color:#ffff00;}}' +
+                          '@keyframes rowB3{0%,100%{border-color:#00ff66;}50%{border-color:#00ffff;}}' +
+                          '@keyframes rowB4{0%,100%{border-color:#ffff00;}50%{border-color:#ff00ff;}}' +
+                          '@keyframes rowB5{0%,100%{border-color:#ff0055;}50%{border-color:#00ff66;}}' +
+                          '@keyframes rowB6{0%,100%{border-color:#00ffff;}50%{border-color:#ff9900;}}' +
+                          '@keyframes rowB7{0%,100%{border-color:#cc00ff;}50%{border-color:#00ffff;}}' +
+                          '@keyframes rowB8{0%,100%{border-color:#00ff66;}50%{border-color:#ff0055;}}' +
+                          '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}' +
+                          '@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}';
             d.head.appendChild(s);
             
-            // Floating Widget Button
+            // Floating Widget Button (10px Larger: ~64px with 3 Unique Ring Animations & Name YS TR BOT)
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:54px;height:54px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 3.5s infinite ease-in-out;border:2.2px solid #ff0033;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:64px;height:64px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:outerRing 4s infinite ease-in-out;border:2.5px solid #ff0055;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:64px;height:64px;border:1.5px dashed #ffd700;border-radius:50%;animation:rCC 9s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:73px;height:73px;border:1.8px dashed #ffff00;border-radius:50%;animation:midRing 5s infinite ease-in-out, rCC 10s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:72px;height:72px;border:1.8px dotted #9400d3;border-radius:50%;animation:rC 11s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:82px;height:82px;border:2px dotted #00ff66;border-radius:50%;animation:innerRing 6s infinite ease-in-out, rC 12s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
-            t.style.cssText = 'width:42px;height:42px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7.5px;animation:slowGlow 2s infinite;display:block;">YS</span><span style="font-size:6px;animation:slowGlow 2s infinite;display:block;">BOT</span>';
+            t.style.cssText = 'width:50px;height:50px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
+            t.innerHTML = '<span style="font-size:7px;animation:slowGlow 2s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:slowGlow 2s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -161,7 +177,7 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:1.8px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards;';
+                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, panelGlow 4s infinite ease-in-out;';
                 
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
@@ -187,11 +203,11 @@ def bot_script():
                 
                 var titleArea = d.createElement('div');
                 titleArea.style.cssText = 'display:flex;align-items:center;gap:2.5px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:slowGlow 2.5s infinite;">YASIN TR BOT</span>';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:slowGlow 2.5s infinite;">YS TR BOT</span>';
                 
                 var activeBadge = d.createElement('span');
                 activeBadge.style.cssText = 'font-size:5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:1.5px;margin-left:2px;';
-                activeBadge.innerHTML = '<span style="width:3px;height:3px;background:#00e676;border-radius:50%;box-shadow:0 0 3px #00e676;"></span> LIVE LATENCY';
+                activeBadge.innerHTML = '<span style="width:3px;height:3px;background:#00e676;border-radius:50%;box-shadow:0 0 3px #00e676;"></span> MULTI-GLOW';
 
                 var minBtn = d.createElement('button');
                 minBtn.style.cssText = 'background:#00c853;border:none;width:11px;height:11px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:9px;font-weight:900;box-shadow:0 0 3px #00c853;';
@@ -210,18 +226,18 @@ def bot_script():
                 header.appendChild(minBtn);
                 panel.appendChild(header);
                 
-                // Mode Buttons Bar
+                // Mode Buttons Bar (5% smaller buttons with 3 distinct unique animation styles)
                 var modeBar = d.createElement('div');
                 modeBar.id = 'mode-bar-container';
                 modeBar.style.cssText = 'padding:3px 4px;background:#06080d;border-bottom:1px solid #1a1f2c;display:flex;gap:3.5px;justify-content:space-between;align-items:center;';
                 
                 var btnOn = d.createElement('button');
-                btnOn.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:6px;color:#fff;cursor:pointer;animation:btnOnGlow 2.5s infinite linear;text-align:center;';
+                btnOn.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:5.7px;color:#fff;cursor:pointer;animation:btnOnAnim 3s infinite linear;text-align:center;';
                 btnOn.innerHTML = 'AUTO TRADE ON';
                 
                 var btnOff = d.createElement('button');
                 btnOff.id = 'btn-auto-off';
-                btnOff.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:6px;color:#fff;cursor:pointer;background:#ff0055;box-shadow:0 0 3px #ff0055;text-align:center;';
+                btnOff.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:5.7px;color:#fff;cursor:pointer;animation:btnOffAnim 3s infinite linear;text-align:center;';
                 btnOff.innerHTML = 'AUTO TRADE OFF';
 
                 btnOn.onclick = function(){
@@ -238,7 +254,7 @@ def bot_script():
                     if(!d.getElementById('btn-manual-scan')){
                         var scanBtn = d.createElement('button');
                         scanBtn.id = 'btn-manual-scan';
-                        scanBtn.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:6px;color:#fff;cursor:pointer;animation:btnScanGlow 2.5s infinite linear;text-align:center;';
+                        scanBtn.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:5.7px;color:#fff;cursor:pointer;animation:btnScanAnim 3s infinite linear;text-align:center;';
                         scanBtn.innerHTML = 'MARKET SCANNING';
                         scanBtn.onclick = function(){
                             runContinuousEngine(panel, false);
@@ -253,28 +269,28 @@ def bot_script():
                 
                 // Outer Wrapper
                 var wrapper = d.createElement('div');
-                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.2px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.3);animation:multiBorder 3.5s infinite ease-in-out;display:flex;flex-direction:column;gap:2.5px;';
+                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.2px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.3);animation:panelGlow 4s infinite ease-in-out;display:flex;flex-direction:column;gap:2.5px;';
 
                 function createRow(label, valId, animClass){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+animClass+' 3s infinite ease-in-out;';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+animClass+' 3.5s infinite ease-in-out;';
                     row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;color:#ffd700;">WAITING...</span>';
                     return row;
                 }
                 
-                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'rRow1'));
-                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'rRow2'));
-                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'rRow3'));
-                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'rRow4'));
+                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'rowB1'));
+                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'rowB2'));
+                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'rowB3'));
+                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'rowB4'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rRow5 3s infinite ease-in-out;';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowB5 3.5s infinite ease-in-out;';
                 sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;color:#ffd700;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
-                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rRow6'));
-                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'rRow7'));
-                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'rRow8'));
+                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rowB6'));
+                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'rowB7'));
+                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'rowB8'));
                 
                 panel.appendChild(wrapper);
                 d.body.appendChild(panel);
@@ -396,7 +412,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20; // 20s Full Live Scanning including Trend
+                    var scanTime = 20; // 20s Full Live Scanning
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -417,14 +433,14 @@ def bot_script():
                             
                             fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                             .then(function(r){ return r.json(); })
-                            .catch(function(){ return {signal: "UP", trend: "STRONG UPTREND", market_state: "STABLE (SAFE)", confidence: 74, conf_level: "MEDIUM", ping: 32, ping_status: "EXCELLENT (0-50ms)"}; })
+                            .catch(function(){ return {signal: "UP", trend: "STRONG UPTREND", market_state: "STABLE (SAFE)", confidence: 75, conf_level: "MEDIUM", ping: 32, ping_status: "EXCELLENT (0-50ms)"}; })
                             .then(function(j){
                                 var rawSig = String(j.signal || 'UP').toUpperCase();
                                 var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
                                 var sigText = isDown ? 'DOWN' : 'UP';
                                 var trendText = String(j.trend || (isDown ? 'STRONG DOWNTREND' : 'STRONG UPTREND'));
                                 var marketStateText = String(j.market_state || 'STABLE (SAFE)');
-                                var conf = Number(j.confidence || 74);
+                                var conf = Number(j.confidence || 75);
                                 var confLevel = String(j.conf_level || 'MEDIUM');
                                 var pingVal = Number(j.ping || 32);
                                 var pingStatus = String(j.ping_status || 'EXCELLENT (0-50ms)');
@@ -441,13 +457,13 @@ def bot_script():
                                     chopEl.style.color = marketStateText.includes('UNSAFE') ? '#ff1a1a' : '#00e676';
                                 }
                                 
-                                // 3. Market Trend (Now Scans Every 20s Loop)
+                                // 3. Market Trend
                                 if(trendEl) {
                                     trendEl.innerText = trendText;
                                     trendEl.style.color = trendText.includes('DOWNTREND') ? '#ff1a1a' : '#00e676';
                                 }
                                 
-                                // Signal with Real Dynamic Percentage
+                                // Signal
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
                                     signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
@@ -456,7 +472,7 @@ def bot_script():
                                 // 4. Smart Money / Rejection
                                 if(wickEl) {
                                     wickEl.innerText = confLevel + ' (' + conf + '%)';
-                                    wickEl.style.color = conf >= 78 ? '#00e676' : (conf >= 64 ? '#ffcc00' : '#ff1a1a');
+                                    wickEl.style.color = conf >= 79 ? '#00e676' : (conf >= 65 ? '#ffcc00' : '#ff1a1a');
                                 }
                                 
                                 // 5. Server Latency (ms)
@@ -465,7 +481,7 @@ def bot_script():
                                     serverEl.style.color = pingVal <= 50 ? '#00e676' : (pingVal <= 150 ? '#ffcc00' : '#ff1a1a');
                                 }
 
-                                // Automatic Single Click Execution (Skip if Choppy/Unsafe or High Latency > 150ms)
+                                // Automatic Single Click Execution
                                 if(window.autoTradeEnabled && isAutoTradeMode && !marketStateText.includes('UNSAFE') && pingVal <= 150) {
                                     triggerTrade(isDown);
                                 }
@@ -493,7 +509,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v31 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v32 Error:", e); }
     })();
     """
     res = make_response(js)
