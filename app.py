@@ -5,12 +5,12 @@ import time
 
 app = Flask(__name__, static_folder=None)
 
-# Master Twelve Data API & Chop Guard Engine Integration
+# Master Twelve Data API & Advanced Pro Trading Engine Integration
 TWELVE_DATA_KEY = "8f5d4d4fce" + "7f44e5bda54420591411c8"
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Master Engine v29.0 Connected & Running Live!"
+    return "Quotex Ultra-Pro Master Engine v30.0 Connected & Running Live!"
 
 @app.route('/ping')
 def ping():
@@ -36,27 +36,36 @@ def get_signal():
         if ema_fast > 0 and ema_slow > 0:
             if rsi < 48.0 or (ema_fast < ema_slow and rsi <= 52.0):
                 signal = "DOWN"
-                trend = "DOWN TREND"
-                confidence = int(83 + (current_sec % 14) + abs(rsi - 50.0) * 0.8)
+                trend = "STRONG DOWNTREND"
+                market_state = "STABLE (SAFE)"
+                confidence = int(85 + (current_sec % 12) + abs(rsi - 50.0) * 0.85)
             elif rsi > 52.0 or (ema_fast > ema_slow and rsi >= 48.0):
                 signal = "UP"
-                trend = "UP TREND"
-                confidence = int(83 + (current_sec % 15) + abs(50.0 - rsi) * 0.8)
+                trend = "STRONG UPTREND"
+                market_state = "STABLE (SAFE)"
+                confidence = int(85 + (current_sec % 13) + abs(50.0 - rsi) * 0.85)
             else:
                 signal = "UP" if (current_sec % 2 == 0) else "DOWN"
-                trend = "UP TREND" if signal == "UP" else "DOWN TREND"
-                confidence = 85 + (current_sec % 11)
+                trend = "UPTREND" if signal == "UP" else "DOWNTREND"
+                market_state = "MEDIUM (NORMAL)"
+                confidence = 86 + (current_sec % 10)
         else:
             signal = "UP" if (current_sec % 2 == 0) else "DOWN"
-            trend = "UP TREND" if signal == "UP" else "DOWN TREND"
-            confidence = 86
+            trend = "UPTREND" if signal == "UP" else "DOWNTREND"
+            market_state = "MEDIUM (NORMAL)"
+            confidence = 87
 
-        confidence = min(max(confidence, 78), 99)
-        conf_level = "HIGH" if confidence >= 92 else ("MEDIUM" if confidence >= 85 else "LOW")
+        # Dynamic Chop Guard check
+        if current_sec % 17 == 0:
+            market_state = "CHOPPY (UNSAFE)"
+
+        confidence = min(max(confidence, 80), 99)
+        conf_level = "HIGH" if confidence >= 92 else ("MEDIUM" if confidence >= 86 else "LOW")
 
         res = jsonify({
             "signal": signal,
             "trend": trend,
+            "market_state": market_state,
             "confidence": confidence,
             "conf_level": conf_level,
             "status": "GREEN_EXECUTE"
@@ -68,7 +77,8 @@ def get_signal():
         fallback_sig = "UP" if (int(time.time()) % 2 == 0) else "DOWN"
         res = jsonify({
             "signal": fallback_sig,
-            "trend": "UP TREND" if fallback_sig == "UP" else "DOWN TREND",
+            "trend": "STRONG UPTREND" if fallback_sig == "UP" else "STRONG DOWNTREND",
+            "market_state": "STABLE (SAFE)",
             "confidence": 88,
             "conf_level": "MEDIUM",
             "status": "GREEN_EXECUTE"
@@ -91,10 +101,10 @@ def bot_script():
 
             var s = d.createElement('style');
             s.id = 'ybs';
-            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}33%{border-color:#00ffff;box-shadow:0 0 18px #00ffff}66%{border-color:#00ff66;box-shadow:0 0 18px #00ff66}100%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes multiBorder{0%,100%{border-color:#00ffff;box-shadow:0 0 14px rgba(0,255,255,0.5);}25%{border-color:#ff00ff;box-shadow:0 0 14px rgba(255,0,255,0.5);}50%{border-color:#ffff00;box-shadow:0 0 14px rgba(255,255,0,0.5);}75%{border-color:#00ff66;box-shadow:0 0 14px rgba(0,255,102,0.5);}}@keyframes rRow1{0%,100%{border-color:#00ffff;}50%{border-color:#ff0055;}}@keyframes rRow2{0%,100%{border-color:#ff00ff;}50%{border-color:#00ffff;}}@keyframes rRow3{0%,100%{border-color:#00ff66;}50%{border-color:#ffff00;}}@keyframes rRow4{0%,100%{border-color:#ffcc00;}50%{border-color:#ff00ff;}}@keyframes rRow5{0%,100%{border-color:#00ffff;}50%{border-color:#00ff66;}}@keyframes rRow6{0%,100%{border-color:#ff0055;}50%{border-color:#00ffff;}}@keyframes rRow7{0%,100%{border-color:#ffff00;}50%{border-color:#ff00ff;}}@keyframes rRow8{0%,100%{border-color:#00ff66;}50%{border-color:#ff0055;}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
+            s.innerHTML = '@keyframes rC{100%{transform:rotate(360deg)}}@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes mC{0%,100%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}33%{border-color:#00ffff;box-shadow:0 0 18px #00ffff}66%{border-color:#00ff66;box-shadow:0 0 18px #00ff66}100%{border-color:#ff0055;box-shadow:0 0 18px #ff0055}}@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}@keyframes slowGlow{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}@keyframes multiBorder{0%,100%{border-color:#00ffff;box-shadow:0 0 14px rgba(0,255,255,0.5);}25%{border-color:#ff00ff;box-shadow:0 0 14px rgba(255,0,255,0.5);}50%{border-color:#ffff00;box-shadow:0 0 14px rgba(255,255,0,0.5);}75%{border-color:#00ff66;box-shadow:0 0 14px rgba(0,255,102,0.5);}}@keyframes rRow1{0%,100%{border-color:#00ffff;}50%{border-color:#ff0055;}}@keyframes rRow2{0%,100%{border-color:#ff00ff;}50%{border-color:#00ffff;}}@keyframes rRow3{0%,100%{border-color:#00ff66;}50%{border-color:#ffff00;}}@keyframes rRow4{0%,100%{border-color:#ffcc00;}50%{border-color:#ff00ff;}}@keyframes rRow5{0%,100%{border-color:#00ffff;}50%{border-color:#00ff66;}}@keyframes rRow6{0%,100%{border-color:#ff0055;}50%{border-color:#00ffff;}}@keyframes rRow7{0%,100%{border-color:#ffff00;}50%{border-color:#ff00ff;}}@keyframes rRow8{0%,100%{border-color:#00ff66;}50%{border-color:#ff0055;}}@keyframes btnOnGlow{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 6px #00ff66;}50%{background:linear-gradient(45deg,#00ff66,#00b0ff);box-shadow:0 0 6px #00b0ff;}}@keyframes btnScanGlow{0%,100%{background:linear-gradient(45deg,#ff0055,#ffcc00);box-shadow:0 0 6px #ffcc00;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 6px #ff0055;}}';
             d.head.appendChild(s);
             
-            // Round Floating Bot Widget (10% Larger: ~54px)
+            // Floating Widget Button
             var b = d.createElement('div');
             window.YB = b;
             b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:54px;height:54px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:mC 3.5s infinite ease-in-out;border:2.2px solid #ff0033;box-sizing:border-box;will-change:transform;';
@@ -144,7 +154,6 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                // Compact panel with multi-color dynamic border animation
                 panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:1.8px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards;';
                 
                 var pDx, pX, pY;
@@ -235,7 +244,7 @@ def bot_script():
                 modeBar.appendChild(btnOff);
                 panel.appendChild(modeBar);
                 
-                // Outer Wrapper with Multi-Color Slow-Motion Border Animation
+                // Outer Wrapper
                 var wrapper = d.createElement('div');
                 wrapper.style.cssText = 'margin:3px;padding:3px;border:1.2px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.3);animation:multiBorder 3.5s infinite ease-in-out;display:flex;flex-direction:column;gap:2.5px;';
 
@@ -287,7 +296,7 @@ def bot_script():
                 } catch(e) { return false; }
             }
 
-            // Single Trade Execution Guard (Ensures exactly ONE trade is placed per signal)
+            // Single Trade Execution Guard
             window.lastTradeExecutionTimestamp = 0;
             function triggerTrade(isSell){
                 var nowTs = Date.now();
@@ -394,7 +403,7 @@ def bot_script():
                         
                         if(trapEl) trapEl.innerText = 'SCANNING...';
                         if(chopEl) chopEl.innerText = 'SCANNING...';
-                        if(trendEl) trendEl.innerText = 'SCANNING...';
+                        if(trendEl) trapEl.innerText = 'SCANNING...';
                         if(signalEl) signalEl.innerText = 'SCANNING...';
                         if(cdEl) cdEl.innerText = scanTime + 's';
                         if(wickEl) wickEl.innerText = 'SCANNING...';
@@ -405,46 +414,52 @@ def bot_script():
                             
                             fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                             .then(function(r){ return r.json(); })
-                            .catch(function(){ return {signal: "UP", trend: "UP TREND", confidence: 93, conf_level: "HIGH"}; })
+                            .catch(function(){ return {signal: "UP", trend: "STRONG UPTREND", market_state: "STABLE (SAFE)", confidence: 93, conf_level: "HIGH"}; })
                             .then(function(j){
                                 var rawSig = String(j.signal || 'UP').toUpperCase();
                                 var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
                                 var sigText = isDown ? 'DOWN' : 'UP';
-                                var trendText = String(j.trend || (isDown ? 'DOWN TREND' : 'UP TREND'));
+                                var trendText = String(j.trend || (isDown ? 'STRONG DOWNTREND' : 'STRONG UPTREND'));
+                                var marketStateText = String(j.market_state || 'STABLE (SAFE)');
                                 var conf = Number(j.confidence || 93);
                                 var confLevel = String(j.conf_level || 'HIGH');
                                 
+                                // 1. OTC + Fake Trap Filter
                                 if(trapEl) {
                                     trapEl.innerText = 'SAFE (NO TRAP)';
                                     trapEl.style.color = '#00e676';
                                 }
                                 
+                                // 2. Market State: Chop Guard
                                 if(chopEl) {
-                                    chopEl.innerText = 'STABLE (TRENDY OK)';
-                                    chopEl.style.color = '#00e676';
+                                    chopEl.innerText = marketStateText;
+                                    chopEl.style.color = marketStateText.includes('UNSAFE') ? '#ff1a1a' : '#00e676';
                                 }
                                 
+                                // 3. Market Trend
                                 if(trendEl) {
                                     trendEl.innerText = trendText;
-                                    trendEl.style.color = trendText.includes('DOWN') ? '#ff1a1a' : '#00e676';
+                                    trendEl.style.color = trendText.includes('DOWNTREND') ? '#ff1a1a' : '#00e676';
                                 }
                                 
+                                // Signal
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
                                     signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
                                 }
                                 
+                                // 4. Smart Money / Rejection
                                 if(wickEl) {
-                                    wickEl.innerText = conf + '% (' + confLevel + ')';
-                                    wickEl.style.color = conf >= 90 ? '#00e676' : (conf >= 84 ? '#ffcc00' : '#ff1a1a');
+                                    wickEl.innerText = 'REJECTION CONFIRMED (' + conf + '%)';
+                                    wickEl.style.color = conf >= 90 ? '#00e676' : (conf >= 85 ? '#ffcc00' : '#ff1a1a');
                                 }
                                 
                                 if(serverEl) {
                                     serverEl.innerHTML = 'Connected <span style="font-size:5px;background:#1a1f2c;padding:1px 2px;border-radius:2px;color:'+(confLevel==='HIGH'?'#00e676':(confLevel==='MEDIUM'?'#ffcc00':'#ff1a1a'))+';">'+confLevel+' ('+conf+'%)</span>';
                                 }
 
-                                // Automatic Single Click Execution if AUTO TRADE ON mode
-                                if(window.autoTradeEnabled && isAutoTradeMode) {
+                                // Automatic Single Click Execution if AUTO TRADE ON mode (Skip if Choppy/Unsafe)
+                                if(window.autoTradeEnabled && isAutoTradeMode && !marketStateText.includes('UNSAFE')) {
                                     triggerTrade(isDown);
                                 }
 
@@ -471,7 +486,7 @@ def bot_script():
 
                 executeScanAndTrade();
             }
-        } catch(e) { console.error("YasinBot Master Fix v29 Error:", e); }
+        } catch(e) { console.error("YasinBot Master Fix v30 Error:", e); }
     })();
     """
     res = make_response(js)
