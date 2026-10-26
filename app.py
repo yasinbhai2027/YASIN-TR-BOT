@@ -7,7 +7,7 @@ import os
 app = Flask(__name__, static_folder=None)
 
 # ==========================================
-# MASTER API KEYS & CONFIGURATIONS (1.1M Knowledge Nodes Integration)
+# MASTER API KEYS & CONFIGURATIONS (1,100,000 Nodes Knowledge Base Integration)
 # ==========================================
 TWELVE_DATA_KEY = "8f5d4d4fce7f44e5bda54420591411c8"
 GROQ_API_KEY = "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"
@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v42.0 [1.1M Nodes, Independent Slow-Motion Field Animations & Strict Single-Trade Execution] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v45.0 [1.1M Nodes, Independent Slow-Field Animations & Strict Single-Trade Execution] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -46,7 +46,7 @@ def get_groq_ai_confluence(market_data_summary):
         payload = {
             "model": "llama-3.3-70b-versatile",
             "messages": [
-                {"role": "system", "content": "You are a master 1.1M-node binary options AI arbiter. Analyze 549 institutional rules and return strictly 'UP' or 'DOWN'."},
+                {"role": "system", "content": "You are a master 1.1M-node binary options AI arbiter. Analyze institutional rules and return strictly 'UP' or 'DOWN'."},
                 {"role": "user", "content": f"Analyze bi-directional market data with 1.1M node confluence: {market_data_summary}. Output decision only."}
             ],
             "temperature": 0.2,
@@ -179,6 +179,10 @@ def bot_script():
                           '@keyframes midRing{0%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}33%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff;}66%{border-color:#00ffff;box-shadow:0 0 15px #00ffff;}100%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}}' +
                           '@keyframes innerRing{0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}33%{border-color:#ff9900;box-shadow:0 0 15px #ff9900;}66%{border-color:#cc00ff;box-shadow:0 0 15px #cc00ff;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}}' +
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
+                          
+                          /* Pulsing Green Indicator Animation */
+                          '@keyframes badgePulse {0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.95);}}' +
+
                           /* Main Borders: Vibrant Electric Fire Lightning Animation */
                           '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 20px #00ffff,inset 0 0 14px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 16px #ffff00,inset 0 0 11px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 22px #00ff66,inset 0 0 15px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 18px #ff00ff,inset 0 0 12px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}}' +
                           
@@ -221,7 +225,7 @@ def bot_script():
             
             var t = d.createElement('div');
             t.style.cssText = 'width:50px;height:50px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7px;animation:fieldPulsePair 3s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:fieldPulseSignal 3s infinite;display:block;">BOT</span>';
+            t.innerHTML = '<span style="font-size:6px;animation:fieldPulsePair 3s infinite;display:block;">YASIN</span><span style="font-size:5.5px;animation:fieldPulseSignal 3s infinite;display:block;">TR BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -256,7 +260,6 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                // Outer Electric Neon Fire Lightning Border Animation
                 panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 2s infinite linear;';
                 
                 var pDx, pX, pY;
@@ -282,11 +285,11 @@ def bot_script():
                 
                 var titleArea = d.createElement('div');
                 titleArea.style.cssText = 'display:flex;align-items:center;gap:2.5px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:fieldPulsePair 3s infinite;">YS TR BOT (1.1M)</span>';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">HR</span><span style="font-size:8px;font-weight:900;animation:fieldPulsePair 3s infinite;">YASIN TR BOT</span>';
                 
                 var activeBadge = d.createElement('span');
-                activeBadge.style.cssText = 'font-size:5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:1.5px;margin-left:2px;';
-                activeBadge.innerHTML = '<span style="width:3px;height:3px;background:#00e676;border-radius:50%;box-shadow:0 0 3px #00e676;"></span> 1.1M NODES';
+                activeBadge.style.cssText = 'font-size:5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:1.5px;margin-left:2px;animation: badgePulse 1.5s infinite ease-in-out;';
+                activeBadge.innerHTML = '<span style="width:3px;height:3px;background:#00e676;border-radius:50%;box-shadow:0 0 3px #00e676;"></span> QX BOT ACTIVE';
 
                 var minBtn = d.createElement('button');
                 minBtn.style.cssText = 'background:#00c853;border:none;width:11px;height:11px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:9px;font-weight:900;box-shadow:0 0 3px #00c853;';
@@ -397,11 +400,10 @@ def bot_script():
             function triggerTrade(isSell){
                 var nowTs = Date.now();
                 if(nowTs - window.lastTradeExecutionTimestamp < 25000) {
-                    return; // Strictly blocks any duplicate trade firing within 25 seconds
+                    return; // Strictly blocks duplicate trade firing within 25 seconds
                 }
                 window.lastTradeExecutionTimestamp = nowTs;
 
-                // Automatically clear any Quotex minimum amount error banners / popups
                 try {
                     var errorPopups = d.querySelectorAll('.notification, .alert, [class*="notification"], [class*="alert"], [class*="error"]');
                     for(var p=0; p<errorPopups.length; p++){
@@ -516,7 +518,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20;
+                    var scanTime = 15;
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -524,7 +526,8 @@ def bot_script():
                         var activePair = getRealPairName();
                         if(pairEl) pairEl.innerText = activePair;
                         
-                        if(trapEl) { trapEl.innerText = '1.1M SCANNING ('+scanTime+'s)...'; }
+                        // Updated scanning text without 1.1M and without seconds number
+                        if(trapEl) { trapEl.innerText = 'SCANNING...'; }
                         if(chopEl) { chopEl.innerText = 'ANALYZING CHOP...'; }
                         if(trendEl) { trendEl.innerText = 'FETCHING TICKS...'; }
                         if(signalEl) { signalEl.innerText = 'AI CONFLUENCE...'; }
@@ -583,7 +586,7 @@ def bot_script():
 
                                 var detectedAmt = getDynamicUserInvestmentAmount();
                                 if(detectedAmt) {
-                                    console.log("YS Bot Active User Investment Detected:", detectedAmt);
+                                    console.log("Yasin Bot Active Investment:", detectedAmt);
                                 }
 
                                 if(window.autoTradeEnabled && isAutoTradeMode && !trapText.includes('TRAP DETECTED') && pingVal <= 120 && j.status !== 'HOLD_NEWS') {
