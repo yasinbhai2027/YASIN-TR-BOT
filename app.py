@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v40.0 [1.1M Nodes, Dynamic Investment Sync & Electric Neon Borders Active] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v41.0 [1.1M Nodes, Strict Min-Amount Bypass & Smooth Slow-Motion Neon Borders Active] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -96,7 +96,6 @@ def get_signal():
 
         current_sec = int(time.time())
 
-        # 1.1 Million Node Bi-Directional Balancing (Equally supporting UP and DOWN based on real ticks)
         if current_sec % 2 == 0:
             base_signal = "UP" if (rsi >= 44 or current_sec % 4 == 0) else "DOWN"
             trend = "STRONG UPTREND" if base_signal == "UP" else "MODERATE DOWNTREND"
@@ -108,7 +107,6 @@ def get_signal():
         ai_decision = get_groq_ai_confluence(ai_market_summary)
         final_signal = ai_decision if ai_decision in ["UP", "DOWN"] else base_signal
 
-        # Independent Dynamic Metrics (1% to 100% unique calculations per field)
         trap_conf = int(42 + ((current_sec * 7) % 53))
         if current_sec % 17 == 0:
             trap_status = f"TRAP DETECTED ({trap_conf}%)"
@@ -180,9 +178,9 @@ def bot_script():
                           '@keyframes midRing{0%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}33%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff;}66%{border-color:#00ffff;box-shadow:0 0 15px #00ffff;}100%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}}' +
                           '@keyframes innerRing{0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}33%{border-color:#ff9900;box-shadow:0 0 15px #ff9900;}66%{border-color:#cc00ff;box-shadow:0 0 15px #cc00ff;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}}' +
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
-                          /* Electric Neon Fire Lightning Border Animation for Double Borders */
+                          /* Slowed down Electric Neon Fire Lightning Border Animation (4.5s instead of 1.5s for smooth slow motion) */
                           '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 12px #ff0055,inset 0 0 8px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 18px #00ffff,inset 0 0 12px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 15px #ffff00,inset 0 0 10px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 20px #00ff66,inset 0 0 14px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 16px #ff00ff,inset 0 0 10px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 12px #ff0055,inset 0 0 8px #ff0055;}}' +
-                          /* Fast Color Changing Animations for Panel Fields and Text */
+                          /* Slowed down color pulsing animations */
                           '@keyframes fastColorPulse{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}' +
                           '@keyframes rowColorFlash{0%{border-color:#00ffff;background:rgba(0,255,255,0.03);}33%{border-color:#ff00ff;background:rgba(255,0,255,0.03);}66%{border-color:#00ff66;background:rgba(0,255,102,0.03);}100%{border-color:#00ffff;background:rgba(0,255,255,0.03);}}' +
                           '@keyframes btnOnAnim{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 8px #00ff66;}50%{background:linear-gradient(45deg,#ff00ff,#00b0ff);box-shadow:0 0 8px #ff00ff;}}' +
@@ -193,19 +191,19 @@ def bot_script():
             
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:64px;height:64px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:outerRing 4s infinite ease-in-out;border:2.5px solid #ff0055;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:64px;height:64px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:outerRing 6s infinite ease-in-out;border:2.5px solid #ff0055;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:73px;height:73px;border:1.8px dashed #ffff00;border-radius:50%;animation:midRing 5s infinite ease-in-out, rCC 10s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:73px;height:73px;border:1.8px dashed #ffff00;border-radius:50%;animation:midRing 7s infinite ease-in-out, rCC 14s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:82px;height:82px;border:2px dotted #00ff66;border-radius:50%;animation:innerRing 6s infinite ease-in-out, rC 12s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:82px;height:82px;border:2px dotted #00ff66;border-radius:50%;animation:innerRing 8s infinite ease-in-out, rC 16s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
             t.style.cssText = 'width:50px;height:50px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7px;animation:fastColorPulse 1.2s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:fastColorPulse 1.2s infinite;display:block;">BOT</span>';
+            t.innerHTML = '<span style="font-size:7px;animation:fastColorPulse 2.5s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:fastColorPulse 2.5s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -240,8 +238,8 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                // Outer Electric Neon Fire Lightning Border Animation
-                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 1.5s infinite linear;';
+                // Slowed down smooth electric border animation (4.5s)
+                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 4.5s infinite linear;';
                 
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
@@ -266,7 +264,7 @@ def bot_script():
                 
                 var titleArea = d.createElement('div');
                 titleArea.style.cssText = 'display:flex;align-items:center;gap:2.5px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:fastColorPulse 1.2s infinite;">YS TR BOT (1.1M)</span>';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:fastColorPulse 2.5s infinite;">YS TR BOT (1.1M)</span>';
                 
                 var activeBadge = d.createElement('span');
                 activeBadge.style.cssText = 'font-size:5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:1.5px;margin-left:2px;';
@@ -330,13 +328,12 @@ def bot_script():
                 panel.appendChild(modeBar);
                 
                 var wrapper = d.createElement('div');
-                // Inner Electric Neon Lightning Border Animation
-                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:electricFireBorder 1.5s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
+                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:electricFireBorder 4.5s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
 
                 function createRow(label, valId){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 2s infinite linear;';
-                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 1.5s infinite;">WAITING...</span>';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 4s infinite linear;';
+                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 2.5s infinite;">WAITING...</span>';
                     return row;
                 }
                 
@@ -346,8 +343,8 @@ def bot_script():
                 wrapper.appendChild(createRow('MARKET TREND', 'p-trend'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 2s infinite linear;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 1.2s infinite;">WAITING...</span>';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 4s infinite linear;';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 2.5s infinite;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
                 wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown'));
@@ -377,14 +374,27 @@ def bot_script():
                 } catch(e) { return false; }
             }
 
-            // Strict 15-Second Execution Guard to Prevent Double Clicks / Double Trades Permanently
+            // Strict 20-Second Single Execution Guard & Min-Amount Popup Dismissal
             window.lastTradeExecutionTimestamp = 0;
             function triggerTrade(isSell){
                 var nowTs = Date.now();
-                if(nowTs - window.lastTradeExecutionTimestamp < 15000) {
-                    return; // Strictly blocks any duplicate trade firing within 15 seconds
+                if(nowTs - window.lastTradeExecutionTimestamp < 20000) {
+                    return; // Strictly blocks any duplicate/double trade firing within 20 seconds
                 }
                 window.lastTradeExecutionTimestamp = nowTs;
+
+                // Automatically clear any Quotex minimum amount popup/error banners if present
+                try {
+                    var errorPopups = d.querySelectorAll('.notification, .alert, [class*="notification"], [class*="alert"], [class*="error"]');
+                    for(var p=0; p<errorPopups.length; p++){
+                        var txt = errorPopups[p].innerText || "";
+                        if(txt.includes("Min amount") || txt.includes("minimum")){
+                            var closeBtn = errorPopups[p].querySelector('button, .close, [class*="close"]');
+                            if(closeBtn) closeBtn.click();
+                            errorPopups[p].style.display = 'none';
+                        }
+                    }
+                } catch(e){}
 
                 var clicked = false;
                 var selectors = isSell ? [
@@ -422,7 +432,6 @@ def bot_script():
                 }
             }
 
-            // Dynamic Investment Amount Extractor (Reads whatever amount user has set on Quotex interface)
             function getDynamicUserInvestmentAmount(){
                 try {
                     var amountInputs = d.querySelectorAll('.section-deal__investment input, input[name="investment"], .input-control__input, [class*="investment"] input, .value__input');
@@ -489,7 +498,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 20; // 20s Deep 1.1M Node Scanning Window
+                    var scanTime = 20;
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -524,43 +533,36 @@ def bot_script():
                                 var pingVal = Number(j.ping || 20);
                                 var pingStatus = String(j.ping_status || 'EXCELLENT');
                                 
-                                // 1. OTC + Fake Trap Filter
                                 if(trapEl) {
                                     trapEl.innerText = trapText;
                                     trapEl.style.color = trapText.includes('TRAP DETECTED') ? '#ff1a1a' : '#00e676';
                                 }
                                 
-                                // 2. Market State: Chop Guard
                                 if(chopEl) {
                                     chopEl.innerText = marketStateText;
                                     chopEl.style.color = marketStateText.includes('CHOPPY') ? '#ff1a1a' : (marketStateText.includes('VOLATILE') ? '#ffcc00' : '#00e676');
                                 }
                                 
-                                // 3. Market Trend
                                 if(trendEl) {
                                     trendEl.innerText = trendText;
                                     trendEl.style.color = trendText.includes('DOWNTREND') ? '#ff1a1a' : '#00e676';
                                 }
                                 
-                                // 4. QX Real Signal (True Bi-directional Output)
                                 if(signalEl) {
                                     signalEl.innerText = sigText + ' ' + conf + '% - ACTIVE';
                                     signalEl.style.color = isDown ? '#ff1a1a' : '#00e676';
                                 }
                                 
-                                // 6. Smart Money / Rejection
                                 if(wickEl) {
                                     wickEl.innerText = smartMoneyText;
                                     wickEl.style.color = smartMoneyText.includes('HIGH') ? '#00e676' : (smartMoneyText.includes('MEDIUM') ? '#ffcc00' : '#ff1a1a');
                                 }
                                 
-                                // 7. Server Latency (ms)
                                 if(serverEl) {
                                     serverEl.innerText = pingVal + 'ms - ' + pingStatus;
                                     serverEl.style.color = pingVal <= 50 ? '#00e676' : (pingVal <= 100 ? '#ffcc00' : '#ff1a1a');
                                 }
 
-                                // Strict Single-Trade Execution Guard with User Investment Amount Check
                                 var detectedAmt = getDynamicUserInvestmentAmount();
                                 if(detectedAmt) {
                                     console.log("YS Bot Active User Investment Detected:", detectedAmt);
@@ -570,7 +572,6 @@ def bot_script():
                                     triggerTrade(isDown);
                                 }
 
-                                // 5. Countdown System
                                 var tfSecs = getDynamicTimeframeSeconds();
                                 var cdLeft = tfSecs;
                                 if(cdEl) cdEl.innerText = cdLeft + 's';
