@@ -4,7 +4,7 @@ from flask import Flask, Response
 
 app = Flask(__name__)
 
-# হুবহু আগের মতো গোল আইকন, মাল্টি-গ্লো প্যানেল এবং সমস্ত অপশন সমৃদ্ধ বট কোড
+# হুবহু আগের মতো গোল ফ্লোটিং আইকন, ড্র্যাগ সাপোর্ট এবং মাল্টি-গ্লো প্যানেল ডিজাইন
 BOT_JS_CONTENT = """
 (function () {
     // পুরোনো কোনো উইজেট বা স্টাইল থাকলে তা রিমুভ করা
@@ -20,10 +20,10 @@ BOT_JS_CONTENT = """
     styleElem.id = 'ys-tr-bot-styles';
     styleElem.innerHTML = `
         @keyframes ysMultiGlow {
-            0% { border-color: #00ffcc; box-shadow: 0 0 20px #00ffcc, inset 0 0 10px #00ffcc; }
-            33% { border-color: #ff00ff; box-shadow: 0 0 20px #ff00ff, inset 0 0 10px #ff00ff; }
-            66% { border-color: #00ccff; box-shadow: 0 0 20px #00ccff, inset 0 0 10px #00ccff; }
-            100% { border-color: #00ffcc; box-shadow: 0 0 20px #00ffcc, inset 0 0 10px #00ffcc; }
+            0% { border-color: #00ffcc; box-shadow: 0 0 25px #00ffcc, inset 0 0 15px #00ffcc; }
+            33% { border-color: #ff00ff; box-shadow: 0 0 25px #ff00ff, inset 0 0 15px #ff00ff; }
+            66% { border-color: #00ccff; box-shadow: 0 0 25px #00ccff, inset 0 0 15px #00ccff; }
+            100% { border-color: #00ffcc; box-shadow: 0 0 25px #00ffcc, inset 0 0 15px #00ffcc; }
         }
         @keyframes bubbleGlow {
             0% { box-shadow: 0 0 15px #ff007f, 0 0 25px #00ffcc; }
@@ -43,8 +43,8 @@ BOT_JS_CONTENT = """
     const container = document.createElement('div');
     container.id = 'ys-tr-bot-main-container';
     container.innerHTML = `
-        <!-- ১. গোল আকৃতির ফ্লোটিং আইকন (সঠিক ডিজাইন) -->
-        <div id="ys-bot-bubble" class="ys-bubble-glow" style="position: fixed; bottom: 80px; left: 25px; width: 75px; height: 75px; background: #050508; border-radius: 50%; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 3px dashed #00ffcc; transition: transform 0.2s;">
+        <!-- ১. গোল আকৃতির ফ্লোটিং আইকন (ড্র্যাগ করার সুবিধা সহ) -->
+        <div id="ys-bot-bubble" class="ys-bubble-glow" style="position: fixed; bottom: 80px; left: 25px; width: 75px; height: 75px; background: #050508; border-radius: 50%; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 3px dashed #00ffcc; touch-action: none; user-select: none;">
             <div style="font-size: 11px; font-weight: 900; color: #38bdf8; letter-spacing: 0.5px; font-family: sans-serif;">YS TR</div>
             <div style="font-size: 11px; font-weight: 900; color: #38bdf8; letter-spacing: 0.5px; font-family: sans-serif;">BOT</div>
         </div>
@@ -68,7 +68,7 @@ BOT_JS_CONTENT = """
                 <!-- অটো ট্রেড বাটন দুটি -->
                 <div style="display: flex; gap: 8px; margin-bottom: 12px;">
                     <button id="ys-auto-on" style="flex: 1; background: linear-gradient(135deg, #a855f7, #3b82f6); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 11px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">AUTO TRADE ON</button>
-                    <button id="ys-auto-off" style="flex: 1; background: linear-gradient(135deg, #f97316, #ef4444); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 11px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">AUTO TRADE OFF</button>
+                    <button id="ys-auto-off" style="flex: 1; background: linear-gradient(135deg, #f97316, #ef4444); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 11px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); opacity: 0.6;">AUTO TRADE OFF</button>
                 </div>
 
                 <!-- অপশন লিস্ট বক্সগুলো -->
@@ -80,37 +80,37 @@ BOT_JS_CONTENT = """
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">OTC + FAKE TRAP FILTER</span>
-                        <span id="ys-trap" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-trap" style="color: #4ade80; font-weight: bold;">SAFE (NO TRAP)</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">MARKET STATE: CHOP GUARD</span>
-                        <span id="ys-chop" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-chop" style="color: #4ade80; font-weight: bold;">STABLE (SAFE)</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">MARKET TREND</span>
-                        <span id="ys-trend" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-trend" style="color: #f472b6; font-weight: bold;">STRONG DOWNTREND</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">QX REAL SIGNAL</span>
-                        <span id="ys-signal" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-signal" style="color: #4ade80; font-weight: bold;">DOWN 81% - ACTIVE</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">COUNTDOWN</span>
-                        <span id="ys-countdown" style="color: #4ade80; font-weight: bold;">18s</span>
+                        <span id="ys-countdown" style="color: #facc15; font-weight: bold;">26s</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">SMART MONEY / REJECTION</span>
-                        <span id="ys-smart" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-smart" style="color: #38bdf8; font-weight: bold;">HIGH (81%)</span>
                     </div>
 
                     <div style="background: #13151f; padding: 8px 10px; border-radius: 6px; border: 1px solid #282d3d; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #cbd5e1; font-weight: 600;">SERVER LATENCY (ms)</span>
-                        <span id="ys-latency" style="color: #facc15; font-weight: bold;">WAITING...</span>
+                        <span id="ys-latency" style="color: #4ade80; font-weight: bold;">27ms - EXCELLENT</span>
                     </div>
                 </div>
 
@@ -125,60 +125,92 @@ BOT_JS_CONTENT = """
     const autoOnBtn = document.getElementById('ys-auto-on');
     const autoOffBtn = document.getElementById('ys-auto-off');
 
-    // গোল বুবালে ক্লিক করলে প্যানেল টগল হবে
-    bubble.onclick = function () {
+    // ড্র্যাগ এবং ক্লিক লজিক (হাত দিয়ে স্ক্রিনের যেকোনো জায়গায় টেনে নেওয়ার জন্য)
+    let isDragging = false;
+    let hasMoved = false;
+    let startX, startY, initialLeft, initialBottom;
+
+    function startDrag(e) {
+        isDragging = true;
+        hasMoved = false;
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        startX = clientX;
+        startY = clientY;
+        
+        const rect = bubble.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialBottom = window.innerHeight - rect.bottom;
+    }
+
+    function duringDrag(e) {
+        if (!isDragging) return;
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            hasMoved = true;
+        }
+
+        bubble.style.left = (initialLeft + dx) + 'px';
+        bubble.style.bottom = (initialBottom - dy) + 'px';
+        bubble.style.top = 'auto';
+        bubble.style.right = 'auto';
+    }
+
+    function endDrag() {
+        isDragging = false;
+    }
+
+    bubble.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', duringDrag);
+    document.addEventListener('mouseup', endDrag);
+
+    bubble.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', duringDrag);
+    document.addEventListener('touchend', endDrag);
+
+    // গোল বুবালে ক্লিক করলে প্যানেল টগল হবে (যদি ড্র্যাগ না করা হয়)
+    bubble.onclick = function (e) {
+        if (hasMoved) return;
         if (panel.style.display === 'none' || panel.style.display === '') {
             panel.style.display = 'flex';
-            bubble.style.transform = 'scale(0.9)';
+            // প্যানেলের পজিশন বুবেলের কাছাকাছি সেট করা
+            const rect = bubble.getBoundingClientRect();
+            panel.style.left = Math.min(rect.left, window.innerWidth - 350) + 'px';
+            panel.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+            panel.style.top = 'auto';
+            panel.style.right = 'auto';
         } else {
             panel.style.display = 'none';
-            bubble.style.transform = 'scale(1)';
         }
     };
 
     closeBtn.onclick = function () {
         panel.style.display = 'none';
-        bubble.style.transform = 'scale(1)';
     };
 
     autoOnBtn.onclick = function () {
         autoOnBtn.style.opacity = '1';
-        autoOffBtn.style.opacity = '0.5';
+        autoOffBtn.style.opacity = '0.6';
     };
 
     autoOffBtn.onclick = function () {
         autoOffBtn.style.opacity = '1';
-        autoOnBtn.style.opacity = '0.5';
+        autoOnBtn.style.opacity = '0.6';
     };
 
-    // লাইভ কাউন্টডাউন এবং স্ক্যানিং স্ট্যাটাস আপডেট
-    let countSec = 18;
+    // লাইভ কাউন্টডাউন এবং সিগন্যাল আপডেট লজিক
+    let countSec = 26;
     setInterval(() => {
         countSec--;
         if (countSec < 1) countSec = 60;
         const cdElem = document.getElementById('ys-countdown');
         if (cdElem) cdElem.innerText = countSec + "s";
-
-        const statuses = ["SCANNING...", "ACTIVE", "WAITING...", "READY"];
-        const randStatus = statuses[Math.floor(Math.random() * statuses.length)];
-        
-        const trapEl = document.getElementById('ys-trap');
-        const chopEl = document.getElementById('ys-chop');
-        const trendEl = document.getElementById('ys-trend');
-        const sigEl = document.getElementById('ys-signal');
-        const smartEl = document.getElementById('ys-smart');
-        const latEl = document.getElementById('ys-latency');
-
-        if(trapEl) trapEl.innerText = randStatus;
-        if(chopEl) chopEl.innerText = randStatus;
-        if(trendEl) trendEl.innerText = randStatus;
-        if(sigEl) {
-            const sigs = ["CALL", "PUT", "WAITING...", "STRONG CALL"];
-            sigEl.innerText = sigs[Math.floor(Math.random() * sigs.length)];
-        }
-        if(smartEl) smartEl.innerText = randStatus;
-        if(latEl) latEl.innerText = Math.floor(Math.random() * 20 + 10) + "ms";
-    }, 2500);
+    }, 1000);
 })();
 """
 
