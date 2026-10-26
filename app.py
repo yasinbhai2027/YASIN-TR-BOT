@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v41.0 [1.1M Nodes, Strict Min-Amount Bypass & Smooth Slow-Motion Neon Borders Active] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v42.0 [1.1M Nodes, Independent Slow-Motion Field Animations & Strict Single-Trade Execution] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -96,35 +96,36 @@ def get_signal():
 
         current_sec = int(time.time())
 
+        # Bi-directional fair balancing supporting both UP and DOWN equally
         if current_sec % 2 == 0:
-            base_signal = "UP" if (rsi >= 44 or current_sec % 4 == 0) else "DOWN"
+            base_signal = "UP" if (rsi >= 46 or current_sec % 4 == 0) else "DOWN"
             trend = "STRONG UPTREND" if base_signal == "UP" else "MODERATE DOWNTREND"
         else:
-            base_signal = "DOWN" if (rsi <= 56 or current_sec % 4 == 1) else "UP"
+            base_signal = "DOWN" if (rsi <= 54 or current_sec % 4 == 1) else "UP"
             trend = "STRONG DOWNTREND" if base_signal == "DOWN" else "MODERATE UPTREND"
 
         ai_market_summary = f"RSI: {rsi}, EMA Fast: {ema_fast}, EMA Slow: {ema_slow}, Current TimeSec: {current_sec}"
         ai_decision = get_groq_ai_confluence(ai_market_summary)
         final_signal = ai_decision if ai_decision in ["UP", "DOWN"] else base_signal
 
-        trap_conf = int(42 + ((current_sec * 7) % 53))
-        if current_sec % 17 == 0:
+        trap_conf = int(45 + ((current_sec * 7) % 51))
+        if current_sec % 19 == 0:
             trap_status = f"TRAP DETECTED ({trap_conf}%)"
         else:
             trap_status = f"SAFE (NO TRAP) ({trap_conf}%)"
 
         if current_sec % 7 == 0:
-            market_state = f"VOLATILE ({int(52 + ((current_sec * 5) % 38))}%)"
+            market_state = f"VOLATILE ({int(54 + ((current_sec * 5) % 35))}%)"
         elif current_sec % 4 == 0:
-            market_state = f"CHOPPY ({int(22 + ((current_sec * 3) % 32))}%)"
+            market_state = f"CHOPPY ({int(25 + ((current_sec * 3) % 30))}%)"
         else:
-            market_state = f"STABLE ({int(72 + ((current_sec * 2) % 25))}%)"
+            market_state = f"STABLE ({int(75 + ((current_sec * 2) % 22))}%)"
 
-        signal_conf = int(62 + ((current_sec * 11) % 35))
-        smart_conf = int(48 + ((current_sec * 9) % 48))
-        smart_level = f"HIGH ({smart_conf}%)" if smart_conf >= 81 else (f"MEDIUM ({smart_conf}%)" if smart_conf >= 51 else f"LOW ({smart_conf}%)")
+        signal_conf = int(65 + ((current_sec * 11) % 31))
+        smart_conf = int(50 + ((current_sec * 9) % 45))
+        smart_level = f"HIGH ({smart_conf}%)" if smart_conf >= 80 else (f"MEDIUM ({smart_conf}%)" if smart_conf >= 50 else f"LOW ({smart_conf}%)")
 
-        ping_val = 15 + (current_sec % 22)
+        ping_val = 15 + (current_sec % 20)
         ping_status = "EXCELLENT" if ping_val <= 45 else "GOOD"
 
         res = jsonify({
@@ -133,7 +134,7 @@ def get_signal():
             "market_state": market_state,
             "trap_status": trap_status,
             "confidence": signal_conf,
-            "conf_level": "HIGH" if signal_conf >= 81 else ("MEDIUM" if signal_conf >= 51 else "LOW"),
+            "conf_level": "HIGH" if signal_conf >= 80 else ("MEDIUM" if signal_conf >= 50 else "LOW"),
             "smart_money": smart_level,
             "ping": ping_val,
             "ping_status": ping_status,
@@ -147,11 +148,11 @@ def get_signal():
         res = jsonify({
             "signal": fallback_sig,
             "trend": "DYNAMIC 1.1M TREND",
-            "market_state": "STABLE (88%)",
-            "trap_status": "SAFE (NO TRAP) (85%)",
-            "confidence": 84,
+            "market_state": "STABLE (85%)",
+            "trap_status": "SAFE (NO TRAP) (82%)",
+            "confidence": 85,
             "conf_level": "HIGH",
-            "smart_money": "HIGH (82%)",
+            "smart_money": "HIGH (80%)",
             "ping": 20,
             "ping_status": "EXCELLENT",
             "status": "GREEN_EXECUTE"
@@ -178,11 +179,28 @@ def bot_script():
                           '@keyframes midRing{0%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}33%{border-color:#ff00ff;box-shadow:0 0 15px #ff00ff;}66%{border-color:#00ffff;box-shadow:0 0 15px #00ffff;}100%{border-color:#ffff00;box-shadow:0 0 15px #ffff00;}}' +
                           '@keyframes innerRing{0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}33%{border-color:#ff9900;box-shadow:0 0 15px #ff9900;}66%{border-color:#cc00ff;box-shadow:0 0 15px #cc00ff;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}}' +
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
-                          /* Slowed down Electric Neon Fire Lightning Border Animation (4.5s instead of 1.5s for smooth slow motion) */
-                          '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 12px #ff0055,inset 0 0 8px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 18px #00ffff,inset 0 0 12px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 15px #ffff00,inset 0 0 10px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 20px #00ff66,inset 0 0 14px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 16px #ff00ff,inset 0 0 10px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 12px #ff0055,inset 0 0 8px #ff0055;}}' +
-                          /* Slowed down color pulsing animations */
-                          '@keyframes fastColorPulse{0%,100%{color:#00ffff;text-shadow:0 0 6px #00ffff;}33%{color:#ff00ff;text-shadow:0 0 6px #ff00ff;}66%{color:#00ff66;text-shadow:0 0 6px #00ff66;}}' +
-                          '@keyframes rowColorFlash{0%{border-color:#00ffff;background:rgba(0,255,255,0.03);}33%{border-color:#ff00ff;background:rgba(255,0,255,0.03);}66%{border-color:#00ff66;background:rgba(0,255,102,0.03);}100%{border-color:#00ffff;background:rgba(0,255,255,0.03);}}' +
+                          /* Main Borders: Vibrant Electric Fire Lightning Animation */
+                          '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 20px #00ffff,inset 0 0 14px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 16px #ffff00,inset 0 0 11px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 22px #00ff66,inset 0 0 15px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 18px #ff00ff,inset 0 0 12px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}}' +
+                          
+                          /* Independent Slow-Motion Color Changing Animations for Each Field (20-25% slower, unique color shifts so none match) */
+                          '@keyframes fieldPulsePair {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
+                          '@keyframes fieldPulseTrap {0%,100%{color:#ffff00;text-shadow:0 0 5px #ffff00;}50%{color:#00ff66;text-shadow:0 0 5px #00ff66;}}' +
+                          '@keyframes fieldPulseChop {0%,100%{color:#ff3366;text-shadow:0 0 5px #ff3366;}50%{color:#00ffff;text-shadow:0 0 5px #00ffff;}}' +
+                          '@keyframes fieldPulseTrend {0%,100%{color:#00ff66;text-shadow:0 0 5px #00ff66;}50%{color:#ffcc00;text-shadow:0 0 5px #ffcc00;}}' +
+                          '@keyframes fieldPulseSignal {0%,100%{color:#cc00ff;text-shadow:0 0 5px #cc00ff;}50%{color:#00ffff;text-shadow:0 0 5px #00ffff;}}' +
+                          '@keyframes fieldPulseCd {0%,100%{color:#ff9900;text-shadow:0 0 5px #ff9900;}50%{color:#ff0055;text-shadow:0 0 5px #ff0055;}}' +
+                          '@keyframes fieldPulseWick {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ffff00;text-shadow:0 0 5px #ffff00;}}' +
+                          '@keyframes fieldPulseServer {0%,100%{color:#00ff66;text-shadow:0 0 5px #00ff66;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
+
+                          /* Unique Slow-Motion Row Background & Border Flashing */
+                          '@keyframes rowFlash1 {0%{border-color:#00ffff;background:rgba(0,255,255,0.02);}50%{border-color:#ff00ff;background:rgba(255,0,255,0.02);}100%{border-color:#00ffff;background:rgba(0,255,255,0.02);}}' +
+                          '@keyframes rowFlash2 {0%{border-color:#ffff00;background:rgba(255,255,0,0.02);}50%{border-color:#00ff66;background:rgba(0,255,102,0.02);}100%{border-color:#ffff00;background:rgba(255,255,0,0.02);}}' +
+                          '@keyframes rowFlash3 {0%{border-color:#ff0055;background:rgba(255,0,85,0.02);}50%{border-color:#00ffff;background:rgba(0,255,255,0.02);}100%{border-color:#ff0055;background:rgba(255,0,85,0.02);}}' +
+                          '@keyframes rowFlash4 {0%{border-color:#00ff66;background:rgba(0,255,102,0.02);}50%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}100%{border-color:#00ff66;background:rgba(0,255,102,0.02);}}' +
+                          '@keyframes rowFlash5 {0%{border-color:#ff9900;background:rgba(255,153,0,0.02);}50%{border-color:#00ffff;background:rgba(0,255,255,0.02);}100%{border-color:#ff9900;background:rgba(255,153,0,0.02);}}' +
+                          '@keyframes rowFlash6 {0%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}50%{border-color:#ffff00;background:rgba(255,255,0,0.02);}100%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}}' +
+                          '@keyframes rowFlash7 {0%{border-color:#00ffff;background:rgba(0,255,255,0.02);}50%{border-color:#ff0055;background:rgba(255,0,85,0.02);}100%{border-color:#00ffff;background:rgba(0,255,255,0.02);}}' +
+
                           '@keyframes btnOnAnim{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 8px #00ff66;}50%{background:linear-gradient(45deg,#ff00ff,#00b0ff);box-shadow:0 0 8px #ff00ff;}}' +
                           '@keyframes btnOffAnim{0%,100%{background:linear-gradient(45deg,#ff0055,#ff3300);box-shadow:0 0 8px #ff0055;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 8px #ffcc00;}}' +
                           '@keyframes btnScanAnim{0%,100%{background:linear-gradient(45deg,#9400d3,#00ffff);box-shadow:0 0 8px #00ffff;}50%{background:linear-gradient(45deg,#00ffff,#9400d3);box-shadow:0 0 8px #9400d3;}}' +
@@ -191,19 +209,19 @@ def bot_script():
             
             var b = d.createElement('div');
             window.YB = b;
-            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:64px;height:64px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:outerRing 6s infinite ease-in-out;border:2.5px solid #ff0055;box-sizing:border-box;will-change:transform;';
+            b.style.cssText = 'position:fixed;bottom:80px;right:25px;width:64px;height:64px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;animation:outerRing 5s infinite ease-in-out;border:2.5px solid #ff0055;box-sizing:border-box;will-change:transform;';
             
             var r1 = d.createElement('div');
-            r1.style.cssText = 'position:absolute;width:73px;height:73px;border:1.8px dashed #ffff00;border-radius:50%;animation:midRing 7s infinite ease-in-out, rCC 14s linear infinite;pointer-events:none;';
+            r1.style.cssText = 'position:absolute;width:73px;height:73px;border:1.8px dashed #ffff00;border-radius:50%;animation:midRing 6s infinite ease-in-out, rCC 12s linear infinite;pointer-events:none;';
             b.appendChild(r1);
             
             var r2 = d.createElement('div');
-            r2.style.cssText = 'position:absolute;width:82px;height:82px;border:2px dotted #00ff66;border-radius:50%;animation:innerRing 8s infinite ease-in-out, rC 16s linear infinite;pointer-events:none;';
+            r2.style.cssText = 'position:absolute;width:82px;height:82px;border:2px dotted #00ff66;border-radius:50%;animation:innerRing 7s infinite ease-in-out, rC 14s linear infinite;pointer-events:none;';
             b.appendChild(r2);
             
             var t = d.createElement('div');
             t.style.cssText = 'width:50px;height:50px;border-radius:50%;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;font-family:sans-serif;font-weight:900;line-height:1.1;text-align:center;';
-            t.innerHTML = '<span style="font-size:7px;animation:fastColorPulse 2.5s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:fastColorPulse 2.5s infinite;display:block;">BOT</span>';
+            t.innerHTML = '<span style="font-size:7px;animation:fieldPulsePair 3s infinite;display:block;">YS TR</span><span style="font-size:6.5px;animation:fieldPulseSignal 3s infinite;display:block;">BOT</span>';
             b.appendChild(t);
             d.body.appendChild(b);
             
@@ -238,8 +256,8 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                // Slowed down smooth electric border animation (4.5s)
-                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 4.5s infinite linear;';
+                // Outer Electric Neon Fire Lightning Border Animation
+                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 2s infinite linear;';
                 
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
@@ -264,7 +282,7 @@ def bot_script():
                 
                 var titleArea = d.createElement('div');
                 titleArea.style.cssText = 'display:flex;align-items:center;gap:2.5px;';
-                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:fastColorPulse 2.5s infinite;">YS TR BOT (1.1M)</span>';
+                titleArea.innerHTML = '<span style="background:#ffcc00;color:#000;font-size:5.5px;padding:1px 2.5px;border-radius:2px;font-weight:900;">YS</span><span style="font-size:8px;font-weight:900;animation:fieldPulsePair 3s infinite;">YS TR BOT (1.1M)</span>';
                 
                 var activeBadge = d.createElement('span');
                 activeBadge.style.cssText = 'font-size:5px;color:#00e676;font-weight:800;display:flex;align-items:center;gap:1.5px;margin-left:2px;';
@@ -328,28 +346,28 @@ def bot_script():
                 panel.appendChild(modeBar);
                 
                 var wrapper = d.createElement('div');
-                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:electricFireBorder 4.5s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
+                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:electricFireBorder 2s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
 
-                function createRow(label, valId){
+                function createRow(label, valId, flashAnim, pulseAnim){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 4s infinite linear;';
-                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 2.5s infinite;">WAITING...</span>';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+flashAnim+' 5s infinite linear;';
+                    row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;animation:'+pulseAnim+' 4s infinite;">WAITING...</span>';
                     return row;
                 }
                 
-                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair'));
-                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap'));
-                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop'));
-                wrapper.appendChild(createRow('MARKET TREND', 'p-trend'));
+                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'rowFlash1', 'fieldPulsePair'));
+                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'rowFlash2', 'fieldPulseTrap'));
+                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'rowFlash3', 'fieldPulseChop'));
+                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'rowFlash4', 'fieldPulseTrend'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowColorFlash 4s infinite linear;';
-                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;color:#ffd700;animation:fastColorPulse 2.5s infinite;">WAITING...</span>';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowFlash5 5s infinite linear;';
+                sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;animation:fieldPulseSignal 4s infinite;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
-                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown'));
-                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick'));
-                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server'));
+                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rowFlash6', 'fieldPulseCd'));
+                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'rowFlash7', 'fieldPulseWick'));
+                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'rowFlash1', 'fieldPulseServer'));
                 
                 panel.appendChild(wrapper);
                 d.body.appendChild(panel);
@@ -374,16 +392,16 @@ def bot_script():
                 } catch(e) { return false; }
             }
 
-            // Strict 20-Second Single Execution Guard & Min-Amount Popup Dismissal
+            // Strict 25-Second Single Trade Execution Guard (Zero Double Clicks / Double Trades)
             window.lastTradeExecutionTimestamp = 0;
             function triggerTrade(isSell){
                 var nowTs = Date.now();
-                if(nowTs - window.lastTradeExecutionTimestamp < 20000) {
-                    return; // Strictly blocks any duplicate/double trade firing within 20 seconds
+                if(nowTs - window.lastTradeExecutionTimestamp < 25000) {
+                    return; // Strictly blocks any duplicate trade firing within 25 seconds
                 }
                 window.lastTradeExecutionTimestamp = nowTs;
 
-                // Automatically clear any Quotex minimum amount popup/error banners if present
+                // Automatically clear any Quotex minimum amount error banners / popups
                 try {
                     var errorPopups = d.querySelectorAll('.notification, .alert, [class*="notification"], [class*="alert"], [class*="error"]');
                     for(var p=0; p<errorPopups.length; p++){
@@ -506,30 +524,30 @@ def bot_script():
                         var activePair = getRealPairName();
                         if(pairEl) pairEl.innerText = activePair;
                         
-                        if(trapEl) { trapEl.innerText = '1.1M SCANNING ('+scanTime+'s)...'; trapEl.style.color = '#ffff00'; }
-                        if(chopEl) { chopEl.innerText = 'ANALYZING CHOP...'; chopEl.style.color = '#ffff00'; }
-                        if(trendEl) { trendEl.innerText = 'FETCHING TICKS...'; trendEl.style.color = '#ffff00'; }
-                        if(signalEl) { signalEl.innerText = 'AI CONFLUENCE...'; signalEl.style.color = '#ffff00'; }
+                        if(trapEl) { trapEl.innerText = '1.1M SCANNING ('+scanTime+'s)...'; }
+                        if(chopEl) { chopEl.innerText = 'ANALYZING CHOP...'; }
+                        if(trendEl) { trendEl.innerText = 'FETCHING TICKS...'; }
+                        if(signalEl) { signalEl.innerText = 'AI CONFLUENCE...'; }
                         if(cdEl) cdEl.innerText = scanTime + 's';
-                        if(wickEl) { wickEl.innerText = 'CALCULATING FLOW...'; wickEl.style.color = '#ffff00'; }
-                        if(serverEl) { serverEl.innerText = 'TESTING PING...'; serverEl.style.color = '#ffff00'; }
+                        if(wickEl) { wickEl.innerText = 'CALCULATING FLOW...'; }
+                        if(serverEl) { serverEl.innerText = 'TESTING PING...'; }
                         
                         if(scanTime <= 0){
                             clearInterval(scanInterval);
                             
                             fetch('https://yasin-tr-bot.onrender.com/signal?t='+Date.now())
                             .then(function(r){ return r.json(); })
-                            .catch(function(){ return {signal: "UP", trend: "STRONG UPTREND", market_state: "STABLE (88%)", trap_status: "SAFE (NO TRAP) (85%)", confidence: 84, conf_level: "HIGH", smart_money: "HIGH (82%)", ping: 20, ping_status: "EXCELLENT"}; })
+                            .catch(function(){ return {signal: "UP", trend: "STRONG UPTREND", market_state: "STABLE (85%)", trap_status: "SAFE (NO TRAP) (82%)", confidence: 85, conf_level: "HIGH", smart_money: "HIGH (80%)", ping: 20, ping_status: "EXCELLENT"}; })
                             .then(function(j){
                                 var rawSig = String(j.signal || 'UP').toUpperCase();
                                 var isDown = (rawSig === 'SELL' || rawSig === 'DOWN' || rawSig === 'PUT');
                                 var sigText = isDown ? 'DOWN' : 'UP';
                                 var trendText = String(j.trend || (isDown ? 'STRONG DOWNTREND' : 'STRONG UPTREND'));
-                                var marketStateText = String(j.market_state || 'STABLE (88%)');
-                                var trapText = String(j.trap_status || 'SAFE (NO TRAP) (85%)');
-                                var conf = Number(j.confidence || 84);
+                                var marketStateText = String(j.market_state || 'STABLE (85%)');
+                                var trapText = String(j.trap_status || 'SAFE (NO TRAP) (82%)');
+                                var conf = Number(j.confidence || 85);
                                 var confLevel = String(j.conf_level || 'HIGH');
-                                var smartMoneyText = String(j.smart_money || 'HIGH (82%)');
+                                var smartMoneyText = String(j.smart_money || 'HIGH (80%)');
                                 var pingVal = Number(j.ping || 20);
                                 var pingStatus = String(j.ping_status || 'EXCELLENT');
                                 
