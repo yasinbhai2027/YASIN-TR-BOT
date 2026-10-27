@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v55.0 [1.1M Nodes, Exact Wick-Tip Pinned Tether & Stable Lock] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v56.0 [1.1M Nodes, Arrow-Tip Smooth Locked Tether & Strict Color] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Wick-Tip Pinned Tether
+            // Fullscreen Transparent Canvas Layer for Arrow-Tip Smooth Locked Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Wick-Tip Pinned Tether (Locks precisely onto the TOP TIP / WICK of the active rightmost running candle)
-            function renderWickTipPinnedTether() {
+            // Arrow-Tip Smooth Locked Tether (Arrow head at the running candle top wick tip, strict green/red color matching)
+            function renderArrowTipPinnedTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderWickTipPinnedTether);
+                    requestAnimationFrame(renderArrowTipPinnedTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -430,10 +430,10 @@ def bot_script():
                         }
                     }
                     
-                    // Pin strictly to the TOP TIP / WICK (highest point of the running candle bounding box)
+                    // Pin strictly to the TOP TIP / WICK of the active running candle
                     tipPt = {
                         x: lrect.left + (lrect.width / 2),
-                        y: lrect.top // Top tip/wick coordinate
+                        y: lrect.top
                     };
                 }
                 
@@ -447,27 +447,39 @@ def bot_script():
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
+                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
+                var hexColor = isGreen ? '#00ff66' : '#ff0055';
+                
                 // Draw single stable straight tether from panel to the running candle TOP TIP
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
                 ctx.lineTo(tipPt.x, tipPt.y);
-                
-                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
                 ctx.lineWidth = 2.8;
                 ctx.strokeStyle = lineColor;
-                ctx.shadowColor = isGreen ? '#00ff66' : '#ff0055';
+                ctx.shadowColor = hexColor;
                 ctx.shadowBlur = 12;
                 ctx.stroke();
                 
-                // Stable lock anchor dot directly on the candle top tip
-                ctx.beginPath();
-                ctx.arc(tipPt.x, tipPt.y, 5, 0, Math.PI * 2);
-                ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
-                ctx.fill();
+                // Draw Arrow Head pointing precisely at the candle top tip
+                ctx.save();
+                ctx.translate(tipPt.x, tipPt.y);
+                var angle = Math.atan2(tipPt.y - originY, tipPt.x - originX);
+                ctx.rotate(angle);
                 
-                requestAnimationFrame(renderWickTipPinnedTether);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-12, -6);
+                ctx.lineTo(-12, 6);
+                ctx.closePath();
+                ctx.fillStyle = hexColor;
+                ctx.shadowColor = hexColor;
+                ctx.shadowBlur = 10;
+                ctx.fill();
+                ctx.restore();
+                
+                requestAnimationFrame(renderArrowTipPinnedTether);
             }
-            requestAnimationFrame(renderWickTipPinnedTether);
+            requestAnimationFrame(renderArrowTipPinnedTether);
 
             function forceClick(el) {
                 if(!el) return false;
