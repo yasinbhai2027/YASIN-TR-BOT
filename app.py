@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v53.0 [1.1M Nodes, Perfect Chart-Locked Single Tether] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v54.0 [1.1M Nodes, Exact Rightmost Running Candle Pinned Tether] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Strict Chart-Locked Single Tether
+            // Fullscreen Transparent Canvas Layer for Exact Rightmost Running Candle Pinned Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Strict Chart-Locked Single Tether (Targets ONLY actual chart candles, completely ignoring right-side timer/price axis)
-            function renderPerfectSingleTether() {
+            // Exact Rightmost Running Candle Pinned Tether (Strictly locks onto the active real-time running candle)
+            function renderExactRunningCandleTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderPerfectSingleTether);
+                    requestAnimationFrame(renderExactRunningCandleTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -399,24 +399,25 @@ def bot_script():
                 var originX = panelRect.left + (panelRect.width / 2);
                 var originY = panelRect.top + (panelRect.height / 2);
                 
-                // Find actual chart candle elements, strictly excluding right-side scale/timer area (> 80% screen width)
-                var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle-body"], [class*="candle"]');
-                var validCandles = [];
+                // Query Quotex chart candles and filter strictly for the live active trading area
+                var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
+                var activeCandles = [];
                 
                 for (var i = 0; i < allCandles.length; i++) {
-                    var rect = allCandles[i].getBoundingClientRect();
-                    if (rect.width > 2 && rect.height > 2 && rect.left > 50 && rect.left < window.innerWidth * 0.80) {
-                        validCandles.push({el: allCandles[i], rect: rect});
+                    var crect = allCandles[i].getBoundingClientRect();
+                    // Exclude right-side price axis, timers, and toolbars (must be within valid chart grid width)
+                    if (crect.width > 2 && crect.height > 2 && crect.left > 30 && crect.left < window.innerWidth * 0.78) {
+                        activeCandles.push({el: allCandles[i], rect: crect});
                     }
                 }
                 
-                var targetPt = null;
+                var runningPt = null;
                 var isGreen = true;
                 
-                if (validCandles.length > 0) {
-                    // Sort horizontally to get the absolute rightmost actual candle on the chart grid
-                    validCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
-                    var runningObj = validCandles[validCandles.length - 1];
+                if (activeCandles.length > 0) {
+                    // Sort by horizontal position (left coordinate) to find the absolute rightmost running candle
+                    activeCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
+                    var runningObj = activeCandles[activeCandles.length - 1];
                     var lrect = runningObj.rect;
                     var el = runningObj.el;
                     
@@ -430,26 +431,26 @@ def bot_script():
                         }
                     }
                     
-                    targetPt = {
+                    runningPt = {
                         x: lrect.left + (lrect.width / 2),
                         y: lrect.top + (lrect.height / 2)
                     };
                 }
                 
-                // Fallback inside active chart grid if DOM query varies
-                if (!targetPt) {
+                // Fallback running candle coordinate inside chart grid if DOM query varies
+                if (!runningPt) {
                     var nowT = Date.now() * 0.003;
-                    targetPt = {
-                        x: window.innerWidth * 0.52,
-                        y: (window.innerHeight * 0.48) + Math.sin(nowT * 8) * 15
+                    runningPt = {
+                        x: window.innerWidth * 0.55,
+                        y: (window.innerHeight * 0.45) + Math.sin(nowT * 8) * 18
                     };
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                // Draw single straight tether directly from panel to the exact running candle
+                // Draw single direct straight tether from panel to the exact running candle
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
-                ctx.lineTo(targetPt.x, targetPt.y);
+                ctx.lineTo(runningPt.x, runningPt.y);
                 
                 var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
                 ctx.lineWidth = 2.8;
@@ -458,15 +459,15 @@ def bot_script():
                 ctx.shadowBlur = 15;
                 ctx.stroke();
                 
-                // Glowing anchor dot on the running candle
+                // Glowing lock anchor dot directly on the running candle body
                 ctx.beginPath();
-                ctx.arc(targetPt.x, targetPt.y, 5.5, 0, Math.PI * 2);
+                ctx.arc(runningPt.x, runningPt.y, 5.5, 0, Math.PI * 2);
                 ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
                 ctx.fill();
                 
-                requestAnimationFrame(renderPerfectSingleTether);
+                requestAnimationFrame(renderExactRunningCandleTether);
             }
-            requestAnimationFrame(renderPerfectSingleTether);
+            requestAnimationFrame(renderExactRunningCandleTether);
 
             function forceClick(el) {
                 if(!el) return false;
