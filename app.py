@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v56.0 [1.1M Nodes, Arrow-Tip Smooth Locked Tether & Strict Color] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v57.0 [1.1M Nodes, White Tether & Open-Candle Arrow Tip Lock] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Arrow-Tip Smooth Locked Tether
+            // Fullscreen Transparent Canvas Layer for White Tether & Open-Candle Arrow Tip Lock
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Arrow-Tip Smooth Locked Tether (Arrow head at the running candle top wick tip, strict green/red color matching)
-            function renderArrowTipPinnedTether() {
+            // White Tether & Open-Candle Arrow Tip Lock (White string body, stable arrow tip locked at the candle starting point, green/red based on candle direction)
+            function renderWhiteTetherOpenTip() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderArrowTipPinnedTether);
+                    requestAnimationFrame(renderWhiteTetherOpenTip);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -410,7 +410,7 @@ def bot_script():
                     }
                 }
                 
-                var tipPt = null;
+                var openPt = null;
                 var isGreen = true;
                 
                 if (activeCandles.length > 0) {
@@ -430,40 +430,39 @@ def bot_script():
                         }
                     }
                     
-                    // Pin strictly to the TOP TIP / WICK of the active running candle
-                    tipPt = {
+                    // Pin strictly to the STARTING BASE (opening price position of the running candle)
+                    openPt = {
                         x: lrect.left + (lrect.width / 2),
-                        y: lrect.top
+                        y: isGreen ? (lrect.top + lrect.height) : lrect.top
                     };
                 }
                 
-                // Fallback top-tip coordinate inside chart grid if DOM query varies
-                if (!tipPt) {
+                // Fallback starting coordinate inside chart grid if DOM query varies
+                if (!openPt) {
                     var nowT = Date.now() * 0.003;
-                    tipPt = {
+                    openPt = {
                         x: window.innerWidth * 0.55,
-                        y: (window.innerHeight * 0.40) + Math.sin(nowT * 6) * 10
+                        y: (window.innerHeight * 0.45) + Math.sin(nowT * 5) * 8
                     };
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
-                var hexColor = isGreen ? '#00ff66' : '#ff0055';
+                var tipColorHex = isGreen ? '#00ff66' : '#ff0055';
                 
-                // Draw single stable straight tether from panel to the running candle TOP TIP
+                // Draw pure WHITE string body from panel to the candle starting point
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
-                ctx.lineTo(tipPt.x, tipPt.y);
+                ctx.lineTo(openPt.x, openPt.y);
                 ctx.lineWidth = 2.8;
-                ctx.strokeStyle = lineColor;
-                ctx.shadowColor = hexColor;
-                ctx.shadowBlur = 12;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 10;
                 ctx.stroke();
                 
-                // Draw Arrow Head pointing precisely at the candle top tip
+                // Draw Arrow Head at the starting point with directional color (Green or Red)
                 ctx.save();
-                ctx.translate(tipPt.x, tipPt.y);
-                var angle = Math.atan2(tipPt.y - originY, tipPt.x - originX);
+                ctx.translate(openPt.x, openPt.y);
+                var angle = Math.atan2(openPt.y - originY, openPt.x - originX);
                 ctx.rotate(angle);
                 
                 ctx.beginPath();
@@ -471,15 +470,15 @@ def bot_script():
                 ctx.lineTo(-12, -6);
                 ctx.lineTo(-12, 6);
                 ctx.closePath();
-                ctx.fillStyle = hexColor;
-                ctx.shadowColor = hexColor;
-                ctx.shadowBlur = 10;
+                ctx.fillStyle = tipColorHex;
+                ctx.shadowColor = tipColorHex;
+                ctx.shadowBlur = 12;
                 ctx.fill();
                 ctx.restore();
                 
-                requestAnimationFrame(renderArrowTipPinnedTether);
+                requestAnimationFrame(renderWhiteTetherOpenTip);
             }
-            requestAnimationFrame(renderArrowTipPinnedTether);
+            requestAnimationFrame(renderWhiteTetherOpenTip);
 
             function forceClick(el) {
                 if(!el) return false;
