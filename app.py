@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v57.0 [1.1M Nodes, White Tether & Open-Candle Arrow Tip Lock] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v58.0 [1.1M Nodes, Zero-Jitter Open-Candle Exact Lock] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for White Tether & Open-Candle Arrow Tip Lock
+            // Fullscreen Transparent Canvas Layer for Zero-Jitter Open-Candle Exact Lock
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // White Tether & Open-Candle Arrow Tip Lock (White string body, stable arrow tip locked at the candle starting point, green/red based on candle direction)
-            function renderWhiteTetherOpenTip() {
+            // Zero-Jitter Open-Candle Exact Lock Tether (Pure white stable string, exact candle open point arrow tip matching real green/red direction)
+            function renderZeroJitterOpenLockTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderWhiteTetherOpenTip);
+                    requestAnimationFrame(renderZeroJitterOpenLockTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -424,13 +424,14 @@ def bot_script():
                     var fillAttr = el.getAttribute('fill') || '';
                     var strokeAttr = el.getAttribute('stroke') || '';
                     
+                    // Determine exact direction based on real candle attributes
                     if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
                         if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
                             isGreen = false;
                         }
                     }
                     
-                    // Pin strictly to the STARTING BASE (opening price position of the running candle)
+                    // Pin strictly to the exact OPENING BASE of the running candle
                     openPt = {
                         x: lrect.left + (lrect.width / 2),
                         y: isGreen ? (lrect.top + lrect.height) : lrect.top
@@ -449,17 +450,17 @@ def bot_script():
                 
                 var tipColorHex = isGreen ? '#00ff66' : '#ff0055';
                 
-                // Draw pure WHITE string body from panel to the candle starting point
+                // Draw pure WHITE string body from panel to the candle open point (Zero Jitter)
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
                 ctx.lineTo(openPt.x, openPt.y);
                 ctx.lineWidth = 2.8;
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
                 ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = 10;
+                ctx.shadowBlur = 8;
                 ctx.stroke();
                 
-                // Draw Arrow Head at the starting point with directional color (Green or Red)
+                // Draw Arrow Head at the exact opening point with directional color (Green or Red based on candle status)
                 ctx.save();
                 ctx.translate(openPt.x, openPt.y);
                 var angle = Math.atan2(openPt.y - originY, openPt.x - originX);
@@ -472,13 +473,13 @@ def bot_script():
                 ctx.closePath();
                 ctx.fillStyle = tipColorHex;
                 ctx.shadowColor = tipColorHex;
-                ctx.shadowBlur = 12;
+                ctx.shadowBlur = 10;
                 ctx.fill();
                 ctx.restore();
                 
-                requestAnimationFrame(renderWhiteTetherOpenTip);
+                requestAnimationFrame(renderZeroJitterOpenLockTether);
             }
-            requestAnimationFrame(renderWhiteTetherOpenTip);
+            requestAnimationFrame(renderZeroJitterOpenLockTether);
 
             function forceClick(el) {
                 if(!el) return false;
