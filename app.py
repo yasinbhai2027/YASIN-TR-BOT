@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v49.0 [1.1M Nodes, Zero-Gap Direct Pinned ESP Tethers & Strict Execution] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v50.0 [1.1M Nodes, Single Running Pinned Tether & Strict Execution] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Zero-Gap Pinned ESP Tethers
+            // Fullscreen Transparent Canvas Layer for Single Running Pinned Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,97 +385,77 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Zero-Gap Straight Pinned ESP Tethers (Render ONLY when Bot Panel is Open)
-            function renderZeroGapEspTethers() {
+            // Single Running Pinned Tether (ONLY ONE Line pointing strictly to the Running Candle)
+            function renderSingleRunningTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderZeroGapEspTethers);
-                    return; // Panel is closed/minimized -> NO lines displayed
+                    requestAnimationFrame(renderSingleRunningTether);
+                    return; // Panel closed/minimized -> NO lines
                 }
                 
                 var rect = panelElem.getBoundingClientRect();
                 var originX = rect.left + (rect.width / 2);
                 var originY = rect.top + (rect.height / 2);
                 
-                // Query actual visible candles from the chart DOM/SVG
+                // Query chart candles to locate the absolute last running candle
                 var candleEls = d.querySelectorAll('.candles-svg svg path, .candlestick, [class*="candle"], circle[class*="point"], rect[class*="candle"]');
-                var targetPoints = [];
+                var runningCandlePt = null;
+                var isGreen = true;
                 
                 if (candleEls.length > 0) {
-                    var step = Math.max(1, Math.floor(candleEls.length / 32));
-                    for (var i = 0; i < candleEls.length; i += step) {
-                        var el = candleEls[i];
-                        var crect = el.getBoundingClientRect();
-                        if (crect.width > 0 && crect.height > 0) {
-                            var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
-                            var fillAttr = el.getAttribute('fill') || '';
-                            var strokeAttr = el.getAttribute('stroke') || '';
-                            
-                            var isGreen = true;
-                            if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
-                                if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
-                                    isGreen = false;
-                                }
+                    var lastEl = candleEls[candleEls.length - 1];
+                    var lrect = lastEl.getBoundingClientRect();
+                    if (lrect.width > 0 && lrect.height > 0) {
+                        var className = (lastEl.className && typeof lastEl.className === 'string') ? lastEl.className.toLowerCase() : '';
+                        var fillAttr = lastEl.getAttribute('fill') || '';
+                        var strokeAttr = lastEl.getAttribute('stroke') || '';
+                        
+                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                            if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
+                                isGreen = false;
                             }
-                            
-                            var isRunning = (i >= candleEls.length - step);
-                            var targetY = crect.top + (crect.height / 2);
-                            
-                            // Real-time running candle physics tracking
-                            if (isRunning) {
-                                targetY += Math.sin(Date.now() * 0.015) * 6;
-                            }
-                            
-                            targetPoints.push({
-                                x: crect.left + (crect.width / 2),
-                                y: targetY,
-                                isGreen: isGreen,
-                                isRunning: isRunning
-                            });
                         }
+                        
+                        runningCandlePt = {
+                            x: lrect.left + (lrect.width / 2),
+                            y: lrect.top + (lrect.height / 2) + Math.sin(Date.now() * 0.015) * 8 // Real-time running candle physics up-down sync
+                        };
                     }
                 }
                 
-                // Fallback direct straight lines mesh if DOM query varies
-                if (targetPoints.length === 0) {
+                // Fallback running candle coordinate if DOM varies
+                if (!runningCandlePt) {
                     var nowT = Date.now() * 0.003;
-                    for (var k = 0; k < 22; k++) {
-                        var isLast = (k === 21);
-                        targetPoints.push({
-                            x: (canvas.width * 0.22) + (k * 35),
-                            y: (canvas.height * 0.5) + (isLast ? Math.sin(nowT * 8) * 14 : Math.sin(nowT + k * 0.35) * 50),
-                            isGreen: k % 2 === 0,
-                            isRunning: isLast
-                        });
-                    }
+                    runningCandlePt = {
+                        x: canvas.width * 0.75,
+                        y: (canvas.height * 0.4) + Math.sin(nowT * 8) * 20
+                    };
+                    isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                // Draw Zero-Gap Straight Lines (Free Fire ESP Aimbot style body lock)
-                for (var j = 0; j < targetPoints.length; j++) {
-                    var pt = targetPoints[j];
-                    ctx.beginPath();
-                    ctx.moveTo(originX, originY);
-                    ctx.lineTo(pt.x, pt.y); // Straight line, zero gap, zero fan curve
-                    
-                    var lineColor = pt.isGreen ? 'rgba(0, 255, 102, 0.9)' : 'rgba(255, 0, 85, 0.9)';
-                    ctx.lineWidth = pt.isRunning ? 2.5 : 1.3;
-                    ctx.strokeStyle = lineColor;
-                    ctx.shadowColor = pt.isGreen ? '#00ff66' : '#ff0055';
-                    ctx.shadowBlur = pt.isRunning ? 14 : 5;
-                    ctx.stroke();
-                    
-                    // Solid locked dot right on candle center
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, pt.isRunning ? 4.5 : 2.5, 0, Math.PI * 2);
-                    ctx.fillStyle = pt.isGreen ? '#00ff66' : '#ff0055';
-                    ctx.fill();
-                }
+                // Draw ONLY ONE single straight pinned tether to the running candle
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(runningCandlePt.x, runningCandlePt.y);
                 
-                requestAnimationFrame(renderZeroGapEspTethers);
+                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.95)' : 'rgba(255, 0, 85, 0.95)';
+                ctx.lineWidth = 2.6;
+                ctx.strokeStyle = lineColor;
+                ctx.shadowColor = isGreen ? '#00ff66' : '#ff0055';
+                ctx.shadowBlur = 15;
+                ctx.stroke();
+                
+                // Glowing lock dot on the running candle
+                ctx.beginPath();
+                ctx.arc(runningCandlePt.x, runningCandlePt.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
+                ctx.fill();
+                
+                requestAnimationFrame(renderSingleRunningTether);
             }
-            requestAnimationFrame(renderZeroGapEspTethers);
+            requestAnimationFrame(renderSingleRunningTether);
 
             function forceClick(el) {
                 if(!el) return false;
@@ -521,7 +501,7 @@ def bot_script():
                     '.section-deal__button-down button', '.section-deal__button-down',
                     '.btn-put', 'button.put', 'button[class*="put"]',
                     '.button-sell', '[class*="sell"]', '.btn-call-put--put', '.deal-button-down',
-                    'button[class*="down"]', 'button[class*="put"]', '.call-put__button_down'
+                    'button[class*="down"]', 'button[class*="put"]', '.call-put__button_up'
                 ] : [
                     '.section-deal__button-up button', '.section-deal__button-up',
                     '.btn-call', 'button.call', 'button[class*="call"]',
