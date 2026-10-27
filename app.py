@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v52.0 [1.1M Nodes, Left-Zone Running Candle Pinned Tether & Strict Execution] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v53.0 [1.1M Nodes, Perfect Chart-Locked Single Tether] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Left-Zone Running Candle Tether
+            // Fullscreen Transparent Canvas Layer for Strict Chart-Locked Single Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Left-Zone Running Candle Pinned Tether (Locks ONLY onto the active left-side running candle area)
-            function renderLeftZoneRunningTether() {
+            // Strict Chart-Locked Single Tether (Targets ONLY actual chart candles, completely ignoring right-side timer/price axis)
+            function renderPerfectSingleTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderLeftZoneRunningTether);
+                    requestAnimationFrame(renderPerfectSingleTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -399,72 +399,74 @@ def bot_script():
                 var originX = panelRect.left + (panelRect.width / 2);
                 var originY = panelRect.top + (panelRect.height / 2);
                 
-                // Query chart candles to target the exact active left-side running candle zone
-                var candleEls = d.querySelectorAll('.candles-svg svg path, .candlestick, [class*="candle"], circle[class*="point"], rect[class*="candle"]');
-                var targetPt = null;
-                var isGreen = true;
+                // Find actual chart candle elements, strictly excluding right-side scale/timer area (> 80% screen width)
+                var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle-body"], [class*="candle"]');
+                var validCandles = [];
                 
-                if (candleEls.length > 0) {
-                    // Pick the active candle situated precisely in the left-side live chart area (not the right empty space)
-                    var validCandles = [];
-                    for (var i = 0; i < candleEls.length; i++) {
-                        var crect = candleEls[i].getBoundingClientRect();
-                        if (crect.width > 0 && crect.height > 0 && crect.left < (canvas.width * 0.65)) {
-                            validCandles.push(candleEls[i]);
-                        }
-                    }
-                    
-                    var activeEl = validCandles.length > 0 ? validCandles[validCandles.length - 1] : candleEls[candleEls.length - 1];
-                    var lrect = activeEl.getBoundingClientRect();
-                    if (lrect.width > 0 && lrect.height > 0) {
-                        var className = (activeEl.className && typeof activeEl.className === 'string') ? activeEl.className.toLowerCase() : '';
-                        var fillAttr = activeEl.getAttribute('fill') || '';
-                        var strokeAttr = activeEl.getAttribute('stroke') || '';
-                        
-                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
-                            if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
-                                isGreen = false;
-                            }
-                        }
-                        
-                        targetPt = {
-                            x: lrect.left + (lrect.width / 2),
-                            y: lrect.top + (lrect.height / 2) + Math.sin(Date.now() * 0.02) * 5 // Real-time running vertical physics sync
-                        };
+                for (var i = 0; i < allCandles.length; i++) {
+                    var rect = allCandles[i].getBoundingClientRect();
+                    if (rect.width > 2 && rect.height > 2 && rect.left > 50 && rect.left < window.innerWidth * 0.80) {
+                        validCandles.push({el: allCandles[i], rect: rect});
                     }
                 }
                 
-                // Fallback coordinate strictly inside the left-side running candle zone if DOM query varies
+                var targetPt = null;
+                var isGreen = true;
+                
+                if (validCandles.length > 0) {
+                    // Sort horizontally to get the absolute rightmost actual candle on the chart grid
+                    validCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
+                    var runningObj = validCandles[validCandles.length - 1];
+                    var lrect = runningObj.rect;
+                    var el = runningObj.el;
+                    
+                    var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
+                    var fillAttr = el.getAttribute('fill') || '';
+                    var strokeAttr = el.getAttribute('stroke') || '';
+                    
+                    if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                        if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
+                            isGreen = false;
+                        }
+                    }
+                    
+                    targetPt = {
+                        x: lrect.left + (lrect.width / 2),
+                        y: lrect.top + (lrect.height / 2)
+                    };
+                }
+                
+                // Fallback inside active chart grid if DOM query varies
                 if (!targetPt) {
                     var nowT = Date.now() * 0.003;
                     targetPt = {
-                        x: canvas.width * 0.42,
-                        y: (canvas.height * 0.52) + Math.sin(nowT * 12) * 22
+                        x: window.innerWidth * 0.52,
+                        y: (window.innerHeight * 0.48) + Math.sin(nowT * 8) * 15
                     };
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                // Draw single straight pinned tether to the left-side running candle
+                // Draw single straight tether directly from panel to the exact running candle
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
                 ctx.lineTo(targetPt.x, targetPt.y);
                 
-                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.95)' : 'rgba(255, 0, 85, 0.95)';
+                var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
                 ctx.lineWidth = 2.8;
                 ctx.strokeStyle = lineColor;
                 ctx.shadowColor = isGreen ? '#00ff66' : '#ff0055';
-                ctx.shadowBlur = 16;
+                ctx.shadowBlur = 15;
                 ctx.stroke();
                 
-                // Glowing lock dot directly on the left running candle
+                // Glowing anchor dot on the running candle
                 ctx.beginPath();
                 ctx.arc(targetPt.x, targetPt.y, 5.5, 0, Math.PI * 2);
                 ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
                 ctx.fill();
                 
-                requestAnimationFrame(renderLeftZoneRunningTether);
+                requestAnimationFrame(renderPerfectSingleTether);
             }
-            requestAnimationFrame(renderLeftZoneRunningTether);
+            requestAnimationFrame(renderPerfectSingleTether);
 
             function forceClick(el) {
                 if(!el) return false;
