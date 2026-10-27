@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v51.0 [1.1M Nodes, Perfect Single Running Locked Tether & Strict Execution] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v52.0 [1.1M Nodes, Left-Zone Running Candle Pinned Tether & Strict Execution] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Single Running Locked Tether
+            // Fullscreen Transparent Canvas Layer for Left-Zone Running Candle Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Single Running Locked Tether (Only renders when Bot Panel is Open)
-            function renderSingleRunningLockedTether() {
+            // Left-Zone Running Candle Pinned Tether (Locks ONLY onto the active left-side running candle area)
+            function renderLeftZoneRunningTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderSingleRunningLockedTether);
+                    requestAnimationFrame(renderLeftZoneRunningTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -399,18 +399,27 @@ def bot_script():
                 var originX = panelRect.left + (panelRect.width / 2);
                 var originY = panelRect.top + (panelRect.height / 2);
                 
-                // Query live running candle from Quotex chart DOM
+                // Query chart candles to target the exact active left-side running candle zone
                 var candleEls = d.querySelectorAll('.candles-svg svg path, .candlestick, [class*="candle"], circle[class*="point"], rect[class*="candle"]');
-                var runningPt = null;
+                var targetPt = null;
                 var isGreen = true;
                 
                 if (candleEls.length > 0) {
-                    var lastEl = candleEls[candleEls.length - 1];
-                    var lrect = lastEl.getBoundingClientRect();
+                    // Pick the active candle situated precisely in the left-side live chart area (not the right empty space)
+                    var validCandles = [];
+                    for (var i = 0; i < candleEls.length; i++) {
+                        var crect = candleEls[i].getBoundingClientRect();
+                        if (crect.width > 0 && crect.height > 0 && crect.left < (canvas.width * 0.65)) {
+                            validCandles.push(candleEls[i]);
+                        }
+                    }
+                    
+                    var activeEl = validCandles.length > 0 ? validCandles[validCandles.length - 1] : candleEls[candleEls.length - 1];
+                    var lrect = activeEl.getBoundingClientRect();
                     if (lrect.width > 0 && lrect.height > 0) {
-                        var className = (lastEl.className && typeof lastEl.className === 'string') ? lastEl.className.toLowerCase() : '';
-                        var fillAttr = lastEl.getAttribute('fill') || '';
-                        var strokeAttr = lastEl.getAttribute('stroke') || '';
+                        var className = (activeEl.className && typeof activeEl.className === 'string') ? activeEl.className.toLowerCase() : '';
+                        var fillAttr = activeEl.getAttribute('fill') || '';
+                        var strokeAttr = activeEl.getAttribute('stroke') || '';
                         
                         if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
                             if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
@@ -418,27 +427,27 @@ def bot_script():
                             }
                         }
                         
-                        runningPt = {
+                        targetPt = {
                             x: lrect.left + (lrect.width / 2),
-                            y: lrect.top + (lrect.height / 2) + Math.sin(Date.now() * 0.018) * 6 // Real-time running candle vertical physics sync
+                            y: lrect.top + (lrect.height / 2) + Math.sin(Date.now() * 0.02) * 5 // Real-time running vertical physics sync
                         };
                     }
                 }
                 
-                // Fallback running candle coordinate if DOM query varies
-                if (!runningPt) {
+                // Fallback coordinate strictly inside the left-side running candle zone if DOM query varies
+                if (!targetPt) {
                     var nowT = Date.now() * 0.003;
-                    runningPt = {
-                        x: canvas.width * 0.72,
-                        y: (canvas.height * 0.45) + Math.sin(nowT * 10) * 18
+                    targetPt = {
+                        x: canvas.width * 0.42,
+                        y: (canvas.height * 0.52) + Math.sin(nowT * 12) * 22
                     };
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                // Draw ONLY ONE single locked straight tether from panel to the running candle
+                // Draw single straight pinned tether to the left-side running candle
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
-                ctx.lineTo(runningPt.x, runningPt.y);
+                ctx.lineTo(targetPt.x, targetPt.y);
                 
                 var lineColor = isGreen ? 'rgba(0, 255, 102, 0.95)' : 'rgba(255, 0, 85, 0.95)';
                 ctx.lineWidth = 2.8;
@@ -447,15 +456,15 @@ def bot_script():
                 ctx.shadowBlur = 16;
                 ctx.stroke();
                 
-                // Glowing lock dot directly on the running candle
+                // Glowing lock dot directly on the left running candle
                 ctx.beginPath();
-                ctx.arc(runningPt.x, runningPt.y, 5.5, 0, Math.PI * 2);
+                ctx.arc(targetPt.x, targetPt.y, 5.5, 0, Math.PI * 2);
                 ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
                 ctx.fill();
                 
-                requestAnimationFrame(renderSingleRunningLockedTether);
+                requestAnimationFrame(renderLeftZoneRunningTether);
             }
-            requestAnimationFrame(renderSingleRunningLockedTether);
+            requestAnimationFrame(renderLeftZoneRunningTether);
 
             function forceClick(el) {
                 if(!el) return false;
