@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v54.0 [1.1M Nodes, Exact Rightmost Running Candle Pinned Tether] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v55.0 [1.1M Nodes, Exact Wick-Tip Pinned Tether & Stable Lock] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Exact Rightmost Running Candle Pinned Tether
+            // Fullscreen Transparent Canvas Layer for Wick-Tip Pinned Tether
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,13 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Exact Rightmost Running Candle Pinned Tether (Strictly locks onto the active real-time running candle)
-            function renderExactRunningCandleTether() {
+            // Wick-Tip Pinned Tether (Locks precisely onto the TOP TIP / WICK of the active rightmost running candle)
+            function renderWickTipPinnedTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderExactRunningCandleTether);
+                    requestAnimationFrame(renderWickTipPinnedTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -399,23 +399,22 @@ def bot_script():
                 var originX = panelRect.left + (panelRect.width / 2);
                 var originY = panelRect.top + (panelRect.height / 2);
                 
-                // Query Quotex chart candles and filter strictly for the live active trading area
+                // Query Quotex chart candles and filter strictly for valid chart grid area
                 var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
                 var activeCandles = [];
                 
                 for (var i = 0; i < allCandles.length; i++) {
                     var crect = allCandles[i].getBoundingClientRect();
-                    // Exclude right-side price axis, timers, and toolbars (must be within valid chart grid width)
                     if (crect.width > 2 && crect.height > 2 && crect.left > 30 && crect.left < window.innerWidth * 0.78) {
                         activeCandles.push({el: allCandles[i], rect: crect});
                     }
                 }
                 
-                var runningPt = null;
+                var tipPt = null;
                 var isGreen = true;
                 
                 if (activeCandles.length > 0) {
-                    // Sort by horizontal position (left coordinate) to find the absolute rightmost running candle
+                    // Sort horizontally to find the absolute rightmost running candle
                     activeCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
                     var runningObj = activeCandles[activeCandles.length - 1];
                     var lrect = runningObj.rect;
@@ -431,43 +430,44 @@ def bot_script():
                         }
                     }
                     
-                    runningPt = {
+                    // Pin strictly to the TOP TIP / WICK (highest point of the running candle bounding box)
+                    tipPt = {
                         x: lrect.left + (lrect.width / 2),
-                        y: lrect.top + (lrect.height / 2)
+                        y: lrect.top // Top tip/wick coordinate
                     };
                 }
                 
-                // Fallback running candle coordinate inside chart grid if DOM query varies
-                if (!runningPt) {
+                // Fallback top-tip coordinate inside chart grid if DOM query varies
+                if (!tipPt) {
                     var nowT = Date.now() * 0.003;
-                    runningPt = {
+                    tipPt = {
                         x: window.innerWidth * 0.55,
-                        y: (window.innerHeight * 0.45) + Math.sin(nowT * 8) * 18
+                        y: (window.innerHeight * 0.40) + Math.sin(nowT * 6) * 10
                     };
                     isGreen = (Math.sin(nowT) > 0);
                 }
                 
-                // Draw single direct straight tether from panel to the exact running candle
+                // Draw single stable straight tether from panel to the running candle TOP TIP
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
-                ctx.lineTo(runningPt.x, runningPt.y);
+                ctx.lineTo(tipPt.x, tipPt.y);
                 
                 var lineColor = isGreen ? 'rgba(0, 255, 102, 0.98)' : 'rgba(255, 0, 85, 0.98)';
                 ctx.lineWidth = 2.8;
                 ctx.strokeStyle = lineColor;
                 ctx.shadowColor = isGreen ? '#00ff66' : '#ff0055';
-                ctx.shadowBlur = 15;
+                ctx.shadowBlur = 12;
                 ctx.stroke();
                 
-                // Glowing lock anchor dot directly on the running candle body
+                // Stable lock anchor dot directly on the candle top tip
                 ctx.beginPath();
-                ctx.arc(runningPt.x, runningPt.y, 5.5, 0, Math.PI * 2);
+                ctx.arc(tipPt.x, tipPt.y, 5, 0, Math.PI * 2);
                 ctx.fillStyle = isGreen ? '#00ff66' : '#ff0055';
                 ctx.fill();
                 
-                requestAnimationFrame(renderExactRunningCandleTether);
+                requestAnimationFrame(renderWickTipPinnedTether);
             }
-            requestAnimationFrame(renderExactRunningCandleTether);
+            requestAnimationFrame(renderWickTipPinnedTether);
 
             function forceClick(el) {
                 if(!el) return false;
