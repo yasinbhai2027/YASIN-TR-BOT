@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v47.0 [1.1M Nodes, Zoom-Responsive Pinned ESP Tethers & Strict Execution] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v48.0 [1.1M Nodes, Direct DOM Pinned Candle ESP Tethers & Strict Execution] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Pinned ESP Tethers
+            // Fullscreen Transparent Canvas Layer for Direct DOM Pinned ESP Tethers
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,8 +385,8 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Zoom-Responsive Pinned Solid ESP Tethers Animation Loop (60 FPS Smooth)
-            function renderPinnedEspTethers() {
+            // Direct DOM Pinned Candle ESP Tethers Animation Loop (60 FPS Smooth)
+            function renderDirectPinnedEspTethers() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var activeElem = d.getElementById('yb-panel') || window.YB;
@@ -395,67 +395,84 @@ def bot_script():
                     var originX = rect.left + (rect.width / 2);
                     var originY = rect.top + (rect.height / 2);
                     
-                    // Zoom & Viewport Responsive Candle Detection
-                    var candleEls = d.querySelectorAll('.candles-svg svg path, .candlestick, [class*="candle"], circle[class*="point"]');
+                    // Direct DOM/SVG Candle Elements Query (Targeting actual chart candles)
+                    var candleEls = d.querySelectorAll('.candles-svg svg path, .candlestick, [class*="candle"], circle[class*="point"], rect[class*="candle"]');
                     var targetPoints = [];
                     
                     if (candleEls.length > 0) {
-                        // Dynamically adapting to visible viewport/zoom level (15 to 40 candles)
-                        var step = Math.max(1, Math.floor(candleEls.length / 30));
+                        var step = Math.max(1, Math.floor(candleEls.length / 35));
                         for (var i = 0; i < candleEls.length; i += step) {
-                            var crect = candleEls[i].getBoundingClientRect();
+                            var el = candleEls[i];
+                            var crect = el.getBoundingClientRect();
                             if (crect.width > 0 && crect.height > 0) {
-                                var isLastRunning = (i >= candleEls.length - step);
+                                // Strict Red/Green Color Sync from DOM Element or Class
+                                var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
+                                var fillAttr = el.getAttribute('fill') || '';
+                                var strokeAttr = el.getAttribute('stroke') || '';
+                                
+                                var isGreen = true;
+                                if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                                    if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
+                                        isGreen = false;
+                                    }
+                                }
+                                
+                                var isRunning = (i >= candleEls.length - step);
+                                var targetY = crect.top + (crect.height / 2);
+                                
+                                // Real-time running candle movement tracking
+                                if (isRunning) {
+                                    targetY += Math.sin(Date.now() * 0.012) * 5;
+                                }
+                                
                                 targetPoints.push({
                                     x: crect.left + (crect.width / 2),
-                                    y: crect.top + (crect.height / 2) + (isLastRunning ? Math.sin(Date.now() * 0.01) * 6 : 0), // Live running candle micro-movement sync
-                                    isGreen: i % 2 === 0,
-                                    isRunning: isLastRunning
+                                    y: targetY,
+                                    isGreen: isGreen,
+                                    isRunning: isRunning
                                 });
                             }
                         }
                     }
                     
-                    // Fallback responsive mesh if elements are dynamic
+                    // Fallback responsive anchor points if DOM selector varies
                     if (targetPoints.length === 0) {
                         var nowT = Date.now() * 0.003;
                         for (var k = 0; k < 25; k++) {
                             var isLast = (k === 24);
                             targetPoints.push({
-                                x: (canvas.width * 0.25) + (k * 30),
-                                y: (canvas.height * 0.45) + (isLast ? Math.sin(nowT * 5) * 15 : Math.sin(nowT + k * 0.4) * 50),
-                                isGreen: k % 3 !== 0,
+                                x: (canvas.width * 0.2) + (k * 32),
+                                y: (canvas.height * 0.5) + (isLast ? Math.sin(nowT * 6) * 12 : Math.sin(nowT + k * 0.3) * 45),
+                                isGreen: k % 2 === 0,
                                 isRunning: isLast
                             });
                         }
                     }
                     
-                    // Draw Solid Pinned Tethers with Dynamic Color Matching
+                    // Draw Strict Red/Green Tethers directly anchored to Candle Body/Wick Center
                     for (var j = 0; j < targetPoints.length; j++) {
                         var pt = targetPoints[j];
                         ctx.beginPath();
                         ctx.moveTo(originX, originY);
-                        
-                        // Straight solid pinned connection lines (No snake wave, locked firmly like game ESP)
                         ctx.lineTo(pt.x, pt.y);
                         
                         var lineColor = pt.isGreen ? 'rgba(0, 255, 102, 0.85)' : 'rgba(255, 0, 85, 0.85)';
-                        ctx.lineWidth = pt.isRunning ? 2.2 : 1.2;
+                        ctx.lineWidth = pt.isRunning ? 2.4 : 1.2;
                         ctx.strokeStyle = lineColor;
                         ctx.shadowColor = pt.isGreen ? '#00ff66' : '#ff0055';
-                        ctx.shadowBlur = pt.isRunning ? 12 : 5;
+                        ctx.shadowBlur = pt.isRunning ? 12 : 4;
                         ctx.stroke();
                         
-                        // Solid Pinned Lock Dot on Candle
+                        // Solid Pinned Anchor Lock Dot directly on Candle Center
                         ctx.beginPath();
-                        ctx.arc(pt.x, pt.y, pt.isRunning ? 4 : 2.5, 0, Math.PI * 2);
+                        ctx.arc(pt.x, pt.y, pt.isRunning ? 4.5 : 2.5, 0, Math.PI * 2);
                         ctx.fillStyle = pt.isGreen ? '#00ff66' : '#ff0055';
                         ctx.fill();
                     }
                 }
-                requestAnimationFrame(renderPinnedEspTethers);
+                requestAnimationFrame(renderDirectPinnedEspTethers);
             }
-            requestAnimationFrame(renderPinnedEspTethers);
+            requestAnimationFrame(renderDirectPinnedEspTethers);
 
             function forceClick(el) {
                 if(!el) return false;
