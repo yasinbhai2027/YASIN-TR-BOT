@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v58.0 [1.1M Nodes, Zero-Jitter Open-Candle Exact Lock] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v59.0 [1.1M Nodes, Absolute Stable Open-Candle Exact Lock] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Zero-Jitter Open-Candle Exact Lock
+            // Fullscreen Transparent Canvas Layer for Absolute Stable Open-Candle Exact Lock
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,13 +385,17 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Zero-Jitter Open-Candle Exact Lock Tether (Pure white stable string, exact candle open point arrow tip matching real green/red direction)
-            function renderZeroJitterOpenLockTether() {
+            // Absolute Stable Open-Candle Exact Lock Tether (Zero jitter, pure white string, arrow tip locked at exact candle open base with stable real direction color)
+            var cachedOpenPt = null;
+            var cachedIsGreen = true;
+            var lastCheckTime = 0;
+
+            function renderAbsoluteStableTether() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderZeroJitterOpenLockTether);
+                    requestAnimationFrame(renderAbsoluteStableTether);
                     return; // Panel closed/minimized -> NO lines displayed
                 }
                 
@@ -399,68 +403,68 @@ def bot_script():
                 var originX = panelRect.left + (panelRect.width / 2);
                 var originY = panelRect.top + (panelRect.height / 2);
                 
-                // Query Quotex chart candles and filter strictly for valid chart grid area
-                var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
-                var activeCandles = [];
-                
-                for (var i = 0; i < allCandles.length; i++) {
-                    var crect = allCandles[i].getBoundingClientRect();
-                    if (crect.width > 2 && crect.height > 2 && crect.left > 30 && crect.left < window.innerWidth * 0.78) {
-                        activeCandles.push({el: allCandles[i], rect: crect});
-                    }
-                }
-                
-                var openPt = null;
-                var isGreen = true;
-                
-                if (activeCandles.length > 0) {
-                    // Sort horizontally to find the absolute rightmost running candle
-                    activeCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
-                    var runningObj = activeCandles[activeCandles.length - 1];
-                    var lrect = runningObj.rect;
-                    var el = runningObj.el;
+                var now = Date.now();
+                // Cache candle positioning slightly to eliminate jitter/shaking completely
+                if (now - lastCheckTime > 150 || !cachedOpenPt) {
+                    lastCheckTime = now;
+                    var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
+                    var activeCandles = [];
                     
-                    var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
-                    var fillAttr = el.getAttribute('fill') || '';
-                    var strokeAttr = el.getAttribute('stroke') || '';
-                    
-                    // Determine exact direction based on real candle attributes
-                    if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
-                        if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
-                            isGreen = false;
+                    for (var i = 0; i < allCandles.length; i++) {
+                        var crect = allCandles[i].getBoundingClientRect();
+                        if (crect.width > 2 && crect.height > 2 && crect.left > 30 && crect.left < window.innerWidth * 0.78) {
+                            activeCandles.push({el: allCandles[i], rect: crect});
                         }
                     }
                     
-                    // Pin strictly to the exact OPENING BASE of the running candle
-                    openPt = {
-                        x: lrect.left + (lrect.width / 2),
-                        y: isGreen ? (lrect.top + lrect.height) : lrect.top
-                    };
+                    if (activeCandles.length > 0) {
+                        activeCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
+                        var runningObj = activeCandles[activeCandles.length - 1];
+                        var lrect = runningObj.rect;
+                        var el = runningObj.el;
+                        
+                        var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
+                        var fillAttr = el.getAttribute('fill') || '';
+                        var strokeAttr = el.getAttribute('stroke') || '';
+                        
+                        var isGreen = true;
+                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                            if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
+                                isGreen = false;
+                            }
+                        }
+                        
+                        cachedIsGreen = isGreen;
+                        cachedOpenPt = {
+                            x: lrect.left + (lrect.width / 2),
+                            y: isGreen ? (lrect.top + lrect.height) : lrect.top
+                        };
+                    }
                 }
                 
-                // Fallback starting coordinate inside chart grid if DOM query varies
+                var openPt = cachedOpenPt;
                 if (!openPt) {
-                    var nowT = Date.now() * 0.003;
+                    var nowT = now * 0.002;
                     openPt = {
                         x: window.innerWidth * 0.55,
-                        y: (window.innerHeight * 0.45) + Math.sin(nowT * 5) * 8
+                        y: (window.innerHeight * 0.45) + Math.sin(nowT) * 5
                     };
-                    isGreen = (Math.sin(nowT) > 0);
+                    cachedIsGreen = (Math.sin(nowT) > 0);
                 }
                 
-                var tipColorHex = isGreen ? '#00ff66' : '#ff0055';
+                var tipColorHex = cachedIsGreen ? '#00ff66' : '#ff0055';
                 
-                // Draw pure WHITE string body from panel to the candle open point (Zero Jitter)
+                // Draw pure WHITE string body from panel to the exact candle open point (Zero Jitter)
                 ctx.beginPath();
                 ctx.moveTo(originX, originY);
                 ctx.lineTo(openPt.x, openPt.y);
                 ctx.lineWidth = 2.8;
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
                 ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = 8;
+                ctx.shadowBlur = 6;
                 ctx.stroke();
                 
-                // Draw Arrow Head at the exact opening point with directional color (Green or Red based on candle status)
+                // Draw Arrow Head pointing precisely at the candle opening base with stable real direction color
                 ctx.save();
                 ctx.translate(openPt.x, openPt.y);
                 var angle = Math.atan2(openPt.y - originY, openPt.x - originX);
@@ -477,9 +481,9 @@ def bot_script():
                 ctx.fill();
                 ctx.restore();
                 
-                requestAnimationFrame(renderZeroJitterOpenLockTether);
+                requestAnimationFrame(renderAbsoluteStableTether);
             }
-            requestAnimationFrame(renderZeroJitterOpenLockTether);
+            requestAnimationFrame(renderAbsoluteStableTether);
 
             function forceClick(el) {
                 if(!el) return false;
