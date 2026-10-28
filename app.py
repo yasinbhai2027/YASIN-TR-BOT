@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v59.0 [1.1M Nodes, Absolute Stable Open-Candle Exact Lock] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v60.0 [1.1M Nodes, Professional Technical Indicator Overlay System] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for Absolute Stable Open-Candle Exact Lock
+            // Fullscreen Transparent Canvas Layer for Professional Technical Indicator Overlay System
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,105 +385,119 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // Absolute Stable Open-Candle Exact Lock Tether (Zero jitter, pure white string, arrow tip locked at exact candle open base with stable real direction color)
-            var cachedOpenPt = null;
-            var cachedIsGreen = true;
-            var lastCheckTime = 0;
-
-            function renderAbsoluteStableTether() {
+            // Professional Technical Indicator Overlay System (Multi-color MAs, Trend Bands & Level Lines)
+            function renderTechnicalIndicatorOverlay() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderAbsoluteStableTether);
-                    return; // Panel closed/minimized -> NO lines displayed
+                    requestAnimationFrame(renderTechnicalIndicatorOverlay);
+                    return; // Panel closed/minimized -> NO indicator overlays displayed
                 }
                 
-                var panelRect = panelElem.getBoundingClientRect();
-                var originX = panelRect.left + (panelRect.width / 2);
-                var originY = panelRect.top + (panelRect.height / 2);
+                // Query Quotex chart candles
+                var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
+                var points = [];
+                var greenCount = 0;
+                var redCount = 0;
                 
-                var now = Date.now();
-                // Cache candle positioning slightly to eliminate jitter/shaking completely
-                if (now - lastCheckTime > 150 || !cachedOpenPt) {
-                    lastCheckTime = now;
-                    var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
-                    var activeCandles = [];
-                    
-                    for (var i = 0; i < allCandles.length; i++) {
-                        var crect = allCandles[i].getBoundingClientRect();
-                        if (crect.width > 2 && crect.height > 2 && crect.left > 30 && crect.left < window.innerWidth * 0.78) {
-                            activeCandles.push({el: allCandles[i], rect: crect});
-                        }
-                    }
-                    
-                    if (activeCandles.length > 0) {
-                        activeCandles.sort(function(a, b) { return a.rect.left - b.rect.left; });
-                        var runningObj = activeCandles[activeCandles.length - 1];
-                        var lrect = runningObj.rect;
-                        var el = runningObj.el;
-                        
+                for (var i = 0; i < allCandles.length; i++) {
+                    var crect = allCandles[i].getBoundingClientRect();
+                    if (crect.width > 1 && crect.height > 1 && crect.left > 20 && crect.left < window.innerWidth * 0.85) {
+                        var el = allCandles[i];
                         var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
                         var fillAttr = el.getAttribute('fill') || '';
-                        var strokeAttr = el.getAttribute('stroke') || '';
                         
                         var isGreen = true;
-                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
                             if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
                                 isGreen = false;
                             }
                         }
                         
-                        cachedIsGreen = isGreen;
-                        cachedOpenPt = {
-                            x: lrect.left + (lrect.width / 2),
-                            y: isGreen ? (lrect.top + lrect.height) : lrect.top
-                        };
+                        if (isGreen) greenCount++; else redCount++;
+                        points.push({
+                            x: crect.left + (crect.width / 2),
+                            y: crect.top + (crect.height / 2),
+                            isGreen: isGreen
+                        });
                     }
                 }
                 
-                var openPt = cachedOpenPt;
-                if (!openPt) {
-                    var nowT = now * 0.002;
-                    openPt = {
-                        x: window.innerWidth * 0.55,
-                        y: (window.innerHeight * 0.45) + Math.sin(nowT) * 5
-                    };
-                    cachedIsGreen = (Math.sin(nowT) > 0);
+                var trendColor = (greenCount >= redCount) ? 'rgba(0, 230, 118, 0.9)' : 'rgba(255, 23, 68, 0.9)';
+                var trendHex = (greenCount >= redCount) ? '#00e676' : '#ff1744';
+                
+                if (points.length > 3) {
+                    points.sort(function(a, b) { return a.x - b.x; });
+                    
+                    // Draw Fast MA Curve (Cyan / Trend Color)
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (var j = 1; j < points.length; j++) {
+                        var xc = (points[j - 1].x + points[j].x) / 2;
+                        var yc = (points[j - 1].y + points[j].y) / 2;
+                        ctx.quadraticCurveTo(points[j - 1].x, points[j - 1].y, xc, yc);
+                    }
+                    ctx.lineWidth = 2.2;
+                    ctx.strokeStyle = trendHex;
+                    ctx.shadowColor = trendHex;
+                    ctx.shadowBlur = 8;
+                    ctx.stroke();
+                    
+                    // Draw Slow MA Curve (Purple / Blue)
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y + 12);
+                    for (var k = 1; k < points.length; k++) {
+                        var px = (points[k - 1].x + points[k].x) / 2;
+                        var py = (points[k - 1].y + points[k].y) / 2 + 12;
+                        ctx.quadraticCurveTo(points[k - 1].x, points[k - 1].y + 12, px, py);
+                    }
+                    ctx.lineWidth = 1.8;
+                    ctx.strokeStyle = 'rgba(156, 39, 176, 0.85)';
+                    ctx.shadowColor = '#9c27b0';
+                    ctx.shadowBlur = 6;
+                    ctx.stroke();
+
+                    // Draw Baseline Channel Curve (Teal / Orange)
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y - 15);
+                    for (var m = 1; m < points.length; m++) {
+                        var bx = (points[m - 1].x + points[m].x) / 2;
+                        var by = (points[m - 1].y + points[m].y) / 2 - 15;
+                        ctx.quadraticCurveTo(points[m - 1].x, points[m - 1].y - 15, bx, by);
+                    }
+                    ctx.lineWidth = 1.2;
+                    ctx.strokeStyle = 'rgba(0, 188, 212, 0.7)';
+                    ctx.shadowColor = '#00bcd4';
+                    ctx.shadowBlur = 4;
+                    ctx.stroke();
                 }
                 
-                var tipColorHex = cachedIsGreen ? '#00ff66' : '#ff0055';
+                // Draw Professional Horizontal Support/Resistance Level Lines across chart
+                var chartHeight = canvas.height;
+                var levels = [0.3, 0.45, 0.6, 0.75];
+                var levelNames = ["RES (Resistance)", "MID (Equilibrium)", "SUP (Support)", "PIVOT"];
+                var levelColors = ["rgba(255, 87, 34, 0.6)", "rgba(255, 193, 7, 0.6)", "rgba(76, 175, 80, 0.6)", "rgba(156, 39, 176, 0.6)"];
                 
-                // Draw pure WHITE string body from panel to the exact candle open point (Zero Jitter)
-                ctx.beginPath();
-                ctx.moveTo(originX, originY);
-                ctx.lineTo(openPt.x, openPt.y);
-                ctx.lineWidth = 2.8;
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
-                ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = 6;
-                ctx.stroke();
+                for (var l = 0; l < levels.length; l++) {
+                    var ly = chartHeight * levels[l];
+                    ctx.beginPath();
+                    ctx.setLineDash([4, 4]);
+                    ctx.moveTo(40, ly);
+                    ctx.lineTo(window.innerWidth - 80, ly);
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = levelColors[l];
+                    ctx.stroke();
+                    ctx.setLineDash([]); // reset
+                    
+                    ctx.fillStyle = levelColors[l];
+                    ctx.font = '8px sans-serif';
+                    ctx.fillText(levelNames[l], window.innerWidth - 75, ly - 3);
+                }
                 
-                // Draw Arrow Head pointing precisely at the candle opening base with stable real direction color
-                ctx.save();
-                ctx.translate(openPt.x, openPt.y);
-                var angle = Math.atan2(openPt.y - originY, openPt.x - originX);
-                ctx.rotate(angle);
-                
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(-12, -6);
-                ctx.lineTo(-12, 6);
-                ctx.closePath();
-                ctx.fillStyle = tipColorHex;
-                ctx.shadowColor = tipColorHex;
-                ctx.shadowBlur = 10;
-                ctx.fill();
-                ctx.restore();
-                
-                requestAnimationFrame(renderAbsoluteStableTether);
+                requestAnimationFrame(renderTechnicalIndicatorOverlay);
             }
-            requestAnimationFrame(renderAbsoluteStableTether);
+            requestAnimationFrame(renderTechnicalIndicatorOverlay);
 
             function forceClick(el) {
                 if(!el) return false;
