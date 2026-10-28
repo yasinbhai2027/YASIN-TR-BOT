@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v62.0 [1.1M Nodes, CB Signals Pro Multi-Curve Technical Overlay] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v63.0 [1.1M Nodes, Pure Mobile CB-Signals Pro Threads Overlay] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -205,7 +205,7 @@ def bot_script():
                           '@keyframes panelPop{0%{opacity:0;transform:scale(0.85) translateY(15px);}100%{opacity:1;transform:scale(1) translateY(0);}}';
             d.head.appendChild(s);
             
-            // Fullscreen Transparent Canvas Layer for CB Signals Pro Style In-Chart Multi-Curve Technical Overlay
+            // Fullscreen Transparent Canvas Layer for Pure Mobile CB-Signals Pro Threads Overlay
             var canvas = d.createElement('canvas');
             window.YBCanvas = canvas;
             canvas.id = 'yb-esp-canvas';
@@ -385,17 +385,17 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
-            // CB Signals Pro Style In-Chart Multi-Curve Technical Overlay System (Mapped directly over live candles)
-            function renderCBSignalsProOverlay() {
+            // Pure Mobile CB-Signals Pro Threads Overlay (Only clean smooth green & red curved candle threads mapped directly over the mobile chart candles)
+            function renderPureMobileThreads() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var panelElem = d.getElementById('yb-panel');
                 if (!panelElem) {
-                    requestAnimationFrame(renderCBSignalsProOverlay);
-                    return; // Panel closed/minimized -> NO technical lines displayed
+                    requestAnimationFrame(renderPureMobileThreads);
+                    return; // Panel closed/minimized -> NO overlay displayed
                 }
                 
-                // Query Quotex live chart candles
+                // Query Quotex mobile chart candles directly
                 var allCandles = d.querySelectorAll('.candles-svg rect, .candles-svg path, .candlestick, [class*="candle"]');
                 var points = [];
                 var greenCount = 0;
@@ -403,13 +403,13 @@ def bot_script():
                 
                 for (var i = 0; i < allCandles.length; i++) {
                     var crect = allCandles[i].getBoundingClientRect();
-                    if (crect.width > 1 && crect.height > 1 && crect.left > 20 && crect.left < window.innerWidth * 0.85) {
+                    if (crect.width > 1 && crect.height > 1 && crect.left > 15 && crect.left < window.innerWidth * 0.9) {
                         var el = allCandles[i];
                         var className = (el.className && typeof el.className === 'string') ? el.className.toLowerCase() : '';
                         var fillAttr = el.getAttribute('fill') || '';
                         
                         var isGreen = true;
-                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || strokeAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
+                        if (className.includes('down') || className.includes('red') || fillAttr.includes('red') || fillAttr.includes('#ff') || fillAttr.includes('rgb(255')) {
                             if (!className.includes('up') && !className.includes('green') && !fillAttr.includes('green') && !fillAttr.includes('#00') && !fillAttr.includes('rgb(0')) {
                                 isGreen = false;
                             }
@@ -424,12 +424,11 @@ def bot_script():
                     }
                 }
                 
-                var dominantHex = (greenCount >= redCount) ? '#00e676' : '#ff1744';
-                
                 if (points.length > 3) {
                     points.sort(function(a, b) { return a.x - b.x; });
                     
-                    // 1. Fast Trend Line (CB Signals Pro Main Green/Red Dynamic Wire)
+                    // 1. Primary Green/Red Smooth Thread (Following exact candle waves)
+                    var primaryColor = (greenCount >= redCount) ? 'rgba(0, 230, 118, 0.95)' : 'rgba(255, 23, 68, 0.95)';
                     ctx.beginPath();
                     ctx.moveTo(points[0].x, points[0].y);
                     for (var j = 1; j < points.length; j++) {
@@ -437,80 +436,44 @@ def bot_script():
                         var yc = (points[j - 1].y + points[j].y) / 2;
                         ctx.quadraticCurveTo(points[j - 1].x, points[j - 1].y, xc, yc);
                     }
-                    ctx.lineWidth = 2.5;
-                    ctx.strokeStyle = dominantHex;
-                    ctx.shadowColor = dominantHex;
-                    ctx.shadowBlur = 10;
+                    ctx.lineWidth = 2.2;
+                    ctx.strokeStyle = primaryColor;
+                    ctx.shadowColor = primaryColor;
+                    ctx.shadowBlur = 8;
                     ctx.stroke();
                     
-                    // 2. Secondary Institutional MA Wire (Smooth Blue/Cyan Wire)
+                    // 2. Secondary Clean Sub-Thread (Smooth Cyan Wire across candles)
                     ctx.beginPath();
-                    ctx.moveTo(points[0].x, points[0].y + 12);
+                    ctx.moveTo(points[0].x, points[0].y + 10);
                     for (var k = 1; k < points.length; k++) {
                         var px = (points[k - 1].x + points[k].x) / 2;
-                        var py = (points[k - 1].y + points[k].y) / 2 + 12;
-                        ctx.quadraticCurveTo(points[k - 1].x, points[k - 1].y + 12, px, py);
-                    }
-                    ctx.lineWidth = 1.8;
-                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.85)';
-                    ctx.shadowColor = '#00e5ff';
-                    ctx.shadowBlur = 6;
-                    ctx.stroke();
-
-                    // 3. Third Institutional Trend Wire (Purple Curve)
-                    ctx.beginPath();
-                    ctx.moveTo(points[0].x, points[0].y - 14);
-                    for (var m = 1; m < points.length; m++) {
-                        var bx = (points[m - 1].x + points[m].x) / 2;
-                        var by = (points[m - 1].y + points[m].y) / 2 - 14;
-                        ctx.quadraticCurveTo(points[m - 1].x, points[m - 1].y - 14, bx, by);
+                        var py = (points[k - 1].y + points[k].y) / 2 + 10;
+                        ctx.quadraticCurveTo(points[k - 1].x, points[k - 1].y + 10, px, py);
                     }
                     ctx.lineWidth = 1.6;
-                    ctx.strokeStyle = 'rgba(156, 39, 176, 0.85)';
-                    ctx.shadowColor = '#9c27b0';
-                    ctx.shadowBlur = 6;
+                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.85)';
+                    ctx.shadowColor = '#00e5ff';
+                    ctx.shadowBlur = 5;
                     ctx.stroke();
 
-                    // 4. Volatility Support/Resistance Curved Band (Orange Wire)
+                    // 3. Third Clean Sub-Thread (Smooth Purple Wire across candles)
                     ctx.beginPath();
-                    ctx.moveTo(points[0].x, points[0].y - 25);
-                    for (var n = 1; n < points.length; n++) {
-                        var ox = (points[n - 1].x + points[n].x) / 2;
-                        var oy = (points[n - 1].y + points[n].y) / 2 - 25;
-                        ctx.quadraticCurveTo(points[n - 1].x, points[n - 1].y - 25, ox, oy);
+                    ctx.moveTo(points[0].x, points[0].y - 12);
+                    for (var m = 1; m < points.length; m++) {
+                        var bx = (points[m - 1].x + points[m].x) / 2;
+                        var by = (points[m - 1].y + points[m].y) / 2 - 12;
+                        ctx.quadraticCurveTo(points[m - 1].x, points[m - 1].y - 12, bx, by);
                     }
-                    ctx.lineWidth = 1.2;
-                    ctx.strokeStyle = 'rgba(255, 152, 0, 0.7)';
-                    ctx.shadowColor = '#ff9800';
-                    ctx.shadowBlur = 4;
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = 'rgba(156, 39, 176, 0.85)';
+                    ctx.shadowColor = '#9c27b0';
+                    ctx.shadowBlur = 5;
                     ctx.stroke();
                 }
                 
-                // Professional Horizontal Resistance & Support Level Lines (CB Signals Pro style)
-                var chartHeight = canvas.height;
-                var levels = [0.28, 0.45, 0.62, 0.78];
-                var levelNames = ["RES", "MID", "SUP", "PIVOT"];
-                var levelColors = ["rgba(255, 87, 34, 0.65)", "rgba(255, 193, 7, 0.65)", "rgba(76, 175, 80, 0.65)", "rgba(156, 39, 176, 0.65)"];
-                
-                for (var l = 0; l < levels.length; l++) {
-                    var ly = chartHeight * levels[l];
-                    ctx.beginPath();
-                    ctx.setLineDash([6, 6]);
-                    ctx.moveTo(40, ly);
-                    ctx.lineTo(window.innerWidth - 80, ly);
-                    ctx.lineWidth = 1;
-                    ctx.strokeStyle = levelColors[l];
-                    ctx.stroke();
-                    ctx.setLineDash([]); // reset
-                    
-                    ctx.fillStyle = levelColors[l];
-                    ctx.font = '8px sans-serif';
-                    ctx.fillText(levelNames[l], window.innerWidth - 75, ly - 4);
-                }
-                
-                requestAnimationFrame(renderCBSignalsProOverlay);
+                requestAnimationFrame(renderPureMobileThreads);
             }
-            requestAnimationFrame(renderCBSignalsProOverlay);
+            requestAnimationFrame(renderPureMobileThreads);
 
             function forceClick(el) {
                 if(!el) return false;
