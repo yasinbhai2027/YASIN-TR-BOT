@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v69.0 [1.1M Nodes, Borderless Transparent UI & 1-Min Dual Color Cycle] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v70.0 [1.1M Nodes, Persistent Unique Borders & Live TF Sync] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -181,13 +181,20 @@ def bot_script():
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
                           '@keyframes badgePulse {0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.95);}}' +
                           
-                          /* 1-Minute Dual Color Cycle Animations */
+                          /* Independent Dual Panel Borders */
                           '@keyframes panelOuterCycle {0%{border-color:#00ffcc;box-shadow:0 0 18px #00ffcc;}25%{border-color:#ff00ff;box-shadow:0 0 22px #ff00ff;}50%{border-color:#ffcc00;box-shadow:0 0 18px #ffcc00;}75%{border-color:#00bfff;box-shadow:0 0 22px #00bfff;}100%{border-color:#00ffcc;box-shadow:0 0 18px #00ffcc;}}' +
                           '@keyframes panelInnerCycle {0%{border-color:#ff3d00;box-shadow:0 0 10px #ff3d00;}25%{border-color:#76ff03;box-shadow:0 0 12px #76ff03;}50%{border-color:#9c27b0;box-shadow:0 0 10px #9c27b0;}75%{border-color:#00ffff;box-shadow:0 0 12px #00ffff;}100%{border-color:#ff3d00;box-shadow:0 0 10px #ff3d00;}}' +
                           
-                          /* Fire, Thunder & Laser Beam Background FX */
-                          '@keyframes fireThunderScanFX {0%{box-shadow:0 0 25px #ff3d00, 0 0 45px #ffea00;background:radial-gradient(circle, rgba(255,61,0,0.35) 0%, rgba(3,4,7,0.65) 85%);filter:hue-rotate(0deg);}50%{box-shadow:0 0 30px #00e5ff, 0 0 50px #76ff03;background:radial-gradient(circle, rgba(0,229,255,0.35) 0%, rgba(3,4,7,0.65) 85%);filter:hue-rotate(180deg);}100%{box-shadow:0 0 25px #ff3d00, 0 0 45px #ffea00;background:radial-gradient(circle, rgba(255,61,0,0.35) 0%, rgba(3,4,7,0.65) 85%);filter:hue-rotate(360deg);}}' +
-                          '@keyframes textGlowCycle {0%{text-shadow:0 0 12px #00ffff, 0 0 25px #ff3d00;}50%{text-shadow:0 0 15px #ff00ff, 0 0 30px #76ff03;}100%{text-shadow:0 0 12px #00ffff, 0 0 25px #ff3d00;}}' +
+                          /* Unique Persistent Option Borders */
+                          '@keyframes rowCycle1 {0%{border-color:#00bfff;box-shadow:0 0 8px #00bfff;}50%{border-color:#00ff66;box-shadow:0 0 10px #00ff66;}100%{border-color:#00bfff;box-shadow:0 0 8px #00bfff;}}' +
+                          '@keyframes rowCycle2 {0%{border-color:#ffea00;box-shadow:0 0 8px #ffea00;}50%{border-color:#9c27b0;box-shadow:0 0 10px #9c27b0;}100%{border-color:#ffea00;box-shadow:0 0 8px #ffea00;}}' +
+                          '@keyframes rowCycle3 {0%{border-color:#ff3d00;box-shadow:0 0 8px #ff3d00;}50%{border-color:#00e5ff;box-shadow:0 0 10px #00e5ff;}100%{border-color:#ff3d00;box-shadow:0 0 8px #ff3d00;}}' +
+                          '@keyframes rowCycle4 {0%{border-color:#ff00ff;box-shadow:0 0 8px #ff00ff;}50%{border-color:#76ff03;box-shadow:0 0 10px #76ff03;}100%{border-color:#ff00ff;box-shadow:0 0 8px #ff00ff;}}' +
+                          '@keyframes rowCycle5 {0%{border-color:#00ffff;box-shadow:0 0 8px #00ffff;}50%{border-color:#ffcc00;box-shadow:0 0 10px #ffcc00;}100%{border-color:#00ffff;box-shadow:0 0 8px #00ffff;}}' +
+                          
+                          /* 10% Faster Active Fire, Thunder & Laser Beam Background FX */
+                          '@keyframes fireThunderScanFX {0%{box-shadow:0 0 28px #ff3d00, 0 0 50px #ffea00;background:radial-gradient(circle, rgba(255,61,0,0.4) 0%, rgba(3,4,7,0.6) 85%);filter:hue-rotate(0deg);}50%{box-shadow:0 0 35px #00e5ff, 0 0 55px #76ff03;background:radial-gradient(circle, rgba(0,229,255,0.4) 0%, rgba(3,4,7,0.6) 85%);filter:hue-rotate(180deg);}100%{box-shadow:0 0 28px #ff3d00, 0 0 50px #ffea00;background:radial-gradient(circle, rgba(255,61,0,0.4) 0%, rgba(3,4,7,0.6) 85%);filter:hue-rotate(360deg);}}' +
+                          '@keyframes textGlowCycle {0%{text-shadow:0 0 14px #00ffff, 0 0 28px #ff3d00;}50%{text-shadow:0 0 18px #ff00ff, 0 0 35px #76ff03;}100%{text-shadow:0 0 14px #00ffff, 0 0 28px #ff3d00;}}' +
                           
                           '@keyframes fieldPulsePair {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
                           '@keyframes fieldPulseTrap {0%,100%{color:#ffff00;text-shadow:0 0 5px #ffff00;}50%{color:#00ff66;text-shadow:0 0 5px #00ff66;}}' +
@@ -312,8 +319,6 @@ def bot_script():
                 var btnOff = d.createElement('button');
                 btnOff.id = 'btn-auto-off';
                 btnOff.style.cssText = 'flex:1;padding:2px 2px;border:none;border-radius:3px;font-weight:900;font-size:5.7px;color:#fff;cursor:pointer;animation:btnOffAnim 3s infinite linear;text-align:center;';
-                btnOff.innerHTML = 'AUTO TRADE OFF';
-
                 btnOn.onclick = function(){
                     window.autoTradeEnabled = true;
                     btnOn.style.outline = '1.5px solid #00ff66';
@@ -344,32 +349,32 @@ def bot_script():
                 var wrapper = d.createElement('div');
                 wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #ff3d00;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:panelInnerCycle 60s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
 
-                function createRow(label, valId, pulseAnim){
+                function createRow(label, valId, animName, pulseAnim){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid rgba(255,255,255,0.12);border-radius:2.5px;background:rgba(255,255,255,0.015);';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1.2px solid #00bfff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+animName+' 8s infinite linear;';
                     row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;animation:'+pulseAnim+' 4s infinite;">WAITING...</span>';
                     return row;
                 }
                 
-                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'fieldPulsePair'));
-                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'fieldPulseTrap'));
-                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'fieldPulseChop'));
-                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'fieldPulseTrend'));
+                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'rowCycle1', 'fieldPulsePair'));
+                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'rowCycle2', 'fieldPulseTrap'));
+                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'rowCycle3', 'fieldPulseChop'));
+                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'rowCycle4', 'fieldPulseTrend'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid rgba(255,255,255,0.12);border-radius:2.5px;background:rgba(255,255,255,0.015);';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1.2px solid #ffea00;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowCycle5 8s infinite linear;';
                 sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;animation:fieldPulseSignal 4s infinite;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
-                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'fieldPulseCd'));
-                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'fieldPulseWick'));
-                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'fieldPulseServer'));
+                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rowCycle2', 'fieldPulseCd'));
+                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'rowCycle3', 'fieldPulseWick'));
+                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'rowCycle1', 'fieldPulseServer'));
                 
                 panel.appendChild(wrapper);
                 d.body.appendChild(panel);
             }
 
-            // Borderless Transparent Text with Fire/Thunder Laser Scan FX (10% smaller)
+            // Borderless Transparent Text with Active Fire/Thunder FX (10% smaller)
             function showNeonAnimation(type, text) {
                 var oldO = d.getElementById('yb-neon-overlay');
                 if(oldO) oldO.remove();
@@ -381,11 +386,11 @@ def bot_script():
                 var contentHtml = '';
 
                 if(type === 'scan') {
-                    contentHtml = '<div style="animation: fireThunderScanFX 2.5s infinite linear; padding: 18px 32px; border-radius: 12px; display:flex; align-items:center; justify-content:center;"><span style="color:#00ffff;animation: textGlowCycle 2s infinite linear; font-size:15.3px; font-weight:900; letter-spacing:1px;">MARKET SCANNING...</span></div>';
+                    contentHtml = '<div style="animation: fireThunderScanFX 2s infinite linear; padding: 16px 28px; border-radius: 10px; display:flex; align-items:center; justify-content:center;"><span style="color:#00ffff;animation: textGlowCycle 1.5s infinite linear; font-size:14.5px; font-weight:900; letter-spacing:1px;">MARKET SCANNING...</span></div>';
                 } else if(type === 'UP') {
-                    contentHtml = '<div style="animation: fireThunderScanFX 2.5s infinite linear; padding: 18px 45px; border-radius: 12px; display:flex; align-items:center; justify-content:center;"><span style="color:#00ff66;text-shadow:0 0 16px #00ff66,0 0 28px #00e5ff;font-size:22.5px;font-weight:900;letter-spacing:2px;">UP</span></div>';
+                    contentHtml = '<div style="animation: fireThunderScanFX 2s infinite linear; padding: 16px 40px; border-radius: 10px; display:flex; align-items:center; justify-content:center;"><span style="color:#00ff66;text-shadow:0 0 16px #00ff66,0 0 28px #00e5ff;font-size:21.5px;font-weight:900;letter-spacing:2px;">UP</span></div>';
                 } else if(type === 'DOWN') {
-                    contentHtml = '<div style="animation: fireThunderScanFX 2.5s infinite linear; padding: 18px 45px; border-radius: 12px; display:flex; align-items:center; justify-content:center;"><span style="color:#ff1744;text-shadow:0 0 16px #ff1744,0 0 28px #00ffff;font-size:22.5px;font-weight:900;letter-spacing:2px;">DOWN</span></div>';
+                    contentHtml = '<div style="animation: fireThunderScanFX 2s infinite linear; padding: 16px 40px; border-radius: 10px; display:flex; align-items:center; justify-content:center;"><span style="color:#ff1744;text-shadow:0 0 16px #ff1744,0 0 28px #00ffff;font-size:21.5px;font-weight:900;letter-spacing:2px;">DOWN</span></div>';
                 }
 
                 overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(3,4,7,0.45);display:flex;align-items:center;justify-content:center;z-index:2147483646;pointer-events:none;';
@@ -490,7 +495,8 @@ def bot_script():
                 return null;
             }
 
-            function getDynamicTimeframeSeconds(){
+            // Real-Time Live Timeframe Countdown Sync with Quotex Platform
+            function getRealTimeframeCountdownSeconds(){
                 try {
                     var timerInputs = d.querySelectorAll('.section-deal__timer input, .timer-text, input[name="time"], .value__input, .input-control__input, [class*="timer"]');
                     for(var i=0; i<timerInputs.length; i++){
@@ -508,7 +514,10 @@ def bot_script():
                         }
                     }
                 } catch(e){}
-                return 15;
+                
+                // Fallback to live candle closing sync (e.g. M1 60s remainder)
+                var nowSec = new Date().getSeconds();
+                return 60 - (nowSec % 60);
             }
 
             function getRealPairName(){
@@ -542,7 +551,7 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 10; // 10 seconds fire & thunder scan
+                    var scanTime = 10; // 10 seconds active fire & thunder scan
                     showNeonAnimation('scan', 'MARKET SCANNING...');
                     
                     var scanInterval = setInterval(function(){
@@ -620,7 +629,7 @@ def bot_script():
                                     triggerTrade(isDown);
                                 }
 
-                                var tfSecs = getDynamicTimeframeSeconds();
+                                var tfSecs = getRealTimeframeCountdownSeconds();
                                 var cdLeft = tfSecs;
                                 if(cdEl) cdEl.innerText = cdLeft + 's';
                                 
