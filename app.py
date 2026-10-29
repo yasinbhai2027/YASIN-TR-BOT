@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v65.0 [1.1M Nodes, Clean Chart & Panel Mode] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v66.0 [1.1M Nodes, 10s Neon Fire & Lightning Scan System] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -166,7 +166,7 @@ def bot_script():
         try {
             if(window.YB){ window.YB.remove(); }
             if(window.YBP){ window.YBP.remove(); }
-            if(window.YBCanvas){ window.YBCanvas.remove(); }
+            if(window.YBOverlay){ window.YBOverlay.remove(); }
             var d = document;
             var oldS = d.getElementById('ybs');
             if(oldS){ oldS.remove(); }
@@ -181,6 +181,10 @@ def bot_script():
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
                           '@keyframes badgePulse {0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.95);}}' +
                           '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 20px #00ffff,inset 0 0 14px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 16px #ffff00,inset 0 0 11px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 22px #00ff66,inset 0 0 15px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 18px #ff00ff,inset 0 0 12px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}}' +
+                          
+                          '@keyframes neonFireBox {0%{border-color:#ff0055;box-shadow:0 0 20px #ff0055,inset 0 0 15px #ff0055;}33%{border-color:#00ffff;box-shadow:0 0 25px #00ffff,inset 0 0 20px #00ffff;}66%{border-color:#00ff66;box-shadow:0 0 20px #00ff66,inset 0 0 15px #00ff66;}100%{border-color:#ff0055;box-shadow:0 0 20px #ff0055,inset 0 0 15px #ff0055;}}' +
+                          '@keyframes neonUpBox {0%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 18px #00ff66;}50%{border-color:#00b0ff;box-shadow:0 0 30px #00b0ff,inset 0 0 22px #00b0ff;}100%{border-color:#00ff66;box-shadow:0 0 25px #00ff66,inset 0 0 18px #00ff66;}}' +
+                          '@keyframes neonDownBox {0%{border-color:#ff1744;box-shadow:0 0 25px #ff1744,inset 0 0 18px #ff1744;}50%{border-color:#00ffff;box-shadow:0 0 30px #00ffff,inset 0 0 22px #00ffff;}100%{border-color:#ff1744;box-shadow:0 0 25px #ff1744,inset 0 0 18px #ff1744;}}' +
                           
                           '@keyframes fieldPulsePair {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
                           '@keyframes fieldPulseTrap {0%,100%{color:#ffff00;text-shadow:0 0 5px #ffff00;}50%{color:#00ff66;text-shadow:0 0 5px #00ff66;}}' +
@@ -370,6 +374,45 @@ def bot_script():
                 d.body.appendChild(panel);
             }
 
+            // Show Neon Fire & Lightning Scan or Result Box over Clean Chart
+            function showNeonAnimation(type, text) {
+                var oldO = d.getElementById('yb-neon-overlay');
+                if(oldO) oldO.remove();
+
+                var overlay = d.createElement('div');
+                window.YBOverlay = overlay;
+                overlay.id = 'yb-neon-overlay';
+                
+                var boxStyle = '';
+                var contentHtml = '';
+
+                if(type === 'scan') {
+                    boxStyle = 'animation: neonFireBox 1.5s infinite linear;';
+                    contentHtml = '<span style="color:#00ffff;text-shadow:0 0 10px #00ffff,0 0 20px #00e676;font-size:18px;font-weight:900;letter-spacing:1px;">MARKET SCANNING...</span>';
+                } else if(type === 'UP') {
+                    boxStyle = 'animation: neonUpBox 1.5s infinite linear;';
+                    contentHtml = '<span style="color:#00ff66;text-shadow:0 0 15px #00ff66,0 0 25px #00b0ff;font-size:26px;font-weight:900;letter-spacing:2px;">UP</span>';
+                } else if(type === 'DOWN') {
+                    boxStyle = 'animation: neonDownBox 1.5s infinite linear;';
+                    contentHtml = '<span style="color:#ff1744;text-shadow:0 0 15px #ff1744,0 0 25px #00ffff;font-size:26px;font-weight:900;letter-spacing:2px;">DOWN</span>';
+                }
+
+                overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(3,4,7,0.78);display:flex;align-items:center;justify-content:center;z-index:2147483646;pointer-events:none;';
+                
+                var innerBox = d.createElement('div');
+                innerBox.style.cssText = 'width:260px;height:95px;background:#05070f;border:3px solid #ff0055;border-radius:14px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;' + boxStyle;
+                innerBox.innerHTML = contentHtml;
+
+                overlay.appendChild(innerBox);
+                d.body.appendChild(overlay);
+
+                if(type !== 'scan') {
+                    setTimeout(function(){
+                        if(overlay) overlay.remove();
+                    }, 3500);
+                }
+            }
+
             function forceClick(el) {
                 if(!el) return false;
                 try {
@@ -511,7 +554,8 @@ def bot_script():
                 var serverEl = panel.querySelector('#p-server');
 
                 function executeScanAndTrade(){
-                    var scanTime = 15;
+                    var scanTime = 10; // Exactly 10 seconds neon scanning
+                    showNeonAnimation('scan', 'MARKET SCANNING...');
                     
                     var scanInterval = setInterval(function(){
                         scanTime--;
@@ -546,6 +590,9 @@ def bot_script():
                                 var pingVal = Number(j.ping || 20);
                                 var pingStatus = String(j.ping_status || 'EXCELLENT');
                                 
+                                // Show Neon Result Box (UP / DOWN)
+                                showNeonAnimation(sigText, sigText);
+
                                 if(trapEl) {
                                     trapEl.innerText = trapText;
                                     trapEl.style.color = trapText.includes('TRAP DETECTED') ? '#ff1a1a' : '#00e676';
