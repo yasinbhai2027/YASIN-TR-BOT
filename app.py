@@ -18,7 +18,7 @@ http_session = requests.Session()
 
 @app.route('/')
 def home():
-    return "Quotex Ultra-Pro Max Master Engine v67.0 [1.1M Nodes, Ultimate Fire, Thunder & Multi-Color Neon FX] Running 24/7!"
+    return "Quotex Ultra-Pro Max Master Engine v68.0 [1.1M Nodes, Slow-Motion RGB & Single-Trade Lock] Running 24/7!"
 
 @app.route('/ping')
 def ping():
@@ -180,12 +180,18 @@ def bot_script():
                           '@keyframes innerRing{0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}33%{border-color:#ff9900;box-shadow:0 0 15px #ff9900;}66%{border-color:#cc00ff;box-shadow:0 0 15px #cc00ff;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66;}}' +
                           '@keyframes rCC{100%{transform:rotate(-360deg)}}@keyframes rC{100%{transform:rotate(360deg)}}' +
                           '@keyframes badgePulse {0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.95);}}' +
-                          '@keyframes electricFireBorder{0%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}20%{border-color:#00ffff;box-shadow:0 0 20px #00ffff,inset 0 0 14px #00ffff;}40%{border-color:#ffff00;box-shadow:0 0 16px #ffff00,inset 0 0 11px #ffff00;}60%{border-color:#00ff66;box-shadow:0 0 22px #00ff66,inset 0 0 15px #00ff66;}80%{border-color:#ff00ff;box-shadow:0 0 18px #ff00ff,inset 0 0 12px #ff00ff;}100%{border-color:#ff0055;box-shadow:0 0 14px #ff0055,inset 0 0 10px #ff0055;}}' +
                           
-                          /* Ultimate Fire, Thunder & Multi-Color Neon Animation FX */
-                          '@keyframes fireThunderScan {0%{border-color:#ff3d00;box-shadow:0 0 12px #ff3d00, 0 0 25px #ffea00, inset 0 0 10px #ff3d00;filter:hue-rotate(0deg);}25%{border-color:#00e5ff;box-shadow:0 0 15px #00e5ff, 0 0 30px #76ff03, inset 0 0 12px #00e5ff;filter:hue-rotate(90deg);}50%{border-color:#ff1744;box-shadow:0 0 18px #ff1744, 0 0 35px #9c27b0, inset 0 0 15px #ff1744;filter:hue-rotate(180deg);}75%{border-color:#76ff03;box-shadow:0 0 15px #76ff03, 0 0 30px #00e5ff, inset 0 0 12px #76ff03;filter:hue-rotate(270deg);}100%{border-color:#ff3d00;box-shadow:0 0 12px #ff3d00, 0 0 25px #ffea00, inset 0 0 10px #ff3d00;filter:hue-rotate(360deg);}}' +
+                          /* Dual Border & Slow-Motion Distinct RGB FX */
+                          '@keyframes slowPanelBorder {0%{border-color:#00ffcc;box-shadow:0 0 15px #00ffcc,inset 0 0 8px #00ffcc;}33%{border-color:#ff00ff;box-shadow:0 0 18px #ff00ff,inset 0 0 10px #ff00ff;}66%{border-color:#ffcc00;box-shadow:0 0 15px #ffcc00,inset 0 0 8px #ffcc00;}100%{border-color:#00ffcc;box-shadow:0 0 15px #00ffcc,inset 0 0 8px #00ffcc;}}' +
                           
-                          '@keyframes multiColorBorder {0%{border-color:#00ff66;box-shadow:0 0 15px #00ff66, 0 0 28px #00b0ff, inset 0 0 12px #00ff66;}33%{border-color:#ffea00;box-shadow:0 0 18px #ffea00, 0 0 32px #ff3d00, inset 0 0 15px #ffea00;}66%{border-color:#9c27b0;box-shadow:0 0 15px #9c27b0, 0 0 28px #00ffff, inset 0 0 12px #9c27b0;}100%{border-color:#00ff66;box-shadow:0 0 15px #00ff66, 0 0 28px #00b0ff, inset 0 0 12px #00ff66;}}' +
+                          '@keyframes slowRowBorder1 {0%{border-color:#00bfff;box-shadow:0 0 8px #00bfff;}33%{border-color:#00ff66;box-shadow:0 0 10px #00ff66;}66%{border-color:#ff3366;box-shadow:0 0 8px #ff3366;}100%{border-color:#00bfff;box-shadow:0 0 8px #00bfff;}}' +
+                          '@keyframes slowRowBorder2 {0%{border-color:#ffea00;box-shadow:0 0 8px #ffea00;}33%{border-color:#9c27b0;box-shadow:0 0 10px #9c27b0;}66%{border-color:#00e5ff;box-shadow:0 0 8px #00e5ff;}100%{border-color:#ffea00;box-shadow:0 0 8px #ffea00;}}' +
+                          '@keyframes slowRowBorder3 {0%{border-color:#ff3d00;box-shadow:0 0 8px #ff3d00;}33%{border-color:#76ff03;box-shadow:0 0 10px #76ff03;}66%{border-color:#e040fb;box-shadow:0 0 8px #e040fb;}100%{border-color:#ff3d00;box-shadow:0 0 8px #ff3d00;}}' +
+                          
+                          /* Fire, Thunder & Lightning Laser Scan FX (Slow Motion) */
+                          '@keyframes fireThunderScanFX {0%{border-color:#ff3d00;box-shadow:0 0 20px #ff3d00, 0 0 35px #ffea00, inset 0 0 15px #ff3d00;background:radial-gradient(circle, rgba(255,61,0,0.25) 0%, rgba(5,7,15,0.92) 80%);}33%{border-color:#00e5ff;box-shadow:0 0 25px #00e5ff, 0 0 40px #76ff03, inset 0 0 18px #00e5ff;background:radial-gradient(circle, rgba(0,229,255,0.25) 0%, rgba(5,7,15,0.92) 80%);}66%{border-color:#ff1744;box-shadow:0 0 22px #ff1744, 0 0 38px #9c27b0, inset 0 0 15px #ff1744;background:radial-gradient(circle, rgba(255,23,68,0.25) 0%, rgba(5,7,15,0.92) 80%);}100%{border-color:#ff3d00;box-shadow:0 0 20px #ff3d00, 0 0 35px #ffea00, inset 0 0 15px #ff3d00;background:radial-gradient(circle, rgba(255,61,0,0.25) 0%, rgba(5,7,15,0.92) 80%);}}' +
+                          
+                          '@keyframes multiColorResult {0%{border-color:#00ff66;box-shadow:0 0 22px #00ff66, 0 0 35px #00b0ff, inset 0 0 15px #00ff66;}50%{border-color:#ff00ff;box-shadow:0 0 25px #ff00ff, 0 0 40px #ffff00, inset 0 0 18px #ff00ff;}100%{border-color:#00ff66;box-shadow:0 0 22px #00ff66, 0 0 35px #00b0ff, inset 0 0 15px #00ff66;}}' +
                           
                           '@keyframes fieldPulsePair {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
                           '@keyframes fieldPulseTrap {0%,100%{color:#ffff00;text-shadow:0 0 5px #ffff00;}50%{color:#00ff66;text-shadow:0 0 5px #00ff66;}}' +
@@ -195,14 +201,6 @@ def bot_script():
                           '@keyframes fieldPulseCd {0%,100%{color:#ff9900;text-shadow:0 0 5px #ff9900;}50%{color:#ff0055;text-shadow:0 0 5px #ff0055;}}' +
                           '@keyframes fieldPulseWick {0%,100%{color:#00ffff;text-shadow:0 0 5px #00ffff;}50%{color:#ffff00;text-shadow:0 0 5px #ffff00;}}' +
                           '@keyframes fieldPulseServer {0%,100%{color:#00ff66;text-shadow:0 0 5px #00ff66;}50%{color:#ff00ff;text-shadow:0 0 5px #ff00ff;}}' +
-
-                          '@keyframes rowFlash1 {0%{border-color:#00ffff;background:rgba(0,255,255,0.02);}50%{border-color:#ff00ff;background:rgba(255,0,255,0.02);}100%{border-color:#00ffff;background:rgba(0,255,255,0.02);}}' +
-                          '@keyframes rowFlash2 {0%{border-color:#ffff00;background:rgba(255,255,0,0.02);}50%{border-color:#00ff66;background:rgba(0,255,102,0.02);}100%{border-color:#ffff00;background:rgba(255,255,0,0.02);}}' +
-                          '@keyframes rowFlash3 {0%{border-color:#ff0055;background:rgba(255,0,85,0.02);}50%{border-color:#00ffff;background:rgba(0,255,255,0.02);}100%{border-color:#ff0055;background:rgba(255,0,85,0.02);}}' +
-                          '@keyframes rowFlash4 {0%{border-color:#00ff66;background:rgba(0,255,102,0.02);}50%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}100%{border-color:#00ff66;background:rgba(0,255,102,0.02);}}' +
-                          '@keyframes rowFlash5 {0%{border-color:#ff9900;background:rgba(255,153,0,0.02);}50%{border-color:#00ffff;background:rgba(0,255,255,0.02);}100%{border-color:#ff9900;background:rgba(255,153,0,0.02);}}' +
-                          '@keyframes rowFlash6 {0%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}50%{border-color:#ffff00;background:rgba(255,255,0,0.02);}100%{border-color:#cc00ff;background:rgba(204,0,255,0.02);}}' +
-                          '@keyframes rowFlash7 {0%{border-color:#00ffff;background:rgba(0,255,255,0.02);}50%{border-color:#ff0055;background:rgba(255,0,85,0.02);}100%{border-color:#00ffff;background:rgba(0,255,255,0.02);}}' +
 
                           '@keyframes btnOnAnim{0%,100%{background:linear-gradient(45deg,#00b0ff,#00ff66);box-shadow:0 0 8px #00ff66;}50%{background:linear-gradient(45deg,#ff00ff,#00b0ff);box-shadow:0 0 8px #ff00ff;}}' +
                           '@keyframes btnOffAnim{0%,100%{background:linear-gradient(45deg,#ff0055,#ff3300);box-shadow:0 0 8px #ff0055;}50%{background:linear-gradient(45deg,#ffcc00,#ff0055);box-shadow:0 0 8px #ffcc00;}}' +
@@ -259,7 +257,7 @@ def bot_script():
                 var panel = d.createElement('div');
                 window.YBP = panel;
                 panel.id = 'yb-panel';
-                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffff;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, electricFireBorder 2s infinite linear;';
+                panel.style.cssText = 'position:fixed;bottom:70px;right:28px;width:195px;background:#030407;border:2.2px solid #00ffcc;border-radius:8px;z-index:2147483647;font-family:sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.95);overflow:hidden;animation:panelPop 0.3s ease-out forwards, slowPanelBorder 4s infinite linear;';
                 
                 var pDx, pX, pY;
                 panel.onmousedown = panel.ontouchstart = function(e){
@@ -348,34 +346,34 @@ def bot_script():
                 panel.appendChild(modeBar);
                 
                 var wrapper = d.createElement('div');
-                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00ffff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:electricFireBorder 2s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
+                wrapper.style.cssText = 'margin:3px;padding:3px;border:1.8px solid #00bfff;border-radius:4.5px;background:rgba(0,0,0,0.35);animation:slowPanelBorder 5s infinite linear;display:flex;flex-direction:column;gap:2.5px;';
 
-                function createRow(label, valId, flashAnim, pulseAnim){
+                function createRow(label, valId, animName, pulseAnim){
                     var row = d.createElement('div');
-                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+flashAnim+' 5s infinite linear;';
+                    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00bfff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:'+animName+' 6s infinite linear;';
                     row.innerHTML = '<span style="color:#a0aec0;font-weight:800;font-size:6px;letter-spacing:0.1px;">'+label+'</span><span id="'+valId+'" style="font-weight:900;font-size:6px;animation:'+pulseAnim+' 4s infinite;">WAITING...</span>';
                     return row;
                 }
                 
-                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'rowFlash1', 'fieldPulsePair'));
-                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'rowFlash2', 'fieldPulseTrap'));
-                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'rowFlash3', 'fieldPulseChop'));
-                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'rowFlash4', 'fieldPulseTrend'));
+                wrapper.appendChild(createRow('MARKET PAIR', 'p-pair', 'slowRowBorder1', 'fieldPulsePair'));
+                wrapper.appendChild(createRow('OTC + FAKE TRAP FILTER', 'p-trap', 'slowRowBorder2', 'fieldPulseTrap'));
+                wrapper.appendChild(createRow('MARKET STATE: CHOP GUARD', 'p-chop', 'slowRowBorder3', 'fieldPulseChop'));
+                wrapper.appendChild(createRow('MARKET TREND', 'p-trend', 'slowRowBorder1', 'fieldPulseTrend'));
                 
                 var sigRow = d.createElement('div');
-                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #00ffff;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:rowFlash5 5s infinite linear;';
+                sigRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:1.5px 3px;border:1px solid #ffea00;border-radius:2.5px;background:rgba(255,255,255,0.015);animation:slowRowBorder2 6s infinite linear;';
                 sigRow.innerHTML = '<span id="p-sig-label" style="color:#a0aec0;font-weight:800;font-size:6px;">QX REAL SIGNAL</span><span id="p-signal" style="font-weight:900;font-size:6px;animation:fieldPulseSignal 4s infinite;">WAITING...</span>';
                 wrapper.appendChild(sigRow);
 
-                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'rowFlash6', 'fieldPulseCd'));
-                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'rowFlash7', 'fieldPulseWick'));
-                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'rowFlash1', 'fieldPulseServer'));
+                wrapper.appendChild(createRow('COUNTDOWN', 'p-countdown', 'slowRowBorder3', 'fieldPulseCd'));
+                wrapper.appendChild(createRow('SMART MONEY / REJECTION', 'p-wick', 'slowRowBorder1', 'fieldPulseWick'));
+                wrapper.appendChild(createRow('SERVER LATENCY (ms)', 'p-server', 'slowRowBorder2', 'fieldPulseServer'));
                 
                 panel.appendChild(wrapper);
                 d.body.appendChild(panel);
             }
 
-            // Show Fire, Thunder & Multi-Color Neon Animation & 5% Smaller Scale Result Box
+            // Show Fire, Thunder Laser Scan & 10% Smaller Compact Box with Slow-Motion RGB FX
             function showNeonAnimation(type, text) {
                 var oldO = d.getElementById('yb-neon-overlay');
                 if(oldO) oldO.remove();
@@ -388,21 +386,21 @@ def bot_script():
                 var contentHtml = '';
 
                 if(type === 'scan') {
-                    boxStyle = 'animation: fireThunderScan 1.2s infinite linear;';
-                    contentHtml = '<span style="color:#00ffff;text-shadow:0 0 10px #00ffff,0 0 20px #ff3d00,0 0 30px #76ff03;font-size:17.1px;font-weight:900;letter-spacing:0.95px;">MARKET SCANNING...</span>';
+                    boxStyle = 'animation: fireThunderScanFX 3s infinite linear;';
+                    contentHtml = '<span style="color:#00ffff;text-shadow:0 0 12px #00ffff,0 0 25px #ff3d00,0 0 35px #76ff03;font-size:16.2px;font-weight:900;letter-spacing:1px;">MARKET SCANNING...</span>';
                 } else if(type === 'UP') {
-                    boxStyle = 'animation: multiColorBorder 1.5s infinite linear;';
-                    contentHtml = '<span style="color:#00ff66;text-shadow:0 0 14px #00ff66,0 0 24px #00e5ff;font-size:24.7px;font-weight:900;letter-spacing:1.9px;">UP</span>';
+                    boxStyle = 'animation: multiColorResult 4s infinite linear;';
+                    contentHtml = '<span style="color:#00ff66;text-shadow:0 0 16px #00ff66,0 0 28px #00e5ff;font-size:23.4px;font-weight:900;letter-spacing:2px;">UP</span>';
                 } else if(type === 'DOWN') {
-                    boxStyle = 'animation: multiColorBorder 1.5s infinite linear;';
-                    contentHtml = '<span style="color:#ff1744;text-shadow:0 0 14px #ff1744,0 0 24px #00ffff;font-size:24.7px;font-weight:900;letter-spacing:1.9px;">DOWN</span>';
+                    boxStyle = 'animation: multiColorResult 4s infinite linear;';
+                    contentHtml = '<span style="color:#ff1744;text-shadow:0 0 16px #ff1744,0 0 28px #00ffff;font-size:23.4px;font-weight:900;letter-spacing:2px;">DOWN</span>';
                 }
 
                 overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(3,4,7,0.78);display:flex;align-items:center;justify-content:center;z-index:2147483646;pointer-events:none;';
                 
                 var innerBox = d.createElement('div');
-                // 5% smaller scale dimensions (247px width x 90.25px height)
-                innerBox.style.cssText = 'width:247px;height:90.25px;background:#05070f;border:3px solid #00ff66;border-radius:13.3px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;' + boxStyle;
+                // 10% smaller compact dimensions (234px width x 85.5px height)
+                innerBox.style.cssText = 'width:234px;height:85.5px;background:#05070f;border:3px solid #ff3d00;border-radius:12px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;' + boxStyle;
                 innerBox.innerHTML = contentHtml;
 
                 overlay.appendChild(innerBox);
@@ -434,11 +432,12 @@ def bot_script():
                 } catch(e) { return false; }
             }
 
+            // Strict Single Trade Execution Lock
             window.lastTradeExecutionTimestamp = 0;
             function triggerTrade(isSell){
                 var nowTs = Date.now();
-                if(nowTs - window.lastTradeExecutionTimestamp < 25000) {
-                    return;
+                if(nowTs - window.lastTradeExecutionTimestamp < 35000) {
+                    return; // Locked against multiple or double clicks
                 }
                 window.lastTradeExecutionTimestamp = nowTs;
 
@@ -592,7 +591,7 @@ def bot_script():
                                 var pingVal = Number(j.ping || 20);
                                 var pingStatus = String(j.ping_status || 'EXCELLENT');
                                 
-                                // Show Multi-Color Neon Result Box (UP / DOWN) with 5% Smaller Scale
+                                // Show Result Box (UP / DOWN) with Compact Scale
                                 showNeonAnimation(sigText, sigText);
 
                                 if(trapEl) {
