@@ -1,5 +1,7 @@
-git+https://github.com/cleitonleonel/pyquotex.git
+flask
 requests
 websocket-client
 gunicorn
-flask
+numpy
+pandas
+git+https://github.com/cleitonleonel/pyquotex.git
